@@ -42,6 +42,16 @@
     <property name="title">
      <string>Playback</string>
     </property>
+    <widget class="QMenu" name="menuSpeed">
+     <property name="title">
+      <string>Speed</string>
+     </property>
+     <addaction name="actionNormal_1x_2"/>
+     <addaction name="actionFaster_2"/>
+     <addaction name="actionSlower_2"/>
+    </widget>
+    <addaction name="menuSpeed"/>
+    <addaction name="separator"/>
     <addaction name="actionPlay_Pause"/>
     <addaction name="actionStop"/>
     <addaction name="actionNext"/>
@@ -205,6 +215,21 @@
   <action name="actionJump_to_Specific_Time_2">
    <property name="text">
     <string>Jump to Specific Time</string>
+   </property>
+  </action>
+  <action name="actionNormal_1x_2">
+   <property name="text">
+    <string>Normal</string>
+   </property>
+  </action>
+  <action name="actionFaster_2">
+   <property name="text">
+    <string>Faster</string>
+   </property>
+  </action>
+  <action name="actionSlower_2">
+   <property name="text">
+    <string>Slower</string>
    </property>
   </action>
  </widget>
