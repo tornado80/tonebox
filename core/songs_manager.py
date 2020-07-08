@@ -43,10 +43,18 @@ class SongsManager:
             for i, song in enumerate(songs):
                 self.songs[f'song{i+1}'] = song   #would be better to change the keys to song titles
 
-    def add(self):
-        pass
-    def remove(self):
-        pass
+    def add(self, song_path):
+        try:
+            self.c.execute(f"INSERT INTO {self.db_name} VALUES ({song_path})")
+        except Exception as e:
+            return repr(e)
+
+    def remove(self, song_path):
+        try:
+            self.c.execute(f"DELETE FROM {self.db_name} WHERE path=?", (song_path,))
+        except Exception as e:
+            return repr(e)    
+
     def get_alldata(self):
         pass
 
