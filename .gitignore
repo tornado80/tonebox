@@ -1,0 +1,11 @@
+# ignore editors files
+.idea/
+.vscode/
+
+# ignore project files
+*.db
+
+# pyc, pyo, pycache files
+__pycache__/
+*.pyc
+*.pyo

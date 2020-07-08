@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ToneBoxMainWindowUi</class>
+ <widget class="QMainWindow" name="ToneBoxMainWindowUi">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Tone Box</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionAddMusic"/>
+    <addaction name="actionAddDirectory"/>
+    <addaction name="actionNewPlaylist"/>
+    <addaction name="separator"/>
+    <addaction name="actionImportDatabase"/>
+    <addaction name="actionExportDatabase"/>
+    <addaction name="actionImportPlaylist"/>
+    <addaction name="actionExportPlaylist"/>
+    <addaction name="separator"/>
+    <addaction name="actionSettings"/>
+   </widget>
+   <widget class="QMenu" name="menuPlayback">
+    <property name="title">
+     <string>Playback</string>
+    </property>
+    <addaction name="actionPlay_Pause"/>
+    <addaction name="actionStop"/>
+    <addaction name="actionNext"/>
+    <addaction name="actionPrevious_Track"/>
+    <addaction name="separator"/>
+    <addaction name="actionJump_Forward"/>
+    <addaction name="actionFump_Backward"/>
+    <addaction name="actionJump_to_Specific_Time_2"/>
+    <addaction name="separator"/>
+    <addaction name="actionIncrease_Volume"/>
+    <addaction name="actionDecrease_Volume"/>
+    <addaction name="actionMute"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuPlayback"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAddMusic">
+   <property name="text">
+    <string>Add Music(s)</string>
+   </property>
+  </action>
+  <action name="actionNewPlaylist">
+   <property name="text">
+    <string>New Playlist</string>
+   </property>
+  </action>
+  <action name="actionImportDatabase">
+   <property name="text">
+    <string>Import Database</string>
+   </property>
+  </action>
+  <action name="actionExportDatabase">
+   <property name="text">
+    <string>Export Database</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionExportPlaylist">
+   <property name="text">
+    <string>Export Playlist</string>
+   </property>
+  </action>
+  <action name="actionAddDirectory">
+   <property name="text">
+    <string>Add Directory</string>
+   </property>
+  </action>
+  <action name="actionImportPlaylist">
+   <property name="text">
+    <string>Import Playlist</string>
+   </property>
+  </action>
+  <action name="actionNormal_1x">
+   <property name="text">
+    <string>Normal (1x)</string>
+   </property>
+  </action>
+  <action name="actionFaster">
+   <property name="text">
+    <string>Faster (+0.1x)</string>
+   </property>
+  </action>
+  <action name="actionSlower">
+   <property name="text">
+    <string>Slower (-0.1x)</string>
+   </property>
+  </action>
+  <action name="actionMush_Faster">
+   <property name="text">
+    <string>Much Faster (+0.3x)</string>
+   </property>
+  </action>
+  <action name="actionMuch_Slower">
+   <property name="text">
+    <string>Much Slower (-0.3x)</string>
+   </property>
+  </action>
+  <action name="actionJump_Forward">
+   <property name="text">
+    <string>Jump Forward</string>
+   </property>
+  </action>
+  <action name="actionFump_Backward">
+   <property name="text">
+    <string>Jump Backward</string>
+   </property>
+  </action>
+  <action name="actionJump_to_Specific_Time">
+   <property name="text">
+    <string>Jump to Specific Time</string>
+   </property>
+  </action>
+  <action name="actionPlay_Pause">
+   <property name="text">
+    <string>Play/Pause</string>
+   </property>
+  </action>
+  <action name="actionStop">
+   <property name="text">
+    <string>Stop</string>
+   </property>
+  </action>
+  <action name="actionNext">
+   <property name="text">
+    <string>Next Track</string>
+   </property>
+  </action>
+  <action name="actionPrevious_Track">
+   <property name="text">
+    <string>Previous Track</string>
+   </property>
+  </action>
+  <action name="actionDevice">
+   <property name="text">
+    <string>Audio Device</string>
+   </property>
+  </action>
+  <action name="actionStereo">
+   <property name="text">
+    <string>Stereo</string>
+   </property>
+  </action>
+  <action name="actionIncrease_Volume">
+   <property name="text">
+    <string>Increase Volume</string>
+   </property>
+  </action>
+  <action name="actionDecrease_Volume">
+   <property name="text">
+    <string>Decrease Volume</string>
+   </property>
+  </action>
+  <action name="actionMute">
+   <property name="text">
+    <string>Mute</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionJump_to_Specific_Time_2">
+   <property name="text">
+    <string>Jump to Specific Time</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
