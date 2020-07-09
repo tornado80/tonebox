@@ -37,7 +37,7 @@ class SongsManager:
         #self.conn.commit()
         
         try:
-            self.c.execute("SELECT * FROM songs")
+            self.c.execute(f"SELECT * FROM {self.db_name}")
         except Exception as e:
             return repr(e)                         #this is a problem
         else:
@@ -56,7 +56,6 @@ class SongsManager:
     def remove(self, song_path):
         try:
             self.c.execute(f"DELETE FROM {self.db_name} WHERE path=?", (song_path,))
-            self.conn.commit()
         except Exception as e:
             return repr(e)
         else:
