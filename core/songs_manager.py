@@ -27,7 +27,7 @@ class SongsManager:
         self.db_name = ntpath.basename(db_path) #assumes the file name is the dbs name
         self.songs = {}
 
-        self.conn = sqlite3.connect(":memory:")    #change to :memory: if u want to test
+        self.conn = sqlite3.connect(self.db_path)    #change to :memory: if u want to test
         self.c = self.conn.cursor()
 
         #self.c.execute("""CREATE TABLE songs(
@@ -41,21 +41,26 @@ class SongsManager:
         except Exception as e:
             return repr(e)                         #this is a problem
         else:
-            songs = self.c.fetchall()             #fetchall returns a list of tuples and for some reason i cant convert them to a string  
-            for i, song in enumerate(songs):
-                self.songs[f'song{i+1}'] = song   #would be better to change the keys to song titles
+            songs = self.c.fetchall()           
+            for song in songs:
+                self.songs[TinyTag.get(song[0]).title] = song[0]
 
     def add(self, song_path):
         try:
             self.c.execute(f"INSERT INTO {self.db_name} VALUES ({song_path})")
         except Exception as e:
             return repr(e)
+        else:
+            self.conn.commit()    
 
     def remove(self, song_path):
         try:
             self.c.execute(f"DELETE FROM {self.db_name} WHERE path=?", (song_path,))
+            self.conn.commit()
         except Exception as e:
-            return repr(e)    
+            return repr(e)
+        else:
+            self.conn.commit()        
 
     def get_alldata(self):
         pass
