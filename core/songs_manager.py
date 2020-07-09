@@ -1,23 +1,25 @@
 import sqlite3
 import ntpath
+from tinytag import TinyTag
 
 class Song:
      def __init__(self, path, id_=None, artist=None, title=None, album=None, track_total=None, duration=None, genre=None, year=None, composer=None, filesize=None, bitrate=None, samplerate=None, comment=None, image=None):
         self.path = path
+        self.tag = TinyTag.get(path)
         self.id_ = id_
-        self.artist = artist
-        self.title = title
-        self.album = album
-        self.track_total = track_total
-        self.duration = duration
-        self.genre = genre
-        self.year = year
-        self.composer = composer
-        self.filesize = filesize
-        self.bitrate = bitrate
-        self.samplerate = samplerate
-        self.comment = comment
-        self.image = image
+        self.artist = tag.artist
+        self.title = tag.title
+        self.album = tag.album
+        self.track_total = tag.track_total
+        self.duration = tag.duration
+        self.genre = tag.genre
+        self.year = tag.year
+        self.composer = tag.composer
+        self.filesize = tag.filesize
+        self.bitrate = tag.bitrate
+        self.samplerate = tag.samplerate
+        self.comment = tag.comment
+        self.image = tag.get_image()
 
 class SongsManager:
     def __init__(self, db_path):
