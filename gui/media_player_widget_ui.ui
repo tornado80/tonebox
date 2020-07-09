@@ -57,7 +57,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap>../icons/icons8-speed-30.png</pixmap>
+          <pixmap resource="icons.qrc">:/images/icons/icons8-speed-30.png</pixmap>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -110,7 +110,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap>../icons/icons8-no-audio-30.png</pixmap>
+          <pixmap resource="icons.qrc">:/images/icons/icons8-no-audio-30.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>false</bool>
@@ -208,9 +208,9 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-play-30.png</normaloff>
-         <normalon>../icons/icons8-pause-30.png</normalon>../icons/icons8-play-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-play-30.png</normaloff>
+         <normalon>:/images/icons/icons8-pause-30.png</normalon>:/images/icons/icons8-play-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -242,8 +242,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-skip-to-start-30.png</normaloff>../icons/icons8-skip-to-start-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-skip-to-start-30.png</normaloff>:/images/icons/icons8-skip-to-start-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -259,8 +259,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-rewind-30.png</normaloff>../icons/icons8-rewind-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-rewind-30.png</normaloff>:/images/icons/icons8-rewind-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -276,8 +276,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-stop-30.png</normaloff>../icons/icons8-stop-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-stop-30.png</normaloff>:/images/icons/icons8-stop-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -293,8 +293,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-fast-forward-30.png</normaloff>../icons/icons8-fast-forward-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-fast-forward-30.png</normaloff>:/images/icons/icons8-fast-forward-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -310,8 +310,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-end-30.png</normaloff>../icons/icons8-end-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-end-30.png</normaloff>:/images/icons/icons8-end-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -340,8 +340,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-replay-30-30.png</normaloff>../icons/icons8-replay-30-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-replay-30-30.png</normaloff>:/images/icons/icons8-replay-30-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -357,8 +357,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-replay-10-30.png</normaloff>../icons/icons8-replay-10-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-replay-10-30.png</normaloff>:/images/icons/icons8-replay-10-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -374,8 +374,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-replay-5-30.png</normaloff>../icons/icons8-replay-5-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-replay-5-30.png</normaloff>:/images/icons/icons8-replay-5-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -391,8 +391,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-forward-5-30.png</normaloff>../icons/icons8-forward-5-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-forward-5-30.png</normaloff>:/images/icons/icons8-forward-5-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -408,8 +408,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-forward-10-30.png</normaloff>../icons/icons8-forward-10-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-forward-10-30.png</normaloff>:/images/icons/icons8-forward-10-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -425,8 +425,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-forward-30-30.png</normaloff>../icons/icons8-forward-30-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-forward-30-30.png</normaloff>:/images/icons/icons8-forward-30-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -455,9 +455,9 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-repeat-30.png</normaloff>
-         <normalon>../icons/icons8-repeat-one-30.png</normalon>../icons/icons8-repeat-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-repeat-30.png</normaloff>
+         <normalon>:/images/icons/icons8-repeat-one-30.png</normalon>:/images/icons/icons8-repeat-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -476,8 +476,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-shuffle-30.png</normaloff>../icons/icons8-shuffle-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-shuffle-30.png</normaloff>:/images/icons/icons8-shuffle-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -496,8 +496,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../icons/icons8-mute-30.png</normaloff>../icons/icons8-mute-30.png</iconset>
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/icons/icons8-mute-30.png</normaloff>:/images/icons/icons8-mute-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -514,6 +514,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

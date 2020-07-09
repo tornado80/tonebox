@@ -1,0 +1,31 @@
+<RCC>
+  <qresource prefix="images">
+    <file>icons/settings-512.png</file>
+    <file>icons/playlist-add-512.png</file>
+    <file>icons/music_add-512.png</file>
+    <file>icons/add-folder.png</file>
+    <file>icons/icons8-voice-30.png</file>
+    <file>icons/icons8-stop-30.png</file>
+    <file>icons/icons8-speed-30.png</file>
+    <file>icons/icons8-skip-to-start-30.png</file>
+    <file>icons/icons8-shuffle-30.png</file>
+    <file>icons/icons8-rewind-30.png</file>
+    <file>icons/icons8-resume-button-30.png</file>
+    <file>icons/icons8-replay-5-30.png</file>
+    <file>icons/icons8-replay-30-30.png</file>
+    <file>icons/icons8-replay-10-30.png</file>
+    <file>icons/icons8-repeat-one-30.png</file>
+    <file>icons/icons8-repeat-30.png</file>
+    <file>icons/icons8-play-30.png</file>
+    <file>icons/icons8-pause-30.png</file>
+    <file>icons/icons8-no-audio-30.png</file>
+    <file>icons/icons8-mute-30.png</file>
+    <file>icons/icons8-low-volume-30.png</file>
+    <file>icons/icons8-forward-5-30.png</file>
+    <file>icons/icons8-forward-30-30.png</file>
+    <file>icons/icons8-forward-10-30.png</file>
+    <file>icons/icons8-fast-forward-30.png</file>
+    <file>icons/icons8-end-30.png</file>
+    <file>icons/icons8-audio-30.png</file>
+  </qresource>
+</RCC>

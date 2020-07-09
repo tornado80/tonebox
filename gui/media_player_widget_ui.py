@@ -15,6 +15,7 @@ from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
     QPixmap, QRadialGradient)
 from PySide2.QtWidgets import *
 
+from  . import icons_rc
 
 class Ui_MediaPlayerWidget(object):
     def setupUi(self, MediaPlayerWidget):
@@ -45,7 +46,7 @@ class Ui_MediaPlayerWidget(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_3 = QLabel(MediaPlayerWidget)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setPixmap(QPixmap(u"../icons/icons8-speed-30.png"))
+        self.label_3.setPixmap(QPixmap(u":/images/icons/icons8-speed-30.png"))
         self.label_3.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_3)
@@ -79,7 +80,7 @@ class Ui_MediaPlayerWidget(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.volumeIcon = QLabel(MediaPlayerWidget)
         self.volumeIcon.setObjectName(u"volumeIcon")
-        self.volumeIcon.setPixmap(QPixmap(u"../icons/icons8-no-audio-30.png"))
+        self.volumeIcon.setPixmap(QPixmap(u":/images/icons/icons8-no-audio-30.png"))
         self.volumeIcon.setScaledContents(False)
         self.volumeIcon.setAlignment(Qt.AlignCenter)
 
@@ -148,8 +149,8 @@ class Ui_MediaPlayerWidget(object):
         self.playPauseBtn = QToolButton(MediaPlayerWidget)
         self.playPauseBtn.setObjectName(u"playPauseBtn")
         icon = QIcon()
-        icon.addFile(u"../icons/icons8-play-30.png", QSize(), QIcon.Normal, QIcon.Off)
-        icon.addFile(u"../icons/icons8-pause-30.png", QSize(), QIcon.Normal, QIcon.On)
+        icon.addFile(u":/images/icons/icons8-play-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/images/icons/icons8-pause-30.png", QSize(), QIcon.Normal, QIcon.On)
         self.playPauseBtn.setIcon(icon)
         self.playPauseBtn.setIconSize(QSize(30, 30))
         self.playPauseBtn.setCheckable(True)
@@ -163,7 +164,7 @@ class Ui_MediaPlayerWidget(object):
         self.previousBtn = QToolButton(MediaPlayerWidget)
         self.previousBtn.setObjectName(u"previousBtn")
         icon1 = QIcon()
-        icon1.addFile(u"../icons/icons8-skip-to-start-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/images/icons/icons8-skip-to-start-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.previousBtn.setIcon(icon1)
         self.previousBtn.setIconSize(QSize(30, 30))
 
@@ -172,7 +173,7 @@ class Ui_MediaPlayerWidget(object):
         self.slowerBtn = QToolButton(MediaPlayerWidget)
         self.slowerBtn.setObjectName(u"slowerBtn")
         icon2 = QIcon()
-        icon2.addFile(u"../icons/icons8-rewind-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon2.addFile(u":/images/icons/icons8-rewind-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.slowerBtn.setIcon(icon2)
         self.slowerBtn.setIconSize(QSize(30, 30))
 
@@ -181,7 +182,7 @@ class Ui_MediaPlayerWidget(object):
         self.stopBtn = QToolButton(MediaPlayerWidget)
         self.stopBtn.setObjectName(u"stopBtn")
         icon3 = QIcon()
-        icon3.addFile(u"../icons/icons8-stop-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon3.addFile(u":/images/icons/icons8-stop-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.stopBtn.setIcon(icon3)
         self.stopBtn.setIconSize(QSize(30, 30))
 
@@ -190,7 +191,7 @@ class Ui_MediaPlayerWidget(object):
         self.fasterBtn = QToolButton(MediaPlayerWidget)
         self.fasterBtn.setObjectName(u"fasterBtn")
         icon4 = QIcon()
-        icon4.addFile(u"../icons/icons8-fast-forward-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon4.addFile(u":/images/icons/icons8-fast-forward-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.fasterBtn.setIcon(icon4)
         self.fasterBtn.setIconSize(QSize(30, 30))
 
@@ -199,7 +200,7 @@ class Ui_MediaPlayerWidget(object):
         self.nextBtn = QToolButton(MediaPlayerWidget)
         self.nextBtn.setObjectName(u"nextBtn")
         icon5 = QIcon()
-        icon5.addFile(u"../icons/icons8-end-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon5.addFile(u":/images/icons/icons8-end-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.nextBtn.setIcon(icon5)
         self.nextBtn.setIconSize(QSize(30, 30))
 
@@ -212,7 +213,7 @@ class Ui_MediaPlayerWidget(object):
         self.back30SecBtn = QToolButton(MediaPlayerWidget)
         self.back30SecBtn.setObjectName(u"back30SecBtn")
         icon6 = QIcon()
-        icon6.addFile(u"../icons/icons8-replay-30-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon6.addFile(u":/images/icons/icons8-replay-30-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.back30SecBtn.setIcon(icon6)
         self.back30SecBtn.setIconSize(QSize(30, 30))
 
@@ -221,7 +222,7 @@ class Ui_MediaPlayerWidget(object):
         self.back10SecBtn = QToolButton(MediaPlayerWidget)
         self.back10SecBtn.setObjectName(u"back10SecBtn")
         icon7 = QIcon()
-        icon7.addFile(u"../icons/icons8-replay-10-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon7.addFile(u":/images/icons/icons8-replay-10-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.back10SecBtn.setIcon(icon7)
         self.back10SecBtn.setIconSize(QSize(30, 30))
 
@@ -230,7 +231,7 @@ class Ui_MediaPlayerWidget(object):
         self.back5SecBtn = QToolButton(MediaPlayerWidget)
         self.back5SecBtn.setObjectName(u"back5SecBtn")
         icon8 = QIcon()
-        icon8.addFile(u"../icons/icons8-replay-5-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon8.addFile(u":/images/icons/icons8-replay-5-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.back5SecBtn.setIcon(icon8)
         self.back5SecBtn.setIconSize(QSize(30, 30))
 
@@ -239,7 +240,7 @@ class Ui_MediaPlayerWidget(object):
         self.skip5SecBtn = QToolButton(MediaPlayerWidget)
         self.skip5SecBtn.setObjectName(u"skip5SecBtn")
         icon9 = QIcon()
-        icon9.addFile(u"../icons/icons8-forward-5-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon9.addFile(u":/images/icons/icons8-forward-5-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.skip5SecBtn.setIcon(icon9)
         self.skip5SecBtn.setIconSize(QSize(30, 30))
 
@@ -248,7 +249,7 @@ class Ui_MediaPlayerWidget(object):
         self.skip10SecBtn = QToolButton(MediaPlayerWidget)
         self.skip10SecBtn.setObjectName(u"skip10SecBtn")
         icon10 = QIcon()
-        icon10.addFile(u"../icons/icons8-forward-10-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon10.addFile(u":/images/icons/icons8-forward-10-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.skip10SecBtn.setIcon(icon10)
         self.skip10SecBtn.setIconSize(QSize(30, 30))
 
@@ -257,7 +258,7 @@ class Ui_MediaPlayerWidget(object):
         self.skip30SecBtn = QToolButton(MediaPlayerWidget)
         self.skip30SecBtn.setObjectName(u"skip30SecBtn")
         icon11 = QIcon()
-        icon11.addFile(u"../icons/icons8-forward-30-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon11.addFile(u":/images/icons/icons8-forward-30-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.skip30SecBtn.setIcon(icon11)
         self.skip30SecBtn.setIconSize(QSize(30, 30))
 
@@ -270,8 +271,8 @@ class Ui_MediaPlayerWidget(object):
         self.repeatBtn = QToolButton(MediaPlayerWidget)
         self.repeatBtn.setObjectName(u"repeatBtn")
         icon12 = QIcon()
-        icon12.addFile(u"../icons/icons8-repeat-30.png", QSize(), QIcon.Normal, QIcon.Off)
-        icon12.addFile(u"../icons/icons8-repeat-one-30.png", QSize(), QIcon.Normal, QIcon.On)
+        icon12.addFile(u":/images/icons/icons8-repeat-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon12.addFile(u":/images/icons/icons8-repeat-one-30.png", QSize(), QIcon.Normal, QIcon.On)
         self.repeatBtn.setIcon(icon12)
         self.repeatBtn.setIconSize(QSize(30, 30))
         self.repeatBtn.setCheckable(True)
@@ -281,7 +282,7 @@ class Ui_MediaPlayerWidget(object):
         self.shuffleBtn = QToolButton(MediaPlayerWidget)
         self.shuffleBtn.setObjectName(u"shuffleBtn")
         icon13 = QIcon()
-        icon13.addFile(u"../icons/icons8-shuffle-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon13.addFile(u":/images/icons/icons8-shuffle-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.shuffleBtn.setIcon(icon13)
         self.shuffleBtn.setIconSize(QSize(30, 30))
         self.shuffleBtn.setCheckable(True)
@@ -291,7 +292,7 @@ class Ui_MediaPlayerWidget(object):
         self.muteBtn = QToolButton(MediaPlayerWidget)
         self.muteBtn.setObjectName(u"muteBtn")
         icon14 = QIcon()
-        icon14.addFile(u"../icons/icons8-mute-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon14.addFile(u":/images/icons/icons8-mute-30.png", QSize(), QIcon.Normal, QIcon.Off)
         self.muteBtn.setIcon(icon14)
         self.muteBtn.setIconSize(QSize(30, 30))
         self.muteBtn.setCheckable(True)
