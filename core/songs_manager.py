@@ -39,7 +39,7 @@ class SongsManager:
         try:
             self.c.execute("SELECT * FROM songs")
         except Exception as e:
-            return repr(e)                         #this is be a problem
+            return repr(e)                         #this is a problem
         else:
             songs = self.c.fetchall()             #fetchall returns a list of tuples and for some reason i cant convert them to a string  
             for i, song in enumerate(songs):
