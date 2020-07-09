@@ -7,19 +7,19 @@ class Song:
         self.path = path
         self.tag = TinyTag.get(path)
         self.id_ = id_
-        self.artist = tag.artist
-        self.title = tag.title
-        self.album = tag.album
-        self.track_total = tag.track_total
-        self.duration = tag.duration
-        self.genre = tag.genre
-        self.year = tag.year
-        self.composer = tag.composer
-        self.filesize = tag.filesize
-        self.bitrate = tag.bitrate
-        self.samplerate = tag.samplerate
-        self.comment = tag.comment
-        self.image = tag.get_image()
+        self.artist = self.tag.artist
+        self.title = self.tag.title
+        self.album = self.tag.album
+        self.track_total = self.tag.track_total
+        self.duration = self.tag.duration
+        self.genre = self.tag.genre
+        self.year = self.tag.year
+        self.composer = self.tag.composer
+        self.filesize = self.tag.filesize
+        self.bitrate = self.tag.bitrate
+        self.samplerate = self.tag.samplerate
+        self.comment = self.tag.comment
+        self.image = self.tag.get_image()
 
 class SongsManager:
     def __init__(self, db_path):
