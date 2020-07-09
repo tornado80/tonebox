@@ -24,11 +24,14 @@ class Ui_MediaPlayerWidget(object):
         MediaPlayerWidget.resize(846, 315)
         self.verticalLayout_3 = QVBoxLayout(MediaPlayerWidget)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.coverImageLabel = QLabel(MediaPlayerWidget)
         self.coverImageLabel.setObjectName(u"coverImageLabel")
-        self.coverImageLabel.setAlignment(Qt.AlignCenter)
+        self.coverImageLabel.setMaximumSize(QSize(100, 100))
+        self.coverImageLabel.setPixmap(QPixmap(u":/images/icons/Blank_CD_icon.png"))
+        self.coverImageLabel.setScaledContents(True)
 
         self.horizontalLayout_2.addWidget(self.coverImageLabel)
 
@@ -311,7 +314,7 @@ class Ui_MediaPlayerWidget(object):
 
     def retranslateUi(self, MediaPlayerWidget):
         MediaPlayerWidget.setWindowTitle(QCoreApplication.translate("MediaPlayerWidget", u"Form", None))
-        self.coverImageLabel.setText(QCoreApplication.translate("MediaPlayerWidget", u"coverImage", None))
+        self.coverImageLabel.setText("")
         self.infoLabel.setText(QCoreApplication.translate("MediaPlayerWidget", u"infoLabel", None))
         self.label_3.setText("")
         self.label.setText(QCoreApplication.translate("MediaPlayerWidget", u"Speed:", None))

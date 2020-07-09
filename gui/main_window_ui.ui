@@ -14,308 +14,153 @@
    <string>Tone Box</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QSplitter" name="splitter">
+     <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QFrame" name="frame_3">
+      <widget class="QSplitter" name="splitter">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QFrame" name="frame_3">
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QTabWidget" name="categoryWidget">
+           <property name="tabPosition">
+            <enum>QTabWidget::North</enum>
+           </property>
+           <property name="tabShape">
+            <enum>QTabWidget::Triangular</enum>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="libraryTab">
+            <attribute name="title">
+             <string>Library</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="albumsTab">
+            <attribute name="title">
+             <string>Albums</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="artistsTab">
+            <attribute name="title">
+             <string>Artists</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="genresTab">
+            <attribute name="title">
+             <string>Genres</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="playlistsTab">
+            <attribute name="title">
+             <string>Playlists</string>
+            </attribute>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QFrame" name="frame">
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,1">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Playing Queue:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QueueWidget" name="queueWidget" native="true"/>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QFrame" name="frame_2">
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
        <property name="frameShadow">
         <enum>QFrame::Plain</enum>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QTabWidget" name="categoryWidget">
-          <property name="tabPosition">
-           <enum>QTabWidget::North</enum>
-          </property>
-          <property name="tabShape">
-           <enum>QTabWidget::Triangular</enum>
-          </property>
-          <property name="currentIndex">
-           <number>3</number>
-          </property>
-          <widget class="QWidget" name="libraryTab">
-           <attribute name="title">
-            <string>Library</string>
-           </attribute>
-          </widget>
-          <widget class="QWidget" name="albumsTab">
-           <attribute name="title">
-            <string>Albums</string>
-           </attribute>
-          </widget>
-          <widget class="QWidget" name="artistsTab">
-           <attribute name="title">
-            <string>Artists</string>
-           </attribute>
-          </widget>
-          <widget class="QWidget" name="genresTab">
-           <attribute name="title">
-            <string>Genres</string>
-           </attribute>
-          </widget>
-          <widget class="QWidget" name="playlistsTab">
-           <attribute name="title">
-            <string>Playlists</string>
-           </attribute>
-          </widget>
-         </widget>
+         <widget class="MediaPlayerWidget" name="playerWidget" native="true"/>
         </item>
        </layout>
       </widget>
-      <widget class="QFrame" name="frame">
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Plain</enum>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <widget class="QWidget" name="queueWidget" native="true"/>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-    </item>
-    <item>
-     <widget class="QFrame" name="frame_2">
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="MediaPlayerWidget" name="playerWidget" native="true"/>
-       </item>
-      </layout>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>920</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionAddMusic"/>
-    <addaction name="actionAddDirectory"/>
-    <addaction name="actionNewPlaylist"/>
-    <addaction name="separator"/>
-    <addaction name="actionImportDatabase"/>
-    <addaction name="actionExportDatabase"/>
-    <addaction name="actionImportPlaylist"/>
-    <addaction name="actionExportPlaylist"/>
-    <addaction name="separator"/>
-    <addaction name="actionSettings"/>
-   </widget>
-   <widget class="QMenu" name="menuPlayback">
-    <property name="title">
-     <string>Playback</string>
-    </property>
-    <widget class="QMenu" name="menuSpeed">
-     <property name="title">
-      <string>Speed</string>
-     </property>
-     <addaction name="actionNormal_1x_2"/>
-     <addaction name="actionFaster_2"/>
-     <addaction name="actionSlower_2"/>
-    </widget>
-    <addaction name="menuSpeed"/>
-    <addaction name="separator"/>
-    <addaction name="actionPlay_Pause"/>
-    <addaction name="actionStop"/>
-    <addaction name="actionNext"/>
-    <addaction name="actionPrevious_Track"/>
-    <addaction name="separator"/>
-    <addaction name="actionJump_Forward"/>
-    <addaction name="actionFump_Backward"/>
-    <addaction name="actionJump_to_Specific_Time_2"/>
-    <addaction name="separator"/>
-    <addaction name="actionIncrease_Volume"/>
-    <addaction name="actionDecrease_Volume"/>
-    <addaction name="actionMute"/>
-   </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionHelp"/>
-    <addaction name="actionAbout"/>
-   </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuPlayback"/>
-   <addaction name="menuHelp"/>
-  </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionAddMusic"/>
+   <addaction name="actionAddDirectory"/>
+   <addaction name="actionNewPlaylist"/>
+   <addaction name="separator"/>
+   <addaction name="actionSettings"/>
+  </widget>
   <action name="actionAddMusic">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/music_add-512.png</normaloff>:/images/icons/music_add-512.png</iconset>
+   </property>
    <property name="text">
     <string>Add Music(s)</string>
    </property>
   </action>
   <action name="actionNewPlaylist">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/icons8-lounge-music-playlist-30.png</normaloff>:/images/icons/icons8-lounge-music-playlist-30.png</iconset>
+   </property>
    <property name="text">
     <string>New Playlist</string>
    </property>
   </action>
-  <action name="actionImportDatabase">
-   <property name="text">
-    <string>Import Database</string>
-   </property>
-  </action>
-  <action name="actionExportDatabase">
-   <property name="text">
-    <string>Export Database</string>
-   </property>
-  </action>
   <action name="actionSettings">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/settings-512.png</normaloff>:/images/icons/settings-512.png</iconset>
+   </property>
    <property name="text">
     <string>Settings</string>
    </property>
   </action>
-  <action name="actionExportPlaylist">
-   <property name="text">
-    <string>Export Playlist</string>
-   </property>
-  </action>
   <action name="actionAddDirectory">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/icons8-opened-folder-50.png</normaloff>:/images/icons/icons8-opened-folder-50.png</iconset>
+   </property>
    <property name="text">
     <string>Add Directory</string>
-   </property>
-  </action>
-  <action name="actionImportPlaylist">
-   <property name="text">
-    <string>Import Playlist</string>
-   </property>
-  </action>
-  <action name="actionNormal_1x">
-   <property name="text">
-    <string>Normal (1x)</string>
-   </property>
-  </action>
-  <action name="actionFaster">
-   <property name="text">
-    <string>Faster (+0.1x)</string>
-   </property>
-  </action>
-  <action name="actionSlower">
-   <property name="text">
-    <string>Slower (-0.1x)</string>
-   </property>
-  </action>
-  <action name="actionMush_Faster">
-   <property name="text">
-    <string>Much Faster (+0.3x)</string>
-   </property>
-  </action>
-  <action name="actionMuch_Slower">
-   <property name="text">
-    <string>Much Slower (-0.3x)</string>
-   </property>
-  </action>
-  <action name="actionJump_Forward">
-   <property name="text">
-    <string>Jump Forward</string>
-   </property>
-  </action>
-  <action name="actionFump_Backward">
-   <property name="text">
-    <string>Jump Backward</string>
-   </property>
-  </action>
-  <action name="actionJump_to_Specific_Time">
-   <property name="text">
-    <string>Jump to Specific Time</string>
-   </property>
-  </action>
-  <action name="actionPlay_Pause">
-   <property name="text">
-    <string>Play/Pause</string>
-   </property>
-  </action>
-  <action name="actionStop">
-   <property name="text">
-    <string>Stop</string>
-   </property>
-  </action>
-  <action name="actionNext">
-   <property name="text">
-    <string>Next Track</string>
-   </property>
-  </action>
-  <action name="actionPrevious_Track">
-   <property name="text">
-    <string>Previous Track</string>
-   </property>
-  </action>
-  <action name="actionDevice">
-   <property name="text">
-    <string>Audio Device</string>
-   </property>
-  </action>
-  <action name="actionStereo">
-   <property name="text">
-    <string>Stereo</string>
-   </property>
-  </action>
-  <action name="actionIncrease_Volume">
-   <property name="text">
-    <string>Increase Volume</string>
-   </property>
-  </action>
-  <action name="actionDecrease_Volume">
-   <property name="text">
-    <string>Decrease Volume</string>
-   </property>
-  </action>
-  <action name="actionMute">
-   <property name="text">
-    <string>Mute</string>
-   </property>
-  </action>
-  <action name="actionHelp">
-   <property name="text">
-    <string>Help</string>
-   </property>
-  </action>
-  <action name="actionAbout">
-   <property name="text">
-    <string>About</string>
-   </property>
-  </action>
-  <action name="actionJump_to_Specific_Time_2">
-   <property name="text">
-    <string>Jump to Specific Time</string>
-   </property>
-  </action>
-  <action name="actionNormal_1x_2">
-   <property name="text">
-    <string>Normal</string>
-   </property>
-  </action>
-  <action name="actionFaster_2">
-   <property name="text">
-    <string>Faster</string>
-   </property>
-  </action>
-  <action name="actionSlower_2">
-   <property name="text">
-    <string>Slower</string>
    </property>
   </action>
  </widget>
@@ -326,7 +171,15 @@
    <header>.media_player_widget</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>QueueWidget</class>
+   <extends>QWidget</extends>
+   <header>.queue_widget</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>
