@@ -2,8 +2,9 @@
 .idea/
 .vscode/
 
-# ignore project files
+# ignore json and database files
 *.db
+*.json
 
 # pyc, pyo, pycache files
 __pycache__/
