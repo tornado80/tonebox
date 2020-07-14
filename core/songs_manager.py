@@ -6,7 +6,7 @@ class Song:
      def __init__(self, path, id_=None, artist=None, title=None, album=None, track_total=None, duration=None, genre=None, year=None, composer=None, filesize=None, bitrate=None, samplerate=None, comment=None, image=None):
         self.path = path
         self.tag = TinyTag.get(path)
-        self.id_ = id_
+        self.id_ = id(self)
         self.artist = self.tag.artist
         self.title = self.tag.title
         self.album = self.tag.album
@@ -45,17 +45,17 @@ class SongsManager:
             for song in songs:
                 self.songs[TinyTag.get(song[0]).title] = song[0]
 
-    def add(self, song_path):
+    def add(self, song):
         try:
-            self.c.execute(f"INSERT INTO {self.db_name} VALUES ({song_path})")
+            self.c.execute(f"INSERT INTO {self.db_name} VALUES ({song.id_}, {song.path})")
         except Exception as e:
             return repr(e)
         else:
             self.conn.commit()    
 
-    def remove(self, song_path):
+    def remove(self, song):
         try:
-            self.c.execute(f"DELETE FROM {self.db_name} WHERE path=?", (song_path,))
+            self.c.execute(f"DELETE FROM {self.db_name} WHERE path=?", (song.path,))
         except Exception as e:
             return repr(e)
         else:
