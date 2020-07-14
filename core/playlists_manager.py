@@ -1,4 +1,6 @@
 import datetime
+import sqlite3
+import ntpath
 
 class Playlist:
     def __init__(self, name, last_played=None):
@@ -12,3 +14,12 @@ class Playlist:
 
     def get_songs(self):
         pass
+
+def PlaylistManager:
+    def __init__(self, db_path):
+        self.db_path = db_path
+        self.db_name = ntpath.basename(db_path)
+
+        self.conn = sqlite3.connect(self.db_path) 
+        self.c = self.conn.cursor()
+        
