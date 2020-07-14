@@ -1,6 +1,6 @@
 import datetime
 
-class PlaylistManager:
+class Playlist:
     def __init__(self, name, last_played=None):
         self.name = name
         self.songs = []
