@@ -51,18 +51,21 @@ class Manager:
         else:
             self.db_conn.commit()
 
-    def remove_playlist(self, playlist):
+    def remove_playlist(self, playlist_name):
         try:
-            self.c.execute(f"DELETE FROM playlists WHERE id=?", (playlist.id_,))
-        except Exception as e:                                                         #should also remove the playlists keys from the group table 
-            return repr(e)
+            self.db_cursor.execute("SELECT playlist_id FROM  WHERE name=?", (playlist_name,))
+            playlist_id = str(self.db_cursor.fetchone())
+            self.db_cursor.execute("DELETE FROM playlists WHERE name=?", (playlist_name,))
+            self.db_cursor.execute("DELETE FROM group WHERE playlist_id=?", (playlist_id,))
+        except Exception as e:                                                     
+            self.show_errors_to_user(e)
         else:
-            self.conn.commit()
+            self.db_conn.commit()
 
     def add_song(self, song_path):
         try:
             new_song = Song(song_path)
-            self.db_cursor.execute(f"INSERT INTO songs (path) VALUES (?)", (new_song.path,))
+            self.db_cursor.execute("INSERT INTO songs (path) VALUES (?)", (new_song.path,))
         except Exception as e:
             self.show_errors_to_user(e)
         else:
@@ -70,7 +73,7 @@ class Manager:
 
     def remove_song(self, song_path):
         try:
-            self.db_cursor.execute("SELECT song_id FROM songs WHERE path=?", (song_path))
+            self.db_cursor.execute("SELECT song_id FROM songs WHERE path=?", (song_path,))
             song_id = str(self.db_cursor.fetchone())
             self.db_cursor.execute("DELETE FROM songs WHERE path=?", (song_path,))
             self.db_cursor.execute("DELETE FROM group WHERE song_id=?", (song_id,))
