@@ -41,10 +41,13 @@ class Manager:
         self.db_path = db_path
         self.db_conn = sqlite3.connect(self.db_path)   
         self.db_cursor = self.db_conn.cursor()
+        self.songs = []
+        self.playlists = {}
 
     def add_playlist(self, playlist_name):
         try:
             new_playlist = Playlist(playlist_name)
+            self.playlists[new_playlist] = []
             self.db_cursor.execute(f"INSERT INTO playlists(name) VALUES (?)", (new_playlist.name,))    
         except Exception as e:
             self.show_errors_to_user(e)
@@ -53,6 +56,10 @@ class Manager:
 
     def remove_playlist(self, playlist_name):
         try:
+            for playlist in self.playlists.keys():
+                if playlist_name == playlist:
+                    del self.playlists[playlist]
+                    
             self.db_cursor.execute("SELECT playlist_id FROM  WHERE name=?", (playlist_name,))
             playlist_id = str(self.db_cursor.fetchone())
             self.db_cursor.execute("DELETE FROM playlists WHERE name=?", (playlist_name,))
@@ -65,6 +72,7 @@ class Manager:
     def add_song(self, song_path):
         try:
             new_song = Song(song_path)
+            self.songs.append(new_song)
             self.db_cursor.execute("INSERT INTO songs (path) VALUES (?)", (new_song.path,))
         except Exception as e:
             self.show_errors_to_user(e)
@@ -73,6 +81,10 @@ class Manager:
 
     def remove_song(self, song_path):
         try:
+            for song in self.songs:
+            if song_path == song.path:
+                del song
+
             self.db_cursor.execute("SELECT song_id FROM songs WHERE path=?", (song_path,))
             song_id = str(self.db_cursor.fetchone())
             self.db_cursor.execute("DELETE FROM songs WHERE path=?", (song_path,))
