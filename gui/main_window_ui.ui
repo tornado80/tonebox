@@ -16,11 +16,11 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QSplitter" name="splitter_2">
+     <widget class="QSplitter" name="playerSplitter">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QSplitter" name="splitter">
+      <widget class="QSplitter" name="queueSplitter">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -47,6 +47,11 @@
             <attribute name="title">
              <string>Library</string>
             </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <widget class="SongsView" name="librarySongsView"/>
+             </item>
+            </layout>
            </widget>
            <widget class="QWidget" name="albumsTab">
             <attribute name="title">
@@ -176,6 +181,11 @@
    <extends>QWidget</extends>
    <header>.queue_widget</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SongsView</class>
+   <extends>QTableWidget</extends>
+   <header>.views</header>
   </customwidget>
  </customwidgets>
  <resources>

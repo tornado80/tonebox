@@ -17,6 +17,7 @@ from PySide2.QtWidgets import *
 
 from .media_player_widget import MediaPlayerWidget
 from .queue_widget import QueueWidget
+from .views import SongsView
 
 from  . import icons_rc
 
@@ -49,13 +50,13 @@ class Ui_MainWindowUi(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_2 = QVBoxLayout(self.centralwidget)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.splitter_2 = QSplitter(self.centralwidget)
-        self.splitter_2.setObjectName(u"splitter_2")
-        self.splitter_2.setOrientation(Qt.Vertical)
-        self.splitter = QSplitter(self.splitter_2)
-        self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Horizontal)
-        self.frame_3 = QFrame(self.splitter)
+        self.playerSplitter = QSplitter(self.centralwidget)
+        self.playerSplitter.setObjectName(u"playerSplitter")
+        self.playerSplitter.setOrientation(Qt.Vertical)
+        self.queueSplitter = QSplitter(self.playerSplitter)
+        self.queueSplitter.setObjectName(u"queueSplitter")
+        self.queueSplitter.setOrientation(Qt.Horizontal)
+        self.frame_3 = QFrame(self.queueSplitter)
         self.frame_3.setObjectName(u"frame_3")
         self.frame_3.setFrameShape(QFrame.Box)
         self.frame_3.setFrameShadow(QFrame.Plain)
@@ -67,6 +68,13 @@ class Ui_MainWindowUi(object):
         self.categoryWidget.setTabShape(QTabWidget.Triangular)
         self.libraryTab = QWidget()
         self.libraryTab.setObjectName(u"libraryTab")
+        self.verticalLayout_5 = QVBoxLayout(self.libraryTab)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.librarySongsView = SongsView(self.libraryTab)
+        self.librarySongsView.setObjectName(u"librarySongsView")
+
+        self.verticalLayout_5.addWidget(self.librarySongsView)
+
         self.categoryWidget.addTab(self.libraryTab, "")
         self.albumsTab = QWidget()
         self.albumsTab.setObjectName(u"albumsTab")
@@ -83,8 +91,8 @@ class Ui_MainWindowUi(object):
 
         self.verticalLayout.addWidget(self.categoryWidget)
 
-        self.splitter.addWidget(self.frame_3)
-        self.frame = QFrame(self.splitter)
+        self.queueSplitter.addWidget(self.frame_3)
+        self.frame = QFrame(self.queueSplitter)
         self.frame.setObjectName(u"frame")
         self.frame.setFrameShape(QFrame.Box)
         self.frame.setFrameShadow(QFrame.Plain)
@@ -101,9 +109,9 @@ class Ui_MainWindowUi(object):
         self.verticalLayout_4.addWidget(self.queueWidget)
 
         self.verticalLayout_4.setStretch(1, 1)
-        self.splitter.addWidget(self.frame)
-        self.splitter_2.addWidget(self.splitter)
-        self.frame_2 = QFrame(self.splitter_2)
+        self.queueSplitter.addWidget(self.frame)
+        self.playerSplitter.addWidget(self.queueSplitter)
+        self.frame_2 = QFrame(self.playerSplitter)
         self.frame_2.setObjectName(u"frame_2")
         self.frame_2.setFrameShape(QFrame.Box)
         self.frame_2.setFrameShadow(QFrame.Plain)
@@ -114,9 +122,9 @@ class Ui_MainWindowUi(object):
 
         self.verticalLayout_3.addWidget(self.playerWidget)
 
-        self.splitter_2.addWidget(self.frame_2)
+        self.playerSplitter.addWidget(self.frame_2)
 
-        self.verticalLayout_2.addWidget(self.splitter_2)
+        self.verticalLayout_2.addWidget(self.playerSplitter)
 
         MainWindowUi.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindowUi)

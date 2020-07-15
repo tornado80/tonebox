@@ -8,23 +8,23 @@ class Playlist:
         self.songs = []
 
 class Song:
-    def __init__(self, path, db_id=None):
+    def __init__(self, path, db_id=None, image = True):
         self.db_id = db_id
         self.path = path
-        #self.tag = TinyTag.get(path)
-        #self.artist = self.tag.artist
-        #self.title = self.tag.title
-        #self.album = self.tag.album
-        #self.track_total = self.tag.track_total
-        #self.duration = self.tag.duration
-        #self.genre = self.tag.genre
-        #self.year = self.tag.year
-        #self.composer = self.tag.composer
-        #self.filesize = self.tag.filesize
-        #self.bitrate = self.tag.bitrate
-        #self.samplerate = self.tag.samplerate
-        #self.comment = self.tag.comment
-        #self.image = self.tag.get_image()
+        self.tag = TinyTag.get(path)
+        self.artist = self.tag.artist
+        self.title = self.tag.title
+        self.album = self.tag.album
+        self.track_total = self.tag.track_total
+        self.duration = self.tag.duration
+        self.genre = self.tag.genre
+        self.year = self.tag.year
+        self.composer = self.tag.composer
+        self.filesize = self.tag.filesize
+        self.bitrate = self.tag.bitrate
+        self.samplerate = self.tag.samplerate
+        self.comment = self.tag.comment
+        self.image = self.tag.get_image()
 
 class Manager:
 
@@ -119,8 +119,8 @@ class Manager:
             self.db_cursor.execute("INSERT INTO Songs(path) VALUES (?)", (new_song.path,))
             self.db_connection.commit()
             self.db_cursor.execute("SELECT song_id FROM Songs WHERE path=?", (song_path,))
-            new_song.id_ = str(self.db_cursor.fetchone()[0])
-            self.songs[new_song.id_] = new_song
+            new_song.db_id = str(self.db_cursor.fetchone()[0])
+            self.songs[new_song.db_id] = new_song
         except sqlite3.Error as e:
             self.show_errors_to_user(e)
         else:
@@ -145,6 +145,26 @@ class Manager:
     def get_alldata(self):
         pass
 
+    def songs_dict_filter(self, **keywords):
+        result = []
+        for song_id, song in self.songs.items():
+            for kw_key, kw_val in keywords.items():
+                if song.getattr(kw_key) != kw_val:
+                    break
+            else:
+                result.append(song_id)
+        return result                    
+
+    def playlists_dict_filter(self, **keywords):
+        result = []
+        for playlist_id, playlist in self.playlists.items():
+            for kw_key, kw_val in keywords.items():
+                if playlist.getattr(kw_key) != kw_val:
+                    break
+            else:
+                result.append(playlist_id)
+        return result
+
     def filter(self, query):
         try:
             self.db_cursor.execute(query)
@@ -160,4 +180,5 @@ class Manager:
         print(err, f"at {place}" if place is not None else "[place not given]")  
 
 if __name__ == "__main__":
-    m = Manager("test.db")
+    m = Manager("tonebox.db")
+    m.add_song("/home/amirhosein/Music/Seyed Jalaledin Mohammadian - Shirin Shirina.mp3")
