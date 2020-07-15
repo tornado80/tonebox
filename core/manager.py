@@ -48,7 +48,7 @@ class Manager:
         try:
             new_playlist = Playlist(playlist_name)
             self.playlists[new_playlist] = []
-            self.db_cursor.execute(f"INSERT INTO playlists(name) VALUES (?)", (new_playlist.name,))    
+            self.db_cursor.execute("INSERT INTO playlists(name) VALUES (?)", (new_playlist.name,))    
         except Exception as e:
             self.show_errors_to_user(e)
         else:
@@ -82,8 +82,8 @@ class Manager:
     def remove_song(self, song_path):
         try:
             for song in self.songs:
-            if song_path == song.path:
-                del song
+                if song_path == song.path:
+                    del song
 
             self.db_cursor.execute("SELECT song_id FROM songs WHERE path=?", (song_path,))
             song_id = str(self.db_cursor.fetchone())
