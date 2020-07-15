@@ -11,20 +11,20 @@ class Song:
     def __init__(self, path, db_id=None):
         self.db_id = db_id
         self.path = path
-        self.tag = TinyTag.get(path)
-        self.artist = self.tag.artist
-        self.title = self.tag.title
-        self.album = self.tag.album
-        self.track_total = self.tag.track_total
-        self.duration = self.tag.duration
-        self.genre = self.tag.genre
-        self.year = self.tag.year
-        self.composer = self.tag.composer
-        self.filesize = self.tag.filesize
-        self.bitrate = self.tag.bitrate
-        self.samplerate = self.tag.samplerate
-        self.comment = self.tag.comment
-        self.image = self.tag.get_image()
+        #self.tag = TinyTag.get(path)
+        #self.artist = self.tag.artist
+        #self.title = self.tag.title
+        #self.album = self.tag.album
+        #self.track_total = self.tag.track_total
+        #self.duration = self.tag.duration
+        #self.genre = self.tag.genre
+        #self.year = self.tag.year
+        #self.composer = self.tag.composer
+        #self.filesize = self.tag.filesize
+        #self.bitrate = self.tag.bitrate
+        #self.samplerate = self.tag.samplerate
+        #self.comment = self.tag.comment
+        #self.image = self.tag.get_image()
 
 class Manager:
 
@@ -37,7 +37,7 @@ class Manager:
         playlist_id INTEGER PRIMARY KEY,
         name TEXT NOT NULL
     );
-    CREATE TABLE IF NOT EXISTS SongsPlaylistsGroup (
+    CREATE TABLE IF NOT EXISTS SongsPlaylistsGroups (
         record_id INTEGER PRIMARY KEY,
         song_id INTEGER NOT NULL,
         playlist_id INTEGER NOT NULL, 
@@ -67,7 +67,7 @@ class Manager:
             self.db_cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
             self.db_conn.commit()
             for tbl in self.db_cursor.fetchall():
-                if tbl[0] not in ["Songs", "Playlists", "SongsPlaylistsGroup"]:
+                if tbl[0] not in ["Songs", "Playlists", "SongsPlaylistsGroups"]:
                     return False
             return True
         except sqlite3.Error as err:
@@ -88,7 +88,7 @@ class Manager:
         try:
             new_playlist = Playlist(playlist_name)
             self.playlists[new_playlist] = []
-            self.db_cursor.execute("INSERT INTO playlists(name) VALUES (?)", (new_playlist.name,))    
+            self.db_cursor.execute("INSERT INTO Playlists(name) VALUES (?)", (new_playlist.name,))    
         except Exception as e:
             self.show_errors_to_user(e)
         else:
@@ -102,10 +102,10 @@ class Manager:
                     break
             del self.playlists[flag]        
                     
-            self.db_cursor.execute("SELECT playlist_id FROM playlists WHERE name=?", (playlist_name,))
+            self.db_cursor.execute("SELECT playlist_id FROM Playlists WHERE name=?", (playlist_name,))
             playlist_id = str(self.db_cursor.fetchone()[0])                                                                        
-            self.db_cursor.execute("DELETE FROM playlists WHERE name=?", (playlist_name,))
-            self.db_cursor.execute("DELETE FROM group WHERE playlist_id=?", (playlist_id,))
+            self.db_cursor.execute("DELETE FROM Playlists WHERE name=?", (playlist_name,))
+            self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE playlist_id=?", (playlist_id,))
         except Exception as e:                                                     
             self.show_errors_to_user(e)
         else:
@@ -114,9 +114,9 @@ class Manager:
     def add_song(self, song_path):
         try:
             new_song = Song(song_path)
-            self.db_cursor.execute("INSERT INTO songs(path) VALUES (?)", (new_song.path,))
+            self.db_cursor.execute("INSERT INTO Songs(path) VALUES (?)", (new_song.path,))
             self.db_connection.commit()
-            self.db_cursor.execute("SELECT song_id FROM songs WHERE path=?", (song_path,))
+            self.db_cursor.execute("SELECT song_id FROM Songs WHERE path=?", (song_path,))
             new_song.id_ = str(self.db_cursor.fetchone()[0])
             self.songs[new_song.id_] = new_song
         except Exception as e:
@@ -131,10 +131,10 @@ class Manager:
                     flag = song_id
             del self.songs[flag]        
 
-            self.db_cursor.execute("SELECT song_id FROM songs WHERE path=?", (song_path,))
+            self.db_cursor.execute("SELECT song_id FROM Songs WHERE path=?", (song_path,))
             song_id = str(self.db_cursor.fetchone())
-            self.db_cursor.execute("DELETE FROM songs WHERE path=?", (song_path,))
-            self.db_cursor.execute("DELETE FROM group WHERE song_id=?", (song_id,))
+            self.db_cursor.execute("DELETE FROM Songs WHERE path=?", (song_path,))
+            self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song_id,))
         except Exception as e:
             self.show_errors_to_user(e)
         else:
