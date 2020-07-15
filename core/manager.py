@@ -68,27 +68,30 @@ class Manager:
         else:
             self.db_conn.commit()    
 
-    def remove(self, song):
+    def remove_song(self, song_path):
         try:
-            self.c.execute(f"DELETE FROM {self.db_name} WHERE path=?", (song.path,))
+            self.db_cursor.execute("SELECT song_id FROM songs WHERE path=?", (song_path))
+            song_id = str(self.db_cursor.fetchone())
+            self.db_cursor.execute("DELETE FROM songs WHERE path=?", (song_path,))
+            self.db_cursor.execute("DELETE FROM group WHERE song_id=?", (song_id,))
         except Exception as e:
-            return repr(e)
+            self.show_errors_to_user(e)
         else:
-            self.conn.commit()        
+            self.db_conn.commit()        
 
     def get_alldata(self):
         pass
 
     def filter(self, query):
         try:
-            self.c.execute(query)
+            self.db_cursor.execute(query)
         except Exception as e:
-            return repr(e)
+            self.show_errors_to_user(e)
         else:        
-            self.conn.commit()
+            self.db_conn.commit()
 
     def close_connection(self):
-        self.conn.close()
+        self.db_conn.close()
 
     def show_errors_to_user(self, err):
         print(err)    
