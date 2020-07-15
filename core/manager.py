@@ -84,6 +84,29 @@ class Manager:
         except sqlite3.Error as err:
             self.show_errors_to_user(err, "setup_database")
 
+    def get_alldata(self):
+        try:
+            self.db_cursor.execute("SELECT * FROM Songs")
+            songs = self.db_cursor.fetchall()
+            for data in songs:
+                song = Song(data[1])
+                self.songs[data[0]] = song
+
+            self.db_cursor.execute("SELECT * FROM Playlists")
+            playlists = self.db_cursor.fetchall()
+            for data in playlists:
+                playlist = Playlist(data[1])
+                self.playlists[data[0]] = playlist        
+            
+
+            self.db_cursor.execute("SELECT * FROM SongsPlaylistsGroups")
+            groups = self.db_cursor.fetchall()
+            for group in groups:
+                self.playlists[group[1]].songs = self.songs[group[2]]
+
+        except sqlite3.Error as e:
+            self.show_errors_to_user(e)        
+
     def add_playlist(self, playlist_name):
         try:
             new_playlist = Playlist(playlist_name)
@@ -131,6 +154,7 @@ class Manager:
             for song_id in self.songs.keys():
                 if song_path == self.songs[song_id].path:
                     flag = song_id
+                    break
             del self.songs[flag]        
 
             self.db_cursor.execute("SELECT song_id FROM Songs WHERE path=?", (song_path,))
@@ -142,7 +166,7 @@ class Manager:
         else:
             self.db_connection.commit()
     
-    def add_song_to_playlist(self, playlist_name, song_path):
+    def add_song_to_playlist(self, playlist_name, song_path):  #tiny tag wont work so takes in song path instead of name
         for playlist_id in self.playlists.keys():
             if self.playlists[playlist_id].name == playlist_name:
                 playlist = self.playlists[playlist_id]
@@ -181,9 +205,6 @@ class Manager:
         else:
             self.db_connection.commit()           
 
-    def get_alldata(self):
-        pass
-
     def filter(self, query):
         try:
             self.db_cursor.execute(query)
@@ -200,7 +221,5 @@ class Manager:
 
 if __name__ == "__main__":
     m = Manager("test.db")
-    m.add_song('E:\\what love is, i think..mp3')
-    m.add_playlist('lofi')
-    m.add_song_to_playlist('lofi', 'E:\\what love is, i think..mp3')
-    m.remove_song_from_playlist('lofi', 'E:\\what love is, i think..mp3')
+
+    
