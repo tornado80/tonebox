@@ -39,26 +39,8 @@ class Song:
 class Manager:
     def __init__(self, db_path):
         self.db_path = db_path
-        self.db_name = ntpath.basename(db_path) #assumes the file name is the dbs name
-        self.songs = {}
-
-        self.conn = sqlite3.connect(self.db_path)    #change to :memory: if u want to test
-        self.c = self.conn.cursor()
-
-        #self.c.execute("""CREATE TABLE songs(
-        #                path text
-        #)""")                                                     #for testing
-        #self.c.execute("INSERT INTO songs VALUES ('testing')")
-        #self.conn.commit()
-        
-        try:
-            self.c.execute(f"SELECT * FROM {self.db_name}")
-        except Exception as e:
-            return repr(e)                         #this is a problem
-        else:
-            songs = self.c.fetchall()           
-            for song in songs:
-                self.songs[TinyTag.get(song[0]).title] = song[0]
+        self.db_conn = sqlite3.connect(self.db_path)   
+        self.db_cursor = self.db_conn.cursor()
 
     def add_playlist(self, playlist):
         try:
@@ -76,13 +58,15 @@ class Manager:
         else:
             self.conn.commit()
 
-    def add(self, song):
+    def add_song(self, song_path):
+        new_song = Song(song_path)
+
         try:
-            self.c.execute(f"INSERT INTO {self.db_name} VALUES ({song.id_}, {song.path})")
+            self.db_cursor.execute(f"INSERT INTO songs (path) VALUES (?)", (new_song.path,))
         except Exception as e:
-            return repr(e)
+            self.show_errors_to_user(e)
         else:
-            self.conn.commit()    
+            self.db_conn.commit()    
 
     def remove(self, song):
         try:
@@ -105,3 +89,6 @@ class Manager:
 
     def close_connection(self):
         self.conn.close()
+
+    def show_errors_to_user(self, err):
+        print(err)    

@@ -3,7 +3,7 @@ from PySide2.QtWidgets import QApplication
 import sys
 from gui.main_window import MainWindow
 from tools.setup import SettingsModel
-from core import model, queue_model, media_player
+from core import songs_model, playlists_model, queue_model, media_player
 
 class ToneBoxApp(QApplication):
     def __init__(self, *args, **kwargs):
