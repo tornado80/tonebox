@@ -4,9 +4,9 @@ import ntpath
 from tinytag import TinyTag
 
 class Playlist:
-    def __init__(self, name, last_played=None):
+    def __init__(self, name, db_id=None, last_played=None):
+        self.db_id = db_id
         self.name = name
-        self.id_ = id(self)
         self.songs = []
         self.c_date = datetime.datetime.now()
         self.last_played = last_played
@@ -17,33 +17,11 @@ class Playlist:
     def get_songs(self):
         pass
 
-class PlaylistManager:
-    def __init__(self, db_path):
-        self.db_path = db_path
-        self.conn = sqlite3.connect(self.db_path) 
-        self.c = self.conn.cursor()
-
-    def add_playlist(self, playlist):
-        try:
-            self.c.execute(f"INSERT INTO playlists VALUES ({playlist.id_}, {playlist.name})")    #assumes the table name is playlists if its not it should be changed
-        except Exception as e:
-            return repr(e)
-        else:
-            self.conn.commit()
-
-    def remove_playlist(self, playlist):
-        try:
-            self.c.execute(f"DELETE FROM playlists WHERE id=?", (playlist.id_,))
-        except Exception as e:                                                         #should also remove the playlists keys from the group table 
-            return repr(e)
-        else:
-            self.conn.commit()
-
 class Song:
-     def __init__(self, path, id_=None, artist=None, title=None, album=None, track_total=None, duration=None, genre=None, year=None, composer=None, filesize=None, bitrate=None, samplerate=None, comment=None, image=None):
+    def __init__(self, path, db_id=None, artist=None, title=None, album=None, track_total=None, duration=None, genre=None, year=None, composer=None, filesize=None, bitrate=None, samplerate=None, comment=None, image=None):
+        self.db_id = db_id
         self.path = path
         self.tag = TinyTag.get(path)
-        self.id_ = id(self)
         self.artist = self.tag.artist
         self.title = self.tag.title
         self.album = self.tag.album
@@ -58,7 +36,7 @@ class Song:
         self.comment = self.tag.comment
         self.image = self.tag.get_image()
 
-class SongsManager:
+class Manager:
     def __init__(self, db_path):
         self.db_path = db_path
         self.db_name = ntpath.basename(db_path) #assumes the file name is the dbs name
@@ -81,6 +59,22 @@ class SongsManager:
             songs = self.c.fetchall()           
             for song in songs:
                 self.songs[TinyTag.get(song[0]).title] = song[0]
+
+    def add_playlist(self, playlist):
+        try:
+            self.c.execute(f"INSERT INTO playlists VALUES ({playlist.id_}, {playlist.name})")    #assumes the table name is playlists if its not it should be changed
+        except Exception as e:
+            return repr(e)
+        else:
+            self.conn.commit()
+
+    def remove_playlist(self, playlist):
+        try:
+            self.c.execute(f"DELETE FROM playlists WHERE id=?", (playlist.id_,))
+        except Exception as e:                                                         #should also remove the playlists keys from the group table 
+            return repr(e)
+        else:
+            self.conn.commit()
 
     def add(self, song):
         try:
