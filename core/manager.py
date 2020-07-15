@@ -1,5 +1,4 @@
 import sqlite3
-from sqlite3.dbapi2 import DatabaseError, NotSupportedError
 from tinytag import TinyTag
 
 class Playlist:
@@ -9,7 +8,7 @@ class Playlist:
         self.songs = []
 
 class Song:
-    def __init__(self, path, db_id=None, artist=None, title=None, album=None, track_total=None, duration=None, genre=None, year=None, composer=None, filesize=None, bitrate=None, samplerate=None, comment=None, image=None):
+    def __init__(self, path, db_id=None):
         self.db_id = db_id
         self.path = path
         self.tag = TinyTag.get(path)
@@ -77,7 +76,7 @@ class Manager:
         try:
             if not self.is_database_valid():
                 self.close_connection()
-                raise NotSupportedError("This database is not created by ToneBox App. Please change the path and try again.")
+                raise sqlite3.NotSupportedError("This database is not created by ToneBox App. Please change the path and try again.")
             self.db_cursor.executescript(Manager.SQLITE_SCHEMA)
             self.db_conn.commit()
         except sqlite3.Error as err:
