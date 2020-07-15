@@ -39,9 +39,9 @@ class Song:
 class Manager:
     def __init__(self, db_path):
         self.db_path = db_path
-        self.db_conn = sqlite3.connect(self.db_path)   
-        self.db_cursor = self.db_conn.cursor()
-        self.songs = []
+        self.db_connection = sqlite3.connect(self.db_path)   
+        self.db_cursor = self.db_connection.cursor()
+        self.songs = {}
         self.playlists = {}
 
     def add_playlist(self, playlist_name):
@@ -52,7 +52,7 @@ class Manager:
         except Exception as e:
             self.show_errors_to_user(e)
         else:
-            self.db_conn.commit()
+            self.db_connection.commit()
 
     def remove_playlist(self, playlist_name):
         try:
@@ -67,23 +67,25 @@ class Manager:
         except Exception as e:                                                     
             self.show_errors_to_user(e)
         else:
-            self.db_conn.commit()
+            self.db_connection.commit()
 
     def add_song(self, song_path):
         try:
             new_song = Song(song_path)
-            self.songs.append(new_song)
             self.db_cursor.execute("INSERT INTO songs (path) VALUES (?)", (new_song.path,))
+            self.db_cursor.execute("SELECT song_id FROM songs WHERE path=?", (new_song.path))
+            new_song.id_ = str(self.db_cursor.fetchone())
+            self.songs[new_song.id_] = new_song
         except Exception as e:
             self.show_errors_to_user(e)
         else:
-            self.db_conn.commit()    
+            self.db_connection.commit()    
 
     def remove_song(self, song_path):
         try:
-            for song in self.songs:
-                if song_path == song.path:
-                    del song
+            for song_id in self.songs.keys():
+                if song_path == self.songs[song_id].path:
+                    del self.songs[song_id]
 
             self.db_cursor.execute("SELECT song_id FROM songs WHERE path=?", (song_path,))
             song_id = str(self.db_cursor.fetchone())
@@ -92,7 +94,7 @@ class Manager:
         except Exception as e:
             self.show_errors_to_user(e)
         else:
-            self.db_conn.commit()        
+            self.db_connection.commit()        
 
     def get_alldata(self):
         pass
@@ -103,10 +105,10 @@ class Manager:
         except Exception as e:
             self.show_errors_to_user(e)
         else:        
-            self.db_conn.commit()
+            self.db_connection.commit()
 
     def close_connection(self):
-        self.db_conn.close()
+        self.db_connection.close()
 
     def show_errors_to_user(self, err):
         print(err)    
