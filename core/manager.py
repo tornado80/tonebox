@@ -159,7 +159,27 @@ class Manager:
         except sqlite3.Error as e:
             self.show_errors_to_user(e)
         else :
-            self.db_connection.commit()   
+            self.db_connection.commit()
+
+    def remove_song_from_playlist(self, playlist_name, song_path):
+        for playlist_id in self.playlists.keys():
+            if self.playlists[playlist_id].name == playlist_name:
+                playlist = self.playlists[playlist_id]
+                break
+        
+        for song_id in self.songs.keys():
+            if self.songs[song_id].path == song_path:
+                song = self.songs[song_id] 
+                break
+
+        playlist.songs.remove(song)
+
+        try:
+            self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song.db_id,))
+        except sqlite3.Error as e:
+            self.show_errors_to_user(e)
+        else:
+            self.db_connection.commit()           
 
     def get_alldata(self):
         pass
@@ -180,3 +200,7 @@ class Manager:
 
 if __name__ == "__main__":
     m = Manager("test.db")
+    m.add_song('E:\\what love is, i think..mp3')
+    m.add_playlist('lofi')
+    m.add_song_to_playlist('lofi', 'E:\\what love is, i think..mp3')
+    m.remove_song_from_playlist('lofi', 'E:\\what love is, i think..mp3')
