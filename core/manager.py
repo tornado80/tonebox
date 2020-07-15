@@ -11,20 +11,20 @@ class Song:
     def __init__(self, path, db_id=None):
         self.db_id = db_id
         self.path = path
-        #self.tag = TinyTag.get(path)
-        #self.artist = self.tag.artist
-        #self.title = self.tag.title
-        #self.album = self.tag.album
-        #self.track_total = self.tag.track_total
-        #self.duration = self.tag.duration
-        #self.genre = self.tag.genre
-        #self.year = self.tag.year
-        #self.composer = self.tag.composer
-        #self.filesize = self.tag.filesize
-        #self.bitrate = self.tag.bitrate
-        #self.samplerate = self.tag.samplerate
-        #self.comment = self.tag.comment
-        #self.image = self.tag.get_image()
+        self.tag = TinyTag.get(path)
+        self.artist = self.tag.artist
+        self.title = self.tag.title
+        self.album = self.tag.album
+        self.track_total = self.tag.track_total
+        self.duration = self.tag.duration
+        self.genre = self.tag.genre
+        self.year = self.tag.year
+        self.composer = self.tag.composer
+        self.filesize = self.tag.filesize
+        self.bitrate = self.tag.bitrate
+        self.samplerate = self.tag.samplerate
+        self.comment = self.tag.comment
+        self.image = self.tag.get_image()
 
 class Manager:
 
@@ -98,9 +98,9 @@ class Manager:
 
     def remove_playlist(self, playlist_name):
         try:
-            for playlist in self.playlists.keys():
-                if playlist_name == playlist.name:
-                    flag = playlist
+            for playlist_id in self.playlists.keys():
+                if playlist_name == self.playlists[playlist_id].name:
+                    flag = playlist_id
                     break
             del self.playlists[flag]        
                     
