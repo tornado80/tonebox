@@ -55,8 +55,8 @@ class Manager:
 
     def open_connection(self):
         try:
-            self.db_conn = sqlite3.connect(self.db_path)
-            self.db_cursor = self.db_conn.cursor()
+            self.db_connection = sqlite3.connect(self.db_path)
+            self.db_cursor = self.db_connection.cursor()
             return 1
         except sqlite3.Error as err:
             self.show_errors_to_user(err)
@@ -65,7 +65,7 @@ class Manager:
     def is_database_valid(self) -> bool:
         try:
             self.db_cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-            self.db_conn.commit()
+            self.db_connection.commit()
             for tbl in self.db_cursor.fetchall():
                 if tbl[0] not in ["Songs", "Playlists", "SongsPlaylistsGroups"]:
                     return False
@@ -80,16 +80,18 @@ class Manager:
                 self.close_connection()
                 raise sqlite3.NotSupportedError("This database is not created by ToneBox App. Please change the path and try again.")
             self.db_cursor.executescript(Manager.SQLITE_SCHEMA)
-            self.db_conn.commit()
+            self.db_connection.commit()
         except sqlite3.Error as err:
             self.show_errors_to_user(err, "setup_database")
 
     def add_playlist(self, playlist_name):
         try:
             new_playlist = Playlist(playlist_name)
-            self.playlists[new_playlist] = []
-            self.db_cursor.execute("INSERT INTO Playlists(name) VALUES (?)", (new_playlist.name,))    
-        except Exception as e:
+            self.db_cursor.execute("INSERT INTO Playlists(name) VALUES (?)", (new_playlist.name,))
+            self.db_cursor.execute("SELECT playlist_id FROM Playlists WHERE name=?", (playlist_name,))
+            new_playlist.db_id = str(self.db_cursor.fetchone()[0])
+            self.playlists[new_playlist.db_id] = new_playlist    
+        except sqlite3.Error as e:
             self.show_errors_to_user(e)
         else:
             self.db_connection.commit()
@@ -106,7 +108,7 @@ class Manager:
             playlist_id = str(self.db_cursor.fetchone()[0])                                                                        
             self.db_cursor.execute("DELETE FROM Playlists WHERE name=?", (playlist_name,))
             self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE playlist_id=?", (playlist_id,))
-        except Exception as e:                                                     
+        except sqlite3.Error as e:                                                     
             self.show_errors_to_user(e)
         else:
             self.db_connection.commit()
@@ -119,7 +121,7 @@ class Manager:
             self.db_cursor.execute("SELECT song_id FROM Songs WHERE path=?", (song_path,))
             new_song.id_ = str(self.db_cursor.fetchone()[0])
             self.songs[new_song.id_] = new_song
-        except Exception as e:
+        except sqlite3.Error as e:
             self.show_errors_to_user(e)
         else:
             self.db_connection.commit()    
@@ -135,7 +137,7 @@ class Manager:
             song_id = str(self.db_cursor.fetchone())
             self.db_cursor.execute("DELETE FROM Songs WHERE path=?", (song_path,))
             self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song_id,))
-        except Exception as e:
+        except sqlite3.Error as e:
             self.show_errors_to_user(e)
         else:
             self.db_connection.commit()        
@@ -146,7 +148,7 @@ class Manager:
     def filter(self, query):
         try:
             self.db_cursor.execute(query)
-        except Exception as e:
+        except sqlite3.Error as e:
             self.show_errors_to_user(e)
         else:        
             self.db_connection.commit()
