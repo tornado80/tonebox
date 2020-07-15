@@ -1,21 +1,12 @@
-import datetime
 import sqlite3
-import ntpath
+from sqlite3.dbapi2 import DatabaseError, NotSupportedError
 from tinytag import TinyTag
 
 class Playlist:
-    def __init__(self, name, db_id=None, last_played=None):
+    def __init__(self, name, db_id=None):
         self.db_id = db_id
         self.name = name
         self.songs = []
-        self.c_date = datetime.datetime.now()
-        self.last_played = last_played
-
-    def update_last_played(self):
-        self.last_played = datetime.datetime.now()
-
-    def get_songs(self):
-        pass
 
 class Song:
     def __init__(self, path, db_id=None, artist=None, title=None, album=None, track_total=None, duration=None, genre=None, year=None, composer=None, filesize=None, bitrate=None, samplerate=None, comment=None, image=None):
@@ -37,10 +28,60 @@ class Song:
         self.image = self.tag.get_image()
 
 class Manager:
+
+    SQLITE_SCHEMA = """
+    CREATE TABLE IF NOT EXISTS Songs (
+        song_id INTEGER PRIMARY KEY,
+        path TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS Playlists (
+        playlist_id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS SongsPlaylistsGroup (
+        record_id INTEGER PRIMARY KEY,
+        song_id INTEGER NOT NULL,
+        playlist_id INTEGER NOT NULL, 
+        FOREIGN KEY (song_id) REFERENCES Songs (song_id),
+        FOREIGN KEY (playlist_id) REFERENCES Playlists (playlist_id)
+    );
+    """
+
     def __init__(self, db_path):
         self.db_path = db_path
-        self.db_conn = sqlite3.connect(self.db_path)   
-        self.db_cursor = self.db_conn.cursor()
+        if self.open_connection():
+            self.setup_database()
+
+    def open_connection(self):
+        try:
+            self.db_conn = sqlite3.connect(self.db_path)
+            self.db_cursor = self.db_conn.cursor()
+            return 1
+        except sqlite3.Error as err:
+            self.show_errors_to_user(err)
+            return 0
+
+    def is_database_valid(self) -> bool:
+        try:
+            self.db_cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            self.db_conn.commit()
+            for tbl in self.db_cursor.fetchall():
+                if tbl[0] not in ["Songs", "Playlists", "SongsPlaylistsGroup"]:
+                    return False
+            return True
+        except sqlite3.Error as err:
+            self.show_errors_to_user(err)
+            return False
+
+    def setup_database(self):
+        try:
+            if not self.is_database_valid():
+                self.close_connection()
+                raise NotSupportedError("This database is not created by ToneBox App. Please change the path and try again.")
+            self.db_cursor.executescript(Manager.SQLITE_SCHEMA)
+            self.db_conn.commit()
+        except sqlite3.Error as err:
+            self.show_errors_to_user(err, "setup_database")
 
     def add_playlist(self, playlist_name):
         try:
@@ -96,5 +137,8 @@ class Manager:
     def close_connection(self):
         self.db_conn.close()
 
-    def show_errors_to_user(self, err):
-        print(err)    
+    def show_errors_to_user(self, err, place=None):
+        print(err, f"at {place}" if place is not None else "[place not given]")  
+
+if __name__ == "__main__":
+    m = Manager("test.db")
