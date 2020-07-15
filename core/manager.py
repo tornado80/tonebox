@@ -42,13 +42,14 @@ class Manager:
         self.db_conn = sqlite3.connect(self.db_path)   
         self.db_cursor = self.db_conn.cursor()
 
-    def add_playlist(self, playlist):
+    def add_playlist(self, playlist_name):
         try:
-            self.c.execute(f"INSERT INTO playlists VALUES ({playlist.id_}, {playlist.name})")    #assumes the table name is playlists if its not it should be changed
+            new_playlist = Playlist(playlist_name)
+            self.db_cursor.execute(f"INSERT INTO playlists(name) VALUES (?)", (new_playlist.name,))    
         except Exception as e:
-            return repr(e)
+            self.show_errors_to_user(e)
         else:
-            self.conn.commit()
+            self.db_conn.commit()
 
     def remove_playlist(self, playlist):
         try:
@@ -59,9 +60,8 @@ class Manager:
             self.conn.commit()
 
     def add_song(self, song_path):
-        new_song = Song(song_path)
-
         try:
+            new_song = Song(song_path)
             self.db_cursor.execute(f"INSERT INTO songs (path) VALUES (?)", (new_song.path,))
         except Exception as e:
             self.show_errors_to_user(e)
