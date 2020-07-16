@@ -151,7 +151,7 @@ class Manager:
             self.db_connection.commit()    
 
     def remove_song(self, song_path=None, song_id=None):
-         if song_id:
+        if song_id:
             try:
                 del self.songs[song_id]
                 self.db_cursor.execute("DELETE FROM Songs WHERE song_id=?", (song_id,))
@@ -160,7 +160,7 @@ class Manager:
                 self.show_errors_to_user(e)
             else:
                 self.db_connection.commit() 
-                
+
         if song_path:
             try:
                 for song_id in self.songs.keys():
