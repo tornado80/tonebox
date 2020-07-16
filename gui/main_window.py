@@ -17,16 +17,20 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
 
         # actions
         self.actionAddMusic.triggered.connect(self.handle_add_music_action)
-        self.actionAddDirectory.triggered.connect(self.handle_add_directory_action)
-        self.actionNewPlaylist.triggered.coonect(self.handle_new_playlist_action)
+        self.actionNewPlaylist.triggered.connect(self.handle_new_playlist_action)
         self.actionSettings.triggered.connect(self.handle_settings)
 
-    def addMusicActionTriggered(self):
+    def handle_add_music_action(self):
         new_songs, _ = QFileDialog.getOpenFileNames(self, 
             "Add Music(s) to Library", 
-            self.settings_model.json_dict["OpenFileName"],
+            self.settings_model.json_dict["OpenFilePath"],
             "Audio Files ({})".format(" ".join(self.settings_model.SUPPORTED_AUDIO_FILES))
             )
         for new_song in new_songs:
             self.manager_model.add_song(new_song)
-        
+    
+    def handle_new_playlist_action(self):
+        pass
+
+    def handle_settings(self):
+        pass

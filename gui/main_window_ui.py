@@ -135,7 +135,6 @@ class Ui_MainWindowUi(object):
         MainWindowUi.addToolBar(Qt.TopToolBarArea, self.toolBar)
 
         self.toolBar.addAction(self.actionAddMusic)
-        self.toolBar.addAction(self.actionAddDirectory)
         self.toolBar.addAction(self.actionNewPlaylist)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionSettings)

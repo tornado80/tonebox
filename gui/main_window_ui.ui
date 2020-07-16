@@ -127,7 +127,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionAddMusic"/>
-   <addaction name="actionAddDirectory"/>
    <addaction name="actionNewPlaylist"/>
    <addaction name="separator"/>
    <addaction name="actionSettings"/>

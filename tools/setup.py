@@ -19,7 +19,7 @@ class Settings(object):
             "Genre" : [1, 3],
             "Duration" : [1, 4],
             "Location" : [1, 5],
-            "Total tracks" : [1, 6],
+            "Total tracks" : [0, 6],
             "Year" : [1, 7],
             "Composer" : [0, 8],
             "File size" : [0, 9],
