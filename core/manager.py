@@ -120,6 +120,16 @@ class Manager:
             self.db_connection.commit()
 
     def remove_playlist(self, playlist_name=None, playlist_id=None):
+        if playlist_id:
+            try:
+                del self.playlists[playlist_id]
+                self.db_cursor.execute("DELETE FROM Playlists WHERE playlist_id=?", (playlist_id,))
+                self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE playlist_id=?", (playlist_id,))
+            except sqlite3.Error as e:                                                     
+                self.show_errors_to_user(e)
+            else:
+                self.db_connection.commit()    
+
         if playlist_name:
             try:
                 for playlist_id in self.playlists.keys():
