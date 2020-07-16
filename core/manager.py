@@ -221,25 +221,37 @@ class Manager:
             else :
                 self.db_connection.commit()
 
-    def remove_song_from_playlist(self, playlist_name, song_path):
-        for playlist_id in self.playlists.keys():
-            if self.playlists[playlist_id].name == playlist_name:
-                playlist = self.playlists[playlist_id]
-                break
-        
-        for song_id in self.songs.keys():
-            if self.songs[song_id].path == song_path:
-                song = self.songs[song_id] 
-                break
-
-        playlist.songs.remove(song)
-
+    def remove_song_from_playlist(self, playlist_id=None, song_id=None, playlist_name=None, song_path=None):
+        if playlist_id and song_id:
+            playlist = self.playlists[playlist_id]
+            song = self.songs[song_id]
+            playlist.songs.remove(song)
         try:
-            self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song.db_id,))
+            self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song_id,))
         except sqlite3.Error as e:
             self.show_errors_to_user(e)
         else:
-            self.db_connection.commit()           
+            self.db_connection.commit()  
+        
+        if playlist_name and song_path:    
+            for playlist_id in self.playlists.keys():
+                if self.playlists[playlist_id].name == playlist_name:
+                    playlist = self.playlists[playlist_id]
+                    break
+            
+            for song_id in self.songs.keys():
+                if self.songs[song_id].path == song_path:
+                    song = self.songs[song_id] 
+                    break
+
+            playlist.songs.remove(song)
+
+            try:
+                self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song.db_id,))
+            except sqlite3.Error as e:
+                self.show_errors_to_user(e)
+            else:
+                self.db_connection.commit()           
 
     def filter(self, query):
         try:
