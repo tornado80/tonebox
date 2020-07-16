@@ -190,24 +190,36 @@ class Manager:
 
           
 
-    def add_song_to_playlist(self, playlist_name, song_path):  #tiny tag wont work so takes in song path instead of name
-        for playlist_id in self.playlists.keys():
-            if self.playlists[playlist_id].name == playlist_name:
-                playlist = self.playlists[playlist_id]
-                break
-        
-        for song_id in self.songs.keys():
-            if self.songs[song_id].path == song_path:
-                song = self.songs[song_id] 
-                break
+    def add_song_to_playlist(self, playlist_id=None, song_id=None, playlist_name=None, song_path=None):  #tiny tag wont work so takes in song path instead of name
+        if playlist_id and song_id:
+            playlist = self.playlists[playlist_id]
+            song = self.songs[song_id]
+            playlist.songs.append(song)
+            try:
+                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id) VALUES (?, ?)", (song_id, playlist_id))
+            except sqlite3.Error as e:
+                self.show_errors_to_user(e)
+            else:
+                self.db_connection.commit()
+ 
+        if playlist_name and song_path:    
+            for playlist_id in self.playlists.keys():
+                if self.playlists[playlist_id].name == playlist_name:
+                    playlist = self.playlists[playlist_id]
+                    break
+            
+            for song_id in self.songs.keys():
+                if self.songs[song_id].path == song_path:
+                    song = self.songs[song_id] 
+                    break
 
-        playlist.songs.append(song)
-        try:
-            self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id) VALUES (?, ?)", (song.db_id, playlist.db_id))
-        except sqlite3.Error as e:
-            self.show_errors_to_user(e)
-        else :
-            self.db_connection.commit()
+            playlist.songs.append(song)
+            try:
+                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id) VALUES (?, ?)", (song.db_id, playlist.db_id))
+            except sqlite3.Error as e:
+                self.show_errors_to_user(e)
+            else :
+                self.db_connection.commit()
 
     def remove_song_from_playlist(self, playlist_name, song_path):
         for playlist_id in self.playlists.keys():
