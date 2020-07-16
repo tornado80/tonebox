@@ -66,11 +66,12 @@ class SongsView(QTableWidget):
             self.manager_model.remove_song(song_id = self.context_menu_selected_song_id)
         
     def update_columns(self):
-        self.setColumnCount(len(self.settings_model.json_dict["SongsViewHeaders"]))
-        for key, value in self.settings_model.json_dict["SongsViewHeaders"].items():
-            self.setHorizontalHeaderItem(value[1], QTableWidgetItem(key)) # this should avoid using value[1]. instead default dictorinary settings keys
-            if not value[0]:
-                self.setColumnHidden(value[1], True)
+        headers = list(self.settings_model.DEFAULT_JSON_FIELDS["SongsViewHeaders"].keys())
+        self.setColumnCount(len(headers))
+        self.setHorizontalHeaderLabels(headers)
+        for i in range(len(headers)):
+            if not self.settings_model.json_dict["SongsViewHeaders"][headers[i]]:
+                self.setColumnHidden(i, True)
         
     def connect_to_filter_view(self, fview):
         self.filterViews.append(fview)
@@ -84,12 +85,15 @@ class SongsView(QTableWidget):
         self.rows_data.clear()
         self.filter_view()
         self.setRowCount(len(self.rows_data))
+        headers = list(self.settings_model.DEFAULT_JSON_FIELDS["SongsViewHeaders"].keys())
         for i in range(len(self.rows_data)):
             song = self.manager_model.songs[self.rows_data[i]]
-            for key, value in self.settings_model.json_dict["SongsViewHeaders"].items():
-                self.setItem(i, value[1], QTableWidgetItem(
-                    str(getattr(song, self.settings_model.SONGS_VIEW_HEADERS_TRANSLATIONS[key]))
-                )) # this should avoid using value[1]. instead default dictorinary settings order
+            for j in range(len(headers)):
+                self.setItem(i, j, QTableWidgetItem(
+                    str(getattr(song, # duration as an integer should be an object and __str__ overloaded for it
+                        self.settings_model.SONGS_VIEW_HEADERS_TRANSLATIONS[headers[j]]
+                    ))
+                ))
 
     def filter_view(self):
         search = {}

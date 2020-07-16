@@ -3,7 +3,10 @@ import json
 import os
 
 def validate_songs_view_headers(s):
-    return True
+    if s.keys() != SettingsModel.SONGS_VIEW_HEADERS_TRANSLATIONS.keys():
+        return False
+    else:
+        return True
 
 class Settings(object):
 
@@ -13,20 +16,20 @@ class Settings(object):
         "AppName" : "ToneBox Copyright 2020 Mo-Rajab-Team",
         "OpenFilePath" : "/",
         "SongsViewHeaders" : {
-            "Title" : [1, 0],
-            "Album" : [1, 1],
-            "Artist" : [1, 2],
-            "Genre" : [1, 3],
-            "Duration" : [1, 4],
-            "Location" : [1, 5],
-            "Total tracks" : [0, 6],
-            "Year" : [1, 7],
-            "Composer" : [0, 8],
-            "File size" : [0, 9],
-            "Bitrate" : [0, 10],
-            "Sample rate" : [0, 11],
-            "Comment" : [1, 12],
-            "Image" : [0, 13]
+            "Title" : 1, 
+            "Album" : 1, 
+            "Artist" : 1, 
+            "Genre" : 1, 
+            "Duration" : 1, 
+            "Location" : 1, 
+            "Total tracks" : 0, 
+            "Year" : 1, 
+            "Composer" : 0, 
+            "File size" : 0, 
+            "Bitrate" : 0, 
+            "Sample rate" : 0,
+            "Comment" : 1, 
+            "Image" : 0, 
         }
     }
     DEFAULT_JSON_FIELDS_VALIDATORS = {
