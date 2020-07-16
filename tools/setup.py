@@ -2,12 +2,38 @@ from PySide2.QtCore import QObject
 import json
 import os
 
+def validate_songs_view_headers(s):
+    return True
+
 class Settings(object):
 
     DEFAULT_SETTINGS_PATH = "settings.json"
     DEFAULT_JSON_FIELDS = {
         "DatabasePath" : "tonebox.db",
-        "AppName" : "ToneBox Copyright 2020 Mo-Rajab-Team"
+        "AppName" : "ToneBox Copyright 2020 Mo-Rajab-Team",
+        "OpenFilePath" : "/",
+        "SongsViewHeaders" : {
+            "Title" : [1, 0],
+            "Album" : [1, 1],
+            "Artist" : [1, 2],
+            "Genre" : [1, 3],
+            "Duration" : [1, 4],
+            "Location" : [1, 5],
+            "Total tracks" : [1, 6],
+            "Year" : [1, 7],
+            "Composer" : [0, 8],
+            "File size" : [0, 9],
+            "Bitrate" : [0, 10],
+            "Sample rate" : [0, 11],
+            "Comment" : [1, 12],
+            "Image" : [0, 13]
+        }
+    }
+    DEFAULT_JSON_FIELDS_VALIDATORS = {
+        "DatabasePath" : lambda s : False if s == "" else True,
+        "AppName" : lambda s : True,
+        "OpenFilePath" : lambda s : True,
+        "SongsViewHeaders" : validate_songs_view_headers
     }
 
     def __init__(self):
@@ -16,6 +42,18 @@ class Settings(object):
             self.create_settings_file()
         else:
             self.read_settings_file()
+            if not self.is_settings_file_valid():
+                self.show_messages_to_user("Settings file not recognized. Making new one!")
+                self.create_settings_file()
+
+    def is_settings_file_valid(self):
+        if self.json_dict.keys() != Settings.DEFAULT_JSON_FIELDS.keys():
+            return False
+        else:
+            for k in self.json_dict.keys():
+                if not Settings.DEFAULT_JSON_FIELDS_VALIDATORS[k](self.json_dict[k]):
+                    return False
+        return True
 
     def settings_file_exists(self):
         if os.path.exists(Settings.DEFAULT_SETTINGS_PATH):
@@ -49,6 +87,26 @@ class Settings(object):
         print(err)
 
 class SettingsModel(QObject, Settings):
+    SONGS_VIEW_HEADERS_TRANSLATIONS = {
+        "Title" : "title",
+        "Album" : "album",
+        "Artist" : "artist",
+        "Genre" : "genre",
+        "Duration" : "duration",
+        "Location" : "path",
+        "Total tracks" : "track_total",
+        "Year" : "year",
+        "Composer" : "composer",
+        "File size" : "filesize",
+        "Bitrate" : "bitrate",
+        "Sample rate" : "samplerate",
+        "Comment" : "comment",
+        "Image" : "image"
+    }
     def __init__(self):
         QObject.__init__(self)
         Settings.__init__(self)
+
+if __name__ == "__main__":
+    s = SettingsModel()
+    print(s.json_dict)

@@ -8,10 +8,10 @@ class Playlist:
         self.songs = []
 
 class Song:
-    def __init__(self, path, db_id=None, image = True):
+    def __init__(self, path, db_id=None):
         self.db_id = db_id
         self.path = path
-        self.tag = TinyTag.get(path)
+        self.tag = TinyTag.get(path, image = True)
         self.artist = self.tag.artist
         self.title = self.tag.title
         self.album = self.tag.album
@@ -52,6 +52,7 @@ class Manager:
         self.playlists = {}
         if self.open_connection():
             self.setup_database()
+            self.get_alldata()
 
     def open_connection(self):
         try:
@@ -209,7 +210,7 @@ class Manager:
         result = []
         for song_id, song in self.songs.items():
             for kw_key, kw_val in keywords.items():
-                if song.getattr(kw_key) != kw_val:
+                if getattr(song, kw_key) != kw_val:
                     break
             else:
                 result.append(song_id)
@@ -219,7 +220,7 @@ class Manager:
         result = []
         for playlist_id, playlist in self.playlists.items():
             for kw_key, kw_val in keywords.items():
-                if playlist.getattr(kw_key) != kw_val:
+                if getattr(playlist, kw_key) != kw_val:
                     break
             else:
                 result.append(playlist_id)
