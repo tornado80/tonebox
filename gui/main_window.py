@@ -13,6 +13,7 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
         
         # views
         self.librarySongsView.connect_to_models(self.manager_model, self.settings_model)
+        self.librarySongsView.connect_to_models_signals()
         self.librarySongsView.update_view()
 
         # actions

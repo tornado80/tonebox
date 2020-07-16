@@ -9,14 +9,13 @@ class SongsView(QTableWidget):
         super().__init__(parent)
         self.manager_model = None
         self.settings_model = None
-        self.context_menu_selected_song_id = None
         self.filterViews = []
         self.rows_data = []
         self.setup_ui()
 
     def setup_ui(self):
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.horizontalHeader().setStretchLastSection(True)
         self.verticalHeader().setVisible(False)
@@ -27,26 +26,41 @@ class SongsView(QTableWidget):
     def connect_to_models(self, manager_model, settings_model):
         self.manager_model = manager_model
         self.settings_model = settings_model
-        # signals
+    
+    def connect_to_models_signals(self):
+        self.manager_model.songAdded.connect(self.update_rows)
+        self.manager_model.songRemoved.connect(self.update_rows)
+
+    def disconnect_from_models_signals(self):
+        self.manager_model.songAdded.disconnect(self.update_rows)
+        self.manager_model.songRemoved.disconnect(self.update_rows)
 
     def contextMenuEvent(self, event):
         row = self.rowAt(event.y())
         if row != -1:
-            self.context_menu_selected_song_id = self.rows_data[row]
-            print("Context menu event for row number:", row)
+            if len(self.selectionModel().selectedRows()) > 1:
+                self.informationAction.setVisible(False)
+                self.playSongAction.setVisible(False)
             self.contextMenu.exec_(event.globalPos())
-            print("Done!")
+            self.informationAction.setVisible(True)
+            self.playSongAction.setVisible(True)
 
     def double_click_to_play_song(self, idx):
-        print("Playing song name:", self.manager_model.songs[self.rows_data[idx.row()]])
+        print("Playing song name:", self.manager_model.songs[self.rows_data[idx.row()]].title)
         print("Row double clicked. Row number:", idx.row(), "Column number:", idx.column())
+        self.request_playing_song()
+
+    def request_playing_song(self):
+        pass
 
     def setup_context_menu(self):
         self.contextMenu = QMenu(self)
+        self.playSongAction = self.contextMenu.addAction("Play")
         self.addToQueueAction = self.contextMenu.addAction("Add to Queue")
         self.addToPlaylistAction = self.contextMenu.addAction("Add to Playlist")
-        self.removeSongAction = self.contextMenu.addAction("Remove song")
+        self.removeSongAction = self.contextMenu.addAction("Remove song(s)")
         self.informationAction = self.contextMenu.addAction("Information")
+        self.playSongAction.triggered.connect(self.request_playing_song)
         self.removeSongAction.triggered.connect(self.handle_remove_song_action)
         self.addToQueueAction.triggered.connect(self.handle_add_to_queue)
         self.addToPlaylistAction.triggered.connect(self.handle_add_to_playlist)
@@ -61,9 +75,10 @@ class SongsView(QTableWidget):
     def handle_add_to_queue(self):
         pass
 
-    def handle_remove_song_action(self):
+    def handle_remove_song_action(self): # there is a bug here. we need a function to delete as many songs as we want and them emit signal
         if QMessageBox.question(self, "User Consent", "Do you really want to remove the file from Library?", QMessageBox.Yes, QMessageBox.No):
-            self.manager_model.remove_song(song_id = self.context_menu_selected_song_id)
+            for row_idx in self.selectionModel().selectedRows():
+                self.manager_model.remove_song(song_id = self.rows_data[row_idx.row()])
         
     def update_columns(self):
         headers = list(self.settings_model.DEFAULT_JSON_FIELDS["SongsViewHeaders"].keys())

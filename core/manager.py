@@ -31,11 +31,11 @@ class Manager:
     SQLITE_SCHEMA = """
     CREATE TABLE IF NOT EXISTS Songs (
         song_id INTEGER PRIMARY KEY,
-        path TEXT NOT NULL
+        path TEXT UNIQUE NOT NULL
     );
     CREATE TABLE IF NOT EXISTS Playlists (
         playlist_id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL
+        name TEXT UNIQUE NOT NULL
     );
     CREATE TABLE IF NOT EXISTS SongsPlaylistsGroups (
         record_id INTEGER PRIMARY KEY,
@@ -52,7 +52,7 @@ class Manager:
         self.playlists = {}
         if self.open_connection():
             self.setup_database()
-            self.get_alldata()
+            self.get_all_data()
 
     def open_connection(self):
         try:
@@ -85,26 +85,22 @@ class Manager:
         except sqlite3.Error as err:
             self.show_errors_to_user(err, "setup_database")
 
-    def get_alldata(self):
+    def get_all_data(self):
         try:
             self.db_cursor.execute("SELECT * FROM Songs")
             songs = self.db_cursor.fetchall()
             for data in songs:
                 song = Song(data[1])
                 self.songs[data[0]] = song
-
             self.db_cursor.execute("SELECT * FROM Playlists")
             playlists = self.db_cursor.fetchall()
             for data in playlists:
                 playlist = Playlist(data[1])
                 self.playlists[data[0]] = playlist        
-            
-
             self.db_cursor.execute("SELECT * FROM SongsPlaylistsGroups")
             groups = self.db_cursor.fetchall()
             for group in groups:
                 self.playlists[group[1]].songs = self.songs[group[2]]
-
         except sqlite3.Error as e:
             self.show_errors_to_user(e)        
 
@@ -114,11 +110,13 @@ class Manager:
             self.db_cursor.execute("INSERT INTO Playlists(name) VALUES (?)", (new_playlist.name,))
             self.db_cursor.execute("SELECT playlist_id FROM Playlists WHERE name=?", (playlist_name,))
             new_playlist.db_id = self.db_cursor.fetchone()[0]
-            self.playlists[new_playlist.db_id] = new_playlist    
+            self.playlists[new_playlist.db_id] = new_playlist   
+            self.db_connection.commit() 
         except sqlite3.Error as e:
             self.show_errors_to_user(e)
         else:
-            self.db_connection.commit()
+            return True
+        return False
 
     def remove_playlist(self, playlist_name=None, playlist_id=None):
         if playlist_id:
@@ -126,27 +124,28 @@ class Manager:
                 del self.playlists[playlist_id]
                 self.db_cursor.execute("DELETE FROM Playlists WHERE playlist_id=?", (playlist_id,))
                 self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE playlist_id=?", (playlist_id,))
+                self.db_connection.commit()    
             except sqlite3.Error as e:                                                     
                 self.show_errors_to_user(e)
             else:
-                self.db_connection.commit()    
-
-        if playlist_name:
+                return True
+        elif playlist_name:
             try:
                 for playlist_id in self.playlists.keys():
                     if playlist_name == self.playlists[playlist_id].name:
                         flag = playlist_id
                         break
                 del self.playlists[flag]        
-                        
                 self.db_cursor.execute("SELECT playlist_id FROM Playlists WHERE name=?", (playlist_name,))
                 playlist_id = self.db_cursor.fetchone()[0]                                                                      
                 self.db_cursor.execute("DELETE FROM Playlists WHERE name=?", (playlist_name,))
                 self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE playlist_id=?", (playlist_id,))
+                self.db_connection.commit()
             except sqlite3.Error as e:                                                     
                 self.show_errors_to_user(e)
             else:
-                self.db_connection.commit()
+                return True
+        return False
 
     def add_song(self, song_path):
         try:
@@ -156,10 +155,12 @@ class Manager:
             self.db_cursor.execute("SELECT song_id FROM Songs WHERE path=?", (song_path,))
             new_song.db_id = self.db_cursor.fetchone()[0]
             self.songs[new_song.db_id] = new_song
+            self.db_connection.commit()
         except sqlite3.Error as e:
             self.show_errors_to_user(e)
         else:
-            self.db_connection.commit()    
+            return True    
+        return False
 
     def remove_song(self, song_path=None, song_id=None):
         if song_id:
@@ -167,68 +168,66 @@ class Manager:
                 del self.songs[song_id]
                 self.db_cursor.execute("DELETE FROM Songs WHERE song_id=?", (song_id,))
                 self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song_id,))
+                self.db_connection.commit() 
             except sqlite3.Error as e:
                 self.show_errors_to_user(e)
             else:
-                self.db_connection.commit() 
-
-        if song_path:
+                return True
+        elif song_path:
             try:
                 for song_id in self.songs.keys():
                     if song_path == self.songs[song_id].path:
                         flag = song_id
                         break
                 del self.songs[flag]        
-
                 self.db_cursor.execute("SELECT song_id FROM Songs WHERE path=?", (song_path,))
                 song_id = self.db_cursor.fetchone()[0]
                 self.db_cursor.execute("DELETE FROM Songs WHERE path=?", (song_path,))
                 self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song_id,))
-            except sqlite3.Error as e:
-                self.show_errors_to_user(e)
-            else:
                 self.db_connection.commit()
-
-          
+            except sqlite3.Error as e:
+                self.show_errors_to_user(e)                
+            else:
+                return True
+        return False       
 
     def add_song_to_playlist(self, playlist_name, song_path):  #tiny tag wont work so takes in song path instead of name
         for playlist_id in self.playlists.keys():
             if self.playlists[playlist_id].name == playlist_name:
                 playlist = self.playlists[playlist_id]
                 break
-        
         for song_id in self.songs.keys():
             if self.songs[song_id].path == song_path:
                 song = self.songs[song_id] 
                 break
-
         playlist.songs.append(song)
         try:
             self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id) VALUES (?, ?)", (song.db_id, playlist.db_id))
+            self.db_connection.commit()
         except sqlite3.Error as e:
             self.show_errors_to_user(e)
-        else :
-            self.db_connection.commit()
+        else:
+            return True
+        return False
 
     def remove_song_from_playlist(self, playlist_name, song_path):
         for playlist_id in self.playlists.keys():
             if self.playlists[playlist_id].name == playlist_name:
                 playlist = self.playlists[playlist_id]
                 break
-        
         for song_id in self.songs.keys():
             if self.songs[song_id].path == song_path:
                 song = self.songs[song_id] 
                 break
-
         playlist.songs.remove(song)
-
         try:
             self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song.db_id,))
+            self.db_connection.commit()
         except sqlite3.Error as e:
             self.show_errors_to_user(e)
         else:
-            self.db_connection.commit()           
+            return True
+        return False           
 
     def songs_dict_filter(self, **keywords):
         result = []
@@ -261,8 +260,10 @@ class Manager:
     def close_connection(self):
         self.db_connection.close()
 
-    def show_errors_to_user(self, err, place=None):
-        print(err, f"at {place}" if place is not None else "[place not given]")  
+    def show_errors_to_user(self, err, place="[place not given]"):
+        output = f"{err} at {place}"
+        print(output)
+        return output  
 
 if __name__ == "__main__":
     m = Manager("tonebox.db")
