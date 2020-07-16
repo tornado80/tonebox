@@ -35,6 +35,7 @@ class Settings(object):
         "OpenFilePath" : lambda s : True,
         "SongsViewHeaders" : validate_songs_view_headers
     }
+    SUPPORTED_AUDIO_FILES = ["*.wav", "*.mp3"]
 
     def __init__(self):
         self.json_dict = {}

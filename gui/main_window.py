@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QMainWindow
+from PySide2.QtWidgets import QMainWindow, QFileDialog
 from .main_window_ui import Ui_MainWindowUi
 
 class MainWindow(QMainWindow, Ui_MainWindowUi):
@@ -10,11 +10,23 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
         self.manager_model = manager_model
         self.queue_model = queue_model
         self.player_object = player_object
-        self.actionAddMusic.triggered.connect(self.addMusicActionTriggered)
-        self.librarySongsView.model = self.manager_model
-        self.librarySongsView.settings_model = self.settings_model
-        self.librarySongsView.setup_columns()
+        
+        # views
+        self.librarySongsView.connect_to_models(self.manager_model, self.settings_model)
         self.librarySongsView.update_view()
 
+        # actions
+        self.actionAddMusic.triggered.connect(self.handle_add_music_action)
+        self.actionAddDirectory.triggered.connect(self.handle_add_directory_action)
+        self.actionNewPlaylist.triggered.coonect(self.handle_new_playlist_action)
+        self.actionSettings.triggered.connect(self.handle_settings)
+
     def addMusicActionTriggered(self):
-        print("hello")
+        new_songs, _ = QFileDialog.getOpenFileNames(self, 
+            "Add Music(s) to Library", 
+            self.settings_model.json_dict["OpenFileName"],
+            "Audio Files ({})".format(" ".join(self.settings_model.SUPPORTED_AUDIO_FILES))
+            )
+        for new_song in new_songs:
+            self.manager_model.add_song(new_song)
+        
