@@ -92,16 +92,18 @@ class Manager:
             songs = self.db_cursor.fetchall()
             for data in songs:
                 song = Song(data[1])
-                self.songs[data[0]] = song
+                song.db_id = data[0]
+                self.songs[data[0]] = song    
             self.db_cursor.execute("SELECT * FROM Playlists")
             playlists = self.db_cursor.fetchall()
             for data in playlists:
                 playlist = Playlist(data[1])
-                self.playlists[data[0]] = playlist        
+                playlist.db_id = data[0]
+                self.playlists[data[0]] = playlist            
             self.db_cursor.execute("SELECT * FROM SongsPlaylistsGroups")
             groups = self.db_cursor.fetchall()
             for group in groups:
-                self.playlists[group[1]].songs = self.songs[group[2]]
+                self.playlists[group[2]].songs.append(self.songs[group[1]])
         except sqlite3.Error as e:
             self.show_errors_to_user(e)        
 
@@ -218,7 +220,7 @@ class Manager:
             song = self.songs[song_id]
             playlist.songs.append(song)
             try:
-                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id, playlist_order) VALUES (?, ?, ?)", (song_id, playlist_id, len(playlist.songs))) #order starts form 0
+                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id, playlist_order) VALUES (?, ?, ?)", (song_id, playlist_id, len(playlist.songs))) #smh nevermind it actually starts from 1 
                 self.db_connection.commit()
             except sqlite3.Error as e:
                 self.show_errors_to_user(e)
@@ -232,10 +234,10 @@ class Manager:
             for song_id in self.songs.keys():
                 if self.songs[song_id].path == song_path:
                     song = self.songs[song_id] 
-                    break
+                    break    
             playlist.songs.append(song)
             try:
-                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id) VALUES (?, ?)", (song.db_id, playlist.db_id))
+                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id, playlist_order) VALUES (?, ?, ?)", (song.db_id, playlist.db_id, len(playlist.songs)))
                 self.db_connection.commit()
             except sqlite3.Error as e:
                 self.show_errors_to_user(e)
@@ -292,3 +294,7 @@ class Manager:
 
 if __name__ == "__main__":
     m = Manager("tonebox.db")
+    #m.add_song_to_playlist(playlist_name='lofi', song_path='E:\\5_32PM (Now on Spotify and Itunes).mp3')
+    print(m.songs)
+    print(m.playlists)
+    print(m.playlists[1].songs)
