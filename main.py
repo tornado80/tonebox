@@ -1,4 +1,3 @@
-from core.media_player import MediaPlayer
 from PySide2.QtWidgets import QApplication
 import sys
 from gui.main_window import MainWindow

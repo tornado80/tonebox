@@ -40,7 +40,8 @@ class Manager:
     CREATE TABLE IF NOT EXISTS SongsPlaylistsGroups (
         record_id INTEGER PRIMARY KEY,
         song_id INTEGER NOT NULL,
-        playlist_id INTEGER NOT NULL, 
+        playlist_id INTEGER NOT NULL,
+        playlist_order INTEGER NOT NULL, 
         FOREIGN KEY (song_id) REFERENCES Songs (song_id),
         FOREIGN KEY (playlist_id) REFERENCES Playlists (playlist_id)
     );
@@ -91,16 +92,24 @@ class Manager:
             songs = self.db_cursor.fetchall()
             for data in songs:
                 song = Song(data[1])
+                song.db_id = data[0]
                 self.songs[data[0]] = song
+
             self.db_cursor.execute("SELECT * FROM Playlists")
             playlists = self.db_cursor.fetchall()
+            playlist_ids = []
             for data in playlists:
                 playlist = Playlist(data[1])
-                self.playlists[data[0]] = playlist        
-            self.db_cursor.execute("SELECT * FROM SongsPlaylistsGroups")
-            groups = self.db_cursor.fetchall()
-            for group in groups:
-                self.playlists[group[1]].songs = self.songs[group[2]]
+                playlist.db_id = data[0]
+                self.playlists[data[0]] = playlist
+                playlist_ids.append(data[0])                                #we use this list to add all the songs to their playlists
+
+            for playlist_id in playlist_ids:
+                self.db_cursor.execute("SELECT song_id FROM SongsPlaylistsGroups WHERE playlist_id=? ORDER BY playlist_order", (playlist_id,))
+                song_ids = self.db_cursor.fetchall()
+                for song_id in song_ids:
+                    self.playlists[playlist_id].songs.append(self.songs[song_id[0]])
+
         except sqlite3.Error as e:
             self.show_errors_to_user(e)        
 
@@ -217,7 +226,7 @@ class Manager:
             song = self.songs[song_id]
             playlist.songs.append(song)
             try:
-                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id) VALUES (?, ?)", (song_id, playlist_id))
+                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id, playlist_order) VALUES (?, ?, ?)", (song_id, playlist_id, len(playlist.songs))) #smh nevermind it actually starts from 1 
                 self.db_connection.commit()
             except sqlite3.Error as e:
                 self.show_errors_to_user(e)
@@ -231,10 +240,10 @@ class Manager:
             for song_id in self.songs.keys():
                 if self.songs[song_id].path == song_path:
                     song = self.songs[song_id] 
-                    break
+                    break    
             playlist.songs.append(song)
             try:
-                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id) VALUES (?, ?)", (song.db_id, playlist.db_id))
+                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id, playlist_order) VALUES (?, ?, ?)", (song.db_id, playlist.db_id, len(playlist.songs)))
                 self.db_connection.commit()
             except sqlite3.Error as e:
                 self.show_errors_to_user(e)
@@ -248,8 +257,10 @@ class Manager:
             song = self.songs[song_id]
             playlist.songs.remove(song)
             try:
-                self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song_id,))
-                self.db_connection.commit()
+                self.db_cursor.execute("SELECT playlist_order FROM SongsPlaylistsGroups WHERE song_id=? AND playlist_id=?", (song_id, playlist_id))
+                flag = self.db_cursor.fetchone()[0]
+                self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=? AND playlist_id=? AND playlist_order=?", (song_id, playlist_id, flag))
+                self.db_cursor.execute(f"UPDATE SongsPlaylistsGroups SET playlist_order = playlist_order-1 WHERE playlist_order > {flag}")
             except sqlite3.Error as e:
                 self.show_errors_to_user(e)
             else:
@@ -265,13 +276,23 @@ class Manager:
                     break
             playlist.songs.remove(song)
             try:
-                self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song.db_id,))
+                print(song.db_id, playlist.db_id)
+                self.db_cursor.execute("SELECT playlist_order FROM SongsPlaylistsGroups WHERE song_id=? AND playlist_id=?", (song.db_id, playlist.db_id))
+                flag = self.db_cursor.fetchone()[0]
+                self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=? AND playlist_id=? AND playlist_order=?", (song.db_id, playlist.db_id, flag)) 
+                self.db_cursor.execute(f"UPDATE SongsPlaylistsGroups SET playlist_order = playlist_order-1 WHERE playlist_order > {flag}") 
                 self.db_connection.commit() 
             except sqlite3.Error as e:
                 self.show_errors_to_user(e)
             else:
                 return True
         return False
+
+    def edit_playlist_name(self, playlist_id, new_name):
+        try:
+            self.playlists[playlist_id].name = new_name 
+        except Exception as e:
+            self.show_errors_to_user(e)            
 
     def filter(self, query):
         try:
@@ -305,4 +326,4 @@ class Manager:
 
 if __name__ == "__main__":
     m = Manager("tonebox.db")
-    m.add_song("/home/amirhosein/Music/Seyed Jalaledin Mohammadian - Shirin Shirina.mp3")
+    

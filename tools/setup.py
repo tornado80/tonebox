@@ -1,4 +1,4 @@
-from PySide2.QtCore import QObject
+from PySide2.QtCore import QObject, Signal
 import json
 import os
 
@@ -107,6 +107,7 @@ class SettingsModel(QObject, Settings):
         "Comment" : "comment",
         "Image" : "image"
     }
+    settignsUpdated = Signal()
     def __init__(self):
         QObject.__init__(self)
         Settings.__init__(self)
