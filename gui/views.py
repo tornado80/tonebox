@@ -3,6 +3,14 @@ from PySide2.QtWidgets import QAbstractItemView, QListWidget, QTableWidget, QTab
 class FilterView(QListWidget):
     def __init__(self, parent):
         super().__init__(parent)
+        self.manager_model = None
+        self.parentFilterViews = []
+
+    def child_filter_keywords(self):
+        pass
+
+    def filter(self):
+        pass
 
 class SongsView(QTableWidget):
     def __init__(self, parent):
@@ -113,6 +121,6 @@ class SongsView(QTableWidget):
     def filter_view(self):
         search = {}
         for view in self.filterViews:
-            search.update(view.songs_filter_keywords())
+            search.update(view.child_filter_keywords())
         self.rows_data = self.manager_model.songs_dict_filter(**search)
         
