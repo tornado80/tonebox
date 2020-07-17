@@ -41,7 +41,7 @@ class Manager:
         record_id INTEGER PRIMARY KEY,
         song_id INTEGER NOT NULL,
         playlist_id INTEGER NOT NULL,
-        order INTEGER NOT NULL, 
+        playlist_order INTEGER NOT NULL, 
         FOREIGN KEY (song_id) REFERENCES Songs (song_id),
         FOREIGN KEY (playlist_id) REFERENCES Playlists (playlist_id)
     );
@@ -218,7 +218,7 @@ class Manager:
             song = self.songs[song_id]
             playlist.songs.append(song)
             try:
-                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id) VALUES (?, ?)", (song_id, playlist_id))
+                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id, playlist_order) VALUES (?, ?, ?)", (song_id, playlist_id, len(playlist.songs))) #order starts form 0
                 self.db_connection.commit()
             except sqlite3.Error as e:
                 self.show_errors_to_user(e)
@@ -292,4 +292,3 @@ class Manager:
 
 if __name__ == "__main__":
     m = Manager("tonebox.db")
-    m.add_song("/home/amirhosein/Music/Seyed Jalaledin Mohammadian - Shirin Shirina.mp3")
