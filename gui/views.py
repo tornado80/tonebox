@@ -1,4 +1,3 @@
-from core.manager import Playlist
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtWidgets import QAbstractItemView, QListView, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QMenu, QMessageBox
 from PySide2.QtCore import Signal
