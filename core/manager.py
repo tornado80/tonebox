@@ -93,17 +93,24 @@ class Manager:
             for data in songs:
                 song = Song(data[1])
                 song.db_id = data[0]
-                self.songs[data[0]] = song    
+                self.songs[data[0]] = song
+
             self.db_cursor.execute("SELECT * FROM Playlists")
             playlists = self.db_cursor.fetchall()
+            playlist_ids = []
             for data in playlists:
                 playlist = Playlist(data[1])
                 playlist.db_id = data[0]
-                self.playlists[data[0]] = playlist            
-            self.db_cursor.execute("SELECT * FROM SongsPlaylistsGroups")
-            groups = self.db_cursor.fetchall()
-            for group in groups:
-                self.playlists[group[2]].songs.append(self.songs[group[1]])
+                self.playlists[data[0]] = playlist
+                playlist_ids.append(data[0])
+            print(playlist_ids)
+
+            for playlist_id in playlist_ids:
+                self.db_cursor.execute("SELECT song_id FROM SongsPlaylistsGroups WHERE playlist_id=? ORDER BY playlist_order", (playlist_id,))
+                song_ids = self.db_cursor.fetchall()
+                for song_id in song_ids:
+                    self.playlists[playlist_id].songs.append(self.songs[song_id[0]])
+
         except sqlite3.Error as e:
             self.show_errors_to_user(e)        
 
@@ -294,7 +301,7 @@ class Manager:
 
 if __name__ == "__main__":
     m = Manager("tonebox.db")
-    #m.add_song_to_playlist(playlist_name='lofi', song_path='E:\\5_32PM (Now on Spotify and Itunes).mp3')
+    #m.add_song_to_playlist(playlist_name='lofi', song_path='E:\\what love is, i think..mp3')
     print(m.songs)
     print(m.playlists)
     print(m.playlists[1].songs)
