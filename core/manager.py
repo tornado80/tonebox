@@ -40,7 +40,8 @@ class Manager:
     CREATE TABLE IF NOT EXISTS SongsPlaylistsGroups (
         record_id INTEGER PRIMARY KEY,
         song_id INTEGER NOT NULL,
-        playlist_id INTEGER NOT NULL, 
+        playlist_id INTEGER NOT NULL,
+        order INTEGER NOT NULL, 
         FOREIGN KEY (song_id) REFERENCES Songs (song_id),
         FOREIGN KEY (playlist_id) REFERENCES Playlists (playlist_id)
     );
