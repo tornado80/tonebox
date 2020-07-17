@@ -14,12 +14,27 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
         # views
         self.librarySongsView.connect_to_models(self.manager_model, self.settings_model)
         self.librarySongsView.update_view()
+
         self.albumSongsView.connect_to_models(self.manager_model, self.settings_model)
         self.albumSongsView.update_view()
         self.albumFilterView.connect_to_models(self.manager_model, self.settings_model)
         self.albumFilterView.setCategory(["album", "artist"])
         self.albumFilterView.update_view()
         self.albumSongsView.connect_to_filter_view(self.albumFilterView)
+
+        self.artistSongsView.connect_to_models(self.manager_model, self.settings_model)
+        self.artistSongsView.update_view()
+        self.artistFilterView.connect_to_models(self.manager_model, self.settings_model)
+        self.artistFilterView.setCategory(["artist"])
+        self.artistFilterView.update_view()
+        self.artistSongsView.connect_to_filter_view(self.artistFilterView)
+
+        self.genreSongsView.connect_to_models(self.manager_model, self.settings_model)
+        self.genreSongsView.update_view()
+        self.genreFilterView.connect_to_models(self.manager_model, self.settings_model)
+        self.genreFilterView.setCategory(["genre"])
+        self.genreFilterView.update_view()
+        self.genreSongsView.connect_to_filter_view(self.genreFilterView)
 
         # actions
         self.actionAddMusic.triggered.connect(self.handle_add_music_action)

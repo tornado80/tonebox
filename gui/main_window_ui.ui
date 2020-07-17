@@ -73,16 +73,49 @@
             <attribute name="title">
              <string>Artists</string>
             </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <widget class="QSplitter" name="splitter_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <widget class="FilterView" name="artistFilterView"/>
+               <widget class="SongsView" name="artistSongsView"/>
+              </widget>
+             </item>
+            </layout>
            </widget>
            <widget class="QWidget" name="genresTab">
             <attribute name="title">
              <string>Genres</string>
             </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <item>
+              <widget class="QSplitter" name="splitter_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <widget class="FilterView" name="genreFilterView"/>
+               <widget class="SongsView" name="genreSongsView"/>
+              </widget>
+             </item>
+            </layout>
            </widget>
            <widget class="QWidget" name="playlistsTab">
             <attribute name="title">
              <string>Playlists</string>
             </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <item>
+              <widget class="QSplitter" name="splitter_4">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <widget class="PlaylistFilterView" name="playlistFilterView"/>
+               <widget class="PlaylistSongsView" name="playlistSongsView"/>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </widget>
          </item>
@@ -200,6 +233,16 @@
   <customwidget>
    <class>FilterView</class>
    <extends>QListWidget</extends>
+   <header>.views</header>
+  </customwidget>
+  <customwidget>
+   <class>PlaylistFilterView</class>
+   <extends>QListWidget</extends>
+   <header>.views</header>
+  </customwidget>
+  <customwidget>
+   <class>PlaylistSongsView</class>
+   <extends>QTableWidget</extends>
    <header>.views</header>
   </customwidget>
  </customwidgets>

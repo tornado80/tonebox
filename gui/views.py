@@ -1,3 +1,4 @@
+from core.manager import Playlist
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtWidgets import QAbstractItemView, QListView, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QMenu, QMessageBox
 from PySide2.QtCore import Signal
@@ -62,10 +63,12 @@ class FilterView(QListWidget):
 
     def child_filter_keywords(self):
         result = self.accumulate_parent_keywords()
-        for i in range(len(self.category)):
-            result.update({
-                self.category[i] : self.rows_data[self.selectionModel().selectedRows()[0].row()][i]
-                })
+        if len(self.selectionModel().selectedRows()) > 0:
+            selected_row = self.selectionModel().selectedRows()[0].row()
+            for i in range(len(self.category)):
+                result.update({
+                    self.category[i] : self.rows_data[selected_row][i]
+                    })
         return result
     
     def update_view(self):
@@ -209,4 +212,9 @@ class SongsView(QTableWidget):
         for view in self.filterViews:
             search.update(view.child_filter_keywords())
         return self.manager_model.songs_dict_filter(**search)
-        
+
+class PlaylistFilterView(FilterView):
+    pass
+
+class PlaylistSongsView(SongsView):
+    pass

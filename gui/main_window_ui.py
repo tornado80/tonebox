@@ -19,6 +19,8 @@ from .media_player_widget import MediaPlayerWidget
 from .queue_widget import QueueWidget
 from .views import SongsView
 from .views import FilterView
+from .views import PlaylistFilterView
+from .views import PlaylistSongsView
 
 from  . import icons_rc
 
@@ -96,12 +98,54 @@ class Ui_MainWindowUi(object):
         self.categoryWidget.addTab(self.albumsTab, "")
         self.artistsTab = QWidget()
         self.artistsTab.setObjectName(u"artistsTab")
+        self.verticalLayout_7 = QVBoxLayout(self.artistsTab)
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.splitter_2 = QSplitter(self.artistsTab)
+        self.splitter_2.setObjectName(u"splitter_2")
+        self.splitter_2.setOrientation(Qt.Vertical)
+        self.artistFilterView = FilterView(self.splitter_2)
+        self.artistFilterView.setObjectName(u"artistFilterView")
+        self.splitter_2.addWidget(self.artistFilterView)
+        self.artistSongsView = SongsView(self.splitter_2)
+        self.artistSongsView.setObjectName(u"artistSongsView")
+        self.splitter_2.addWidget(self.artistSongsView)
+
+        self.verticalLayout_7.addWidget(self.splitter_2)
+
         self.categoryWidget.addTab(self.artistsTab, "")
         self.genresTab = QWidget()
         self.genresTab.setObjectName(u"genresTab")
+        self.verticalLayout_8 = QVBoxLayout(self.genresTab)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.splitter_3 = QSplitter(self.genresTab)
+        self.splitter_3.setObjectName(u"splitter_3")
+        self.splitter_3.setOrientation(Qt.Vertical)
+        self.genreFilterView = FilterView(self.splitter_3)
+        self.genreFilterView.setObjectName(u"genreFilterView")
+        self.splitter_3.addWidget(self.genreFilterView)
+        self.genreSongsView = SongsView(self.splitter_3)
+        self.genreSongsView.setObjectName(u"genreSongsView")
+        self.splitter_3.addWidget(self.genreSongsView)
+
+        self.verticalLayout_8.addWidget(self.splitter_3)
+
         self.categoryWidget.addTab(self.genresTab, "")
         self.playlistsTab = QWidget()
         self.playlistsTab.setObjectName(u"playlistsTab")
+        self.verticalLayout_9 = QVBoxLayout(self.playlistsTab)
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
+        self.splitter_4 = QSplitter(self.playlistsTab)
+        self.splitter_4.setObjectName(u"splitter_4")
+        self.splitter_4.setOrientation(Qt.Vertical)
+        self.playlistFilterView = PlaylistFilterView(self.splitter_4)
+        self.playlistFilterView.setObjectName(u"playlistFilterView")
+        self.splitter_4.addWidget(self.playlistFilterView)
+        self.playlistSongsView = PlaylistSongsView(self.splitter_4)
+        self.playlistSongsView.setObjectName(u"playlistSongsView")
+        self.splitter_4.addWidget(self.playlistSongsView)
+
+        self.verticalLayout_9.addWidget(self.splitter_4)
+
         self.categoryWidget.addTab(self.playlistsTab, "")
 
         self.verticalLayout.addWidget(self.categoryWidget)
