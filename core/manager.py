@@ -189,45 +189,7 @@ class Manager:
                 self.show_errors_to_user(e)                
             else:
                 return True
-        return False       
-
-    def add_song_to_playlist(self, playlist_name, song_path):  #tiny tag wont work so takes in song path instead of name
-        for playlist_id in self.playlists.keys():
-            if self.playlists[playlist_id].name == playlist_name:
-                playlist = self.playlists[playlist_id]
-                break
-        for song_id in self.songs.keys():
-            if self.songs[song_id].path == song_path:
-                song = self.songs[song_id] 
-                break
-        playlist.songs.append(song)
-        try:
-            self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id) VALUES (?, ?)", (song.db_id, playlist.db_id))
-            self.db_connection.commit()
-        except sqlite3.Error as e:
-            self.show_errors_to_user(e)
-        else:
-            return True
-        return False
-
-    def remove_song_from_playlist(self, playlist_name, song_path):
-        for playlist_id in self.playlists.keys():
-            if self.playlists[playlist_id].name == playlist_name:
-                playlist = self.playlists[playlist_id]
-                break
-        for song_id in self.songs.keys():
-            if self.songs[song_id].path == song_path:
-                song = self.songs[song_id] 
-                break
-        playlist.songs.remove(song)
-        try:
-            self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song.db_id,))
-            self.db_connection.commit()
-        except sqlite3.Error as e:
-            self.show_errors_to_user(e)
-        else:
-            return True
-        return False           
+        return False                
 
     def songs_dict_filter(self, **keywords):
         result = []
@@ -248,6 +210,68 @@ class Manager:
             else:
                 result.append(playlist_id)
         return result
+
+    def add_song_to_playlist(self, playlist_id=None, song_id=None, playlist_name=None, song_path=None):  #tiny tag wont work so takes in song path instead of name
+        if playlist_id and song_id:
+            playlist = self.playlists[playlist_id]
+            song = self.songs[song_id]
+            playlist.songs.append(song)
+            try:
+                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id) VALUES (?, ?)", (song_id, playlist_id))
+                self.db_connection.commit()
+            except sqlite3.Error as e:
+                self.show_errors_to_user(e)
+            else:
+                return True
+        elif playlist_name and song_path:    
+            for playlist_id in self.playlists.keys():
+                if self.playlists[playlist_id].name == playlist_name:
+                    playlist = self.playlists[playlist_id]
+                    break
+            for song_id in self.songs.keys():
+                if self.songs[song_id].path == song_path:
+                    song = self.songs[song_id] 
+                    break
+            playlist.songs.append(song)
+            try:
+                self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id) VALUES (?, ?)", (song.db_id, playlist.db_id))
+                self.db_connection.commit()
+            except sqlite3.Error as e:
+                self.show_errors_to_user(e)
+            else:
+                return True
+        return False
+
+    def remove_song_from_playlist(self, playlist_id=None, song_id=None, playlist_name=None, song_path=None):
+        if playlist_id and song_id:
+            playlist = self.playlists[playlist_id]
+            song = self.songs[song_id]
+            playlist.songs.remove(song)
+            try:
+                self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song_id,))
+                self.db_connection.commit()
+            except sqlite3.Error as e:
+                self.show_errors_to_user(e)
+            else:
+                return True
+        elif playlist_name and song_path:    
+            for playlist_id in self.playlists.keys():
+                if self.playlists[playlist_id].name == playlist_name:
+                    playlist = self.playlists[playlist_id]
+                    break
+            for song_id in self.songs.keys():
+                if self.songs[song_id].path == song_path:
+                    song = self.songs[song_id] 
+                    break
+            playlist.songs.remove(song)
+            try:
+                self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song.db_id,))
+                self.db_connection.commit() 
+            except sqlite3.Error as e:
+                self.show_errors_to_user(e)
+            else:
+                return True
+        return False
 
     def filter(self, query):
         try:
