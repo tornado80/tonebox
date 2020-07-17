@@ -1,6 +1,8 @@
 from PySide2.QtWidgets import QAbstractItemView, QListWidget, QTableWidget, QTableWidgetItem, QMenu, QMessageBox
+from PySide2.QtCore import Signal
 
 class FilterView(QListWidget):
+    childToBeUpdated = Signal()
     def __init__(self, parent):
         super().__init__(parent)
         self.manager_model = None
@@ -9,7 +11,7 @@ class FilterView(QListWidget):
     def child_filter_keywords(self):
         pass
 
-    def filter(self):
+    def filter_view(self):
         pass
 
 class SongsView(QTableWidget):
@@ -99,6 +101,7 @@ class SongsView(QTableWidget):
                 self.setColumnHidden(i, True)
         
     def connect_to_filter_view(self, fview):
+        fview.childToBeUpdated.connect(self.update_view)
         self.filterViews.append(fview)
 
     def update_view(self):

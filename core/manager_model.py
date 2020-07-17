@@ -4,14 +4,12 @@ from .manager import Manager
 from PySide2.QtCore import Signal
 
 class Model(QObject, Manager):
-
     songAdded = Signal()
     songRemoved = Signal()
     playlistAdded = Signal()
     playlistRemoved = Signal()
     songAddedToPlaylist = Signal()
     songRemovedFromPlaylist = Signal()
-
     def __init__(self, db_path):
         QObject.__init__(self)
         Manager.__init__(self, db_path)
