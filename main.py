@@ -8,7 +8,7 @@ class ToneBoxApp(QApplication):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.settings_model = SettingsModel()
-        self.manager_model = manager_model.Model(self.settings_model.json_dict["DatabasePath"])
+        self.manager_model = manager_model.Model(self.settings_model.get("DatabasePath"))
         self.queue_model = queue_model.QueueModel()
         self.player_object = media_player.MediaPlayer()
         self.player_object.setPlaylist(self.queue_model)

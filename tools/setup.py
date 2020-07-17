@@ -15,13 +15,14 @@ class Settings(object):
         "DatabasePath" : "tonebox.db",
         "AppName" : "ToneBox Copyright 2020 Mo-Rajab-Team",
         "OpenFilePath" : "/",
+        "RememberLastPath" : 1,
         "SongsViewHeaders" : {
             "Title" : 1, 
             "Album" : 1, 
             "Artist" : 1, 
             "Genre" : 1, 
             "Duration" : 1, 
-            "Location" : 0, 
+            "Location" : 1, 
             "Total tracks" : 0, 
             "Year" : 1, 
             "Composer" : 0, 
@@ -33,15 +34,19 @@ class Settings(object):
         }
     }
     DEFAULT_JSON_FIELDS_VALIDATORS = {
-        "DatabasePath" : lambda s : False if s == "" else True,
+        "DatabasePath" : lambda s : False if s == "" and isinstance(s, str) else True,
         "AppName" : lambda s : False if s != Settings.DEFAULT_JSON_FIELDS["AppName"] else True,
-        "OpenFilePath" : lambda s : True,
+        "OpenFilePath" : lambda s : True if isinstance(s, str) else False,
+        "RememberLastPath" : lambda s : True if isinstance(s, int) else False,
         "SongsViewHeaders" : validate_songs_view_headers
     }
     SUPPORTED_AUDIO_FILES = ["*.wav", "*.mp3"]
 
     def __init__(self):
         self.json_dict = {}
+        self.setup_settings()
+
+    def setup_settings(self):
         if not self.settings_file_exists():
             self.create_settings_file()
         else:
@@ -71,6 +76,13 @@ class Settings(object):
                 return True
         else:
             return False
+
+    def update(self, key, value):
+        self.json_dict[key] = value
+        self.write_settings_file()
+
+    def get(self, key):
+        return self.json_dict[key]
 
     def create_settings_file(self):
         self.json_dict = Settings.DEFAULT_JSON_FIELDS.copy()
@@ -107,10 +119,18 @@ class SettingsModel(QObject, Settings):
         "Comment" : "comment",
         "Image" : "image"
     }
-    settignsUpdated = Signal()
+    settingsUpdated = Signal()
     def __init__(self):
         QObject.__init__(self)
         Settings.__init__(self)
+
+    def write_settings_file(self):
+        Settings.write_settings_file(self)
+        self.settingsUpdated.emit()
+
+    def read_settings_file(self):
+        Settings.read_settings_file(self)
+        self.settingsUpdated.emit()  
 
 if __name__ == "__main__":
     s = SettingsModel()

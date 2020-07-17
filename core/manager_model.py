@@ -10,6 +10,7 @@ class Model(QObject, Manager):
     playlistRemoved = Signal()
     songAddedToPlaylist = Signal()
     songRemovedFromPlaylist = Signal()
+    modelUpdated = Signal()
     def __init__(self, db_path):
         QObject.__init__(self)
         Manager.__init__(self, db_path)
@@ -27,6 +28,7 @@ class Model(QObject, Manager):
                 added_songs_count += 1
         if added_songs_count != 0:
             self.songAdded.emit()
+            self.modelUpdated.emit()
     
     def remove_songs(self, *song_ids):
         removed_songs_count = 0
@@ -38,6 +40,7 @@ class Model(QObject, Manager):
                 removed_songs_count += 1
         if removed_songs_count != 0:
             self.songRemoved.emit()
+            self.modelUpdated.emit()
         
     def add_playlists(self, *playlist_names):
         added_playlists_count = 0
@@ -48,6 +51,7 @@ class Model(QObject, Manager):
                 added_playlists_count += 1
         if added_playlists_count != 0:
             self.playlistAdded.emit()
+            self.modelUpdated.emit()
 
     def remove_playlists(self, *playlist_ids):
         removed_playlists_count = 0
@@ -59,6 +63,7 @@ class Model(QObject, Manager):
                 removed_playlists_count += 1
         if removed_playlists_count != 0:    
             self.playlistRemoved.emit()
+            self.modelUpdated.emit()
     
     def add_songs_to_playlist(self, playlist_id, *song_ids):
         added_songs_count = 0
@@ -71,6 +76,7 @@ class Model(QObject, Manager):
                 added_songs_count += 1
         if added_songs_count != 0:
             self.songAddedToPlaylist.emit()
+            self.modelUpdated.emit()
     
     def remove_songs_from_playlist(self, playlist_id, *song_ids):
         removed_songs_count = 0
@@ -83,3 +89,4 @@ class Model(QObject, Manager):
                 removed_songs_count += 1
         if removed_songs_count != 0:
             self.songRemovedFromPlaylist.emit()
+            self.modelUpdated.emit()

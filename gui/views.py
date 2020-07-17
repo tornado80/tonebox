@@ -24,12 +24,14 @@ class FilterView(QListWidget):
         self.connect_to_models_signals()
     
     def connect_to_models_signals(self):
-        self.manager_model.songAdded.connect(self.update_view)
-        self.manager_model.songRemoved.connect(self.update_view)
+        self.manager_model.modelUpdated.connect(self.update_view)
+        #self.manager_model.songAdded.connect(self.update_view)
+        #self.manager_model.songRemoved.connect(self.update_view)
 
     def disconnect_from_models_signals(self):
-        self.manager_model.songAdded.disconnect(self.update_view)
-        self.manager_model.songRemoved.disconnect(self.update_view)
+        self.manager_model.modelUpdated.disconnect(self.update_view)
+        #self.manager_model.songAdded.disconnect(self.update_view)
+        #self.manager_model.songRemoved.disconnect(self.update_view)
 
     def setupUi(self):
         self.setViewMode(QListWidget.ListMode)
@@ -124,12 +126,16 @@ class SongsView(QTableWidget):
         self.connect_to_models_signals()
     
     def connect_to_models_signals(self):
-        self.manager_model.songAdded.connect(self.update_rows)
-        self.manager_model.songRemoved.connect(self.update_rows)
+        self.manager_model.modelUpdated.connect(self.update_view)
+        self.settings_model.settingsUpdated.connect(self.update_columns)
+        #self.manager_model.songAdded.connect(self.update_rows)
+        #self.manager_model.songRemoved.connect(self.update_rows)
 
     def disconnect_from_models_signals(self):
-        self.manager_model.songAdded.disconnect(self.update_rows)
-        self.manager_model.songRemoved.disconnect(self.update_rows)
+        self.manager_model.modelUpdated.disconnect(self.update_view)
+        self.settings_model.settingsUpdated.disconnect(self.update_columns)
+        #self.manager_model.songAdded.disconnect(self.update_rows)
+        #self.manager_model.songRemoved.disconnect(self.update_rows)
 
     def contextMenuEvent(self, event):
         row = self.rowAt(event.y())
@@ -181,8 +187,10 @@ class SongsView(QTableWidget):
         self.setColumnCount(len(headers))
         self.setHorizontalHeaderLabels(headers)
         for i in range(len(headers)):
-            if not self.settings_model.json_dict["SongsViewHeaders"][headers[i]]:
+            if not self.settings_model.get("SongsViewHeaders")[headers[i]]:
                 self.setColumnHidden(i, True)
+            else:
+                self.setColumnHidden(i, False)
         
     def connect_to_filter_view(self, fview):
         fview.childToBeUpdated.connect(self.update_view)

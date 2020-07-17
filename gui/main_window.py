@@ -1,5 +1,7 @@
 from PySide2.QtWidgets import QMainWindow, QFileDialog
 from .main_window_ui import Ui_MainWindowUi
+from pathlib import Path
+from .settings_dialog import SettingsDialog
 
 class MainWindow(QMainWindow, Ui_MainWindowUi):
     def __init__(self, settings_model, manager_model, queue_model, player_object):
@@ -10,6 +12,7 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
         self.manager_model = manager_model
         self.queue_model = queue_model
         self.player_object = player_object
+        self.settings_dialog = SettingsDialog(self, self.settings_model, self.manager_model)
         
         # views
         self.librarySongsView.connect_to_models(self.manager_model, self.settings_model)
@@ -44,16 +47,18 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
     def handle_add_music_action(self):
         new_songs, _ = QFileDialog.getOpenFileNames(self, 
             "Add Music(s) to Library", 
-            self.settings_model.json_dict["OpenFilePath"],
+            self.settings_model.get("OpenFilePath"),
             "Audio Files ({})".format(" ".join(self.settings_model.SUPPORTED_AUDIO_FILES))
             )
         self.manager_model.add_songs(*new_songs)
+        if self.settings_model.get("RememberLastPath"):
+            self.settings_model.update("OpenFilePath", str(Path(new_songs[0]).parent))
     
     def handle_new_playlist_action(self):
         pass
 
     def handle_settings(self):
-        pass
+        self.settings_dialog.exec_()
 
     def closeEvent(self, event):
         self.manager_model.close_connection()
