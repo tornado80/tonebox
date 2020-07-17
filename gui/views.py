@@ -26,6 +26,8 @@ class SongsView(QTableWidget):
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.horizontalHeader().setStretchLastSection(True)
+        self.horizontalHeader().setSortIndicatorShown(True)
+        self.setSortingEnabled(True)
         self.verticalHeader().setVisible(False)
         self.horizontalHeader().setSectionsMovable(True)
         self.doubleClicked.connect(self.double_click_to_play_song)
@@ -85,8 +87,8 @@ class SongsView(QTableWidget):
 
     def handle_remove_song_action(self): # there is a bug here. we need a function to delete as many songs as we want and them emit signal
         if QMessageBox.question(self, "User Consent", "Do you really want to remove the file from Library?", QMessageBox.Yes, QMessageBox.No):
-            for row_idx in self.selectionModel().selectedRows():
-                self.manager_model.remove_song(song_id = self.rows_data[row_idx.row()])
+            songs_to_be_deleted = [self.rows_data[row_idx.row()] for row_idx in self.selectionModel().selectedRows()]
+            self.manager_model.remove_songs(*songs_to_be_deleted)
         
     def update_columns(self):
         headers = list(self.settings_model.DEFAULT_JSON_FIELDS["SongsViewHeaders"].keys())

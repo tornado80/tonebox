@@ -27,11 +27,13 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
             self.settings_model.json_dict["OpenFilePath"],
             "Audio Files ({})".format(" ".join(self.settings_model.SUPPORTED_AUDIO_FILES))
             )
-        for new_song in new_songs:
-            self.manager_model.add_song(new_song)
+        self.manager_model.add_songs(*new_songs)
     
     def handle_new_playlist_action(self):
         pass
 
     def handle_settings(self):
         pass
+
+    def closeEvent(self, event):
+        self.manager_model.close_connection()

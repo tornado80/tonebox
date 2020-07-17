@@ -34,7 +34,7 @@ class Settings(object):
     }
     DEFAULT_JSON_FIELDS_VALIDATORS = {
         "DatabasePath" : lambda s : False if s == "" else True,
-        "AppName" : lambda s : True,
+        "AppName" : lambda s : False if s != Settings.DEFAULT_JSON_FIELDS["AppName"] else True,
         "OpenFilePath" : lambda s : True,
         "SongsViewHeaders" : validate_songs_view_headers
     }
