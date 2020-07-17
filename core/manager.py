@@ -290,7 +290,7 @@ class Manager:
             else:
                 result.add(
                     tuple([
-                        getattr(song, c) for c in category
+                        getattr(song, c) if getattr(song, c) is not None else "?" for c in category
                     ])
                 )
         return result

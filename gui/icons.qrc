@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="images">
+    <file>icons/ascii/question_mark.svg</file>
     <file>icons/ascii/a.png</file>
     <file>icons/ascii/b.png</file>
     <file>icons/ascii/c.png</file>

@@ -34,6 +34,7 @@ class FilterView(QListWidget):
     def setupUi(self):
         self.setViewMode(QListWidget.ListMode)
         self.setMovement(QListView.Static)
+        self.clicked.connect(self.single_click_to_filter_child)
         self.setup_context_menu()
 
     def contextMenuEvent(self, event):
@@ -43,6 +44,9 @@ class FilterView(QListWidget):
         self.contextMenu = QMenu(self)
         self.viewModeAction = self.contextMenu.addAction("Icon Mode")
         self.viewModeAction.triggered.connect(self.handle_view_mode_action)
+
+    def single_click_to_filter_child(self): # not sure to use idx
+        self.childToBeUpdated.emit()
 
     def handle_view_mode_action(self):
         if self.viewMode() == QListWidget.ListMode:
@@ -57,7 +61,12 @@ class FilterView(QListWidget):
         self.parentFilterViews.append(fview)
 
     def child_filter_keywords(self):
-        return {}
+        result = self.accumulate_parent_keywords()
+        for i in range(len(self.category)):
+            result.update({
+                self.category[i] : self.rows_data[self.selectionModel().selectedRows()[0].row()][i]
+                })
+        return result
     
     def update_view(self):
         self.clear()
@@ -67,7 +76,14 @@ class FilterView(QListWidget):
             item = QListWidgetItem(shown_name.format(
                 ", ".join(row_data)
             ))
-            item.setIcon(QIcon(QPixmap(u":/images/icons/ascii/{}.png".format(row_data[0][0].lower()))))
+            if ord("a") <= ord(str(row_data[0][0]).lower()) <= ord("z"):
+                item.setIcon(QIcon(
+                    QPixmap(u":/images/icons/ascii/{}.png".format(str(row_data[0][0]).lower()))
+                    ))
+            else:
+                item.setIcon(QIcon(
+                    QPixmap(u":/images/icons/ascii/question_mark.svg")
+                    ))               
             self.addItem(item)
     
     def accumulate_parent_keywords(self):

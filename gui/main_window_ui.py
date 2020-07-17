@@ -156,7 +156,7 @@ class Ui_MainWindowUi(object):
 
         self.retranslateUi(MainWindowUi)
 
-        self.categoryWidget.setCurrentIndex(1)
+        self.categoryWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindowUi)
