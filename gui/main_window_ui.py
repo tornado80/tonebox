@@ -18,6 +18,7 @@ from PySide2.QtWidgets import *
 from .media_player_widget import MediaPlayerWidget
 from .queue_widget import QueueWidget
 from .views import SongsView
+from .views import FilterView
 
 from  . import icons_rc
 
@@ -78,6 +79,20 @@ class Ui_MainWindowUi(object):
         self.categoryWidget.addTab(self.libraryTab, "")
         self.albumsTab = QWidget()
         self.albumsTab.setObjectName(u"albumsTab")
+        self.verticalLayout_6 = QVBoxLayout(self.albumsTab)
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.splitter = QSplitter(self.albumsTab)
+        self.splitter.setObjectName(u"splitter")
+        self.splitter.setOrientation(Qt.Vertical)
+        self.albumFilterView = FilterView(self.splitter)
+        self.albumFilterView.setObjectName(u"albumFilterView")
+        self.splitter.addWidget(self.albumFilterView)
+        self.albumSongsView = SongsView(self.splitter)
+        self.albumSongsView.setObjectName(u"albumSongsView")
+        self.splitter.addWidget(self.albumSongsView)
+
+        self.verticalLayout_6.addWidget(self.splitter)
+
         self.categoryWidget.addTab(self.albumsTab, "")
         self.artistsTab = QWidget()
         self.artistsTab.setObjectName(u"artistsTab")
@@ -141,7 +156,7 @@ class Ui_MainWindowUi(object):
 
         self.retranslateUi(MainWindowUi)
 
-        self.categoryWidget.setCurrentIndex(0)
+        self.categoryWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindowUi)

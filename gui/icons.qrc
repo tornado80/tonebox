@@ -1,5 +1,31 @@
 <RCC>
   <qresource prefix="images">
+    <file>icons/ascii/a.png</file>
+    <file>icons/ascii/b.png</file>
+    <file>icons/ascii/c.png</file>
+    <file>icons/ascii/d.png</file>
+    <file>icons/ascii/e.png</file>
+    <file>icons/ascii/f.png</file>
+    <file>icons/ascii/g.png</file>
+    <file>icons/ascii/h.png</file>
+    <file>icons/ascii/i.png</file>
+    <file>icons/ascii/j.png</file>
+    <file>icons/ascii/k.png</file>
+    <file>icons/ascii/l.png</file>
+    <file>icons/ascii/m.png</file>
+    <file>icons/ascii/n.png</file>
+    <file>icons/ascii/o.png</file>
+    <file>icons/ascii/p.png</file>
+    <file>icons/ascii/q.png</file>
+    <file>icons/ascii/r.png</file>
+    <file>icons/ascii/s.png</file>
+    <file>icons/ascii/t.png</file>
+    <file>icons/ascii/u.png</file>
+    <file>icons/ascii/v.png</file>
+    <file>icons/ascii/w.png</file>
+    <file>icons/ascii/x.png</file>
+    <file>icons/ascii/y.png</file>
+    <file>icons/ascii/z.png</file>
     <file>icons/no-repeat-all-30.png</file>
     <file>icons/icons8-opened-folder-50.png</file>
     <file>icons/icons8-lounge-music-playlist-30.png</file>

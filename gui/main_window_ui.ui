@@ -41,7 +41,7 @@
             <enum>QTabWidget::Triangular</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="libraryTab">
             <attribute name="title">
@@ -57,6 +57,17 @@
             <attribute name="title">
              <string>Albums</string>
             </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <widget class="QSplitter" name="splitter">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <widget class="FilterView" name="albumFilterView"/>
+               <widget class="SongsView" name="albumSongsView"/>
+              </widget>
+             </item>
+            </layout>
            </widget>
            <widget class="QWidget" name="artistsTab">
             <attribute name="title">
@@ -184,6 +195,11 @@
   <customwidget>
    <class>SongsView</class>
    <extends>QTableWidget</extends>
+   <header>.views</header>
+  </customwidget>
+  <customwidget>
+   <class>FilterView</class>
+   <extends>QListWidget</extends>
    <header>.views</header>
   </customwidget>
  </customwidgets>

@@ -13,8 +13,13 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
         
         # views
         self.librarySongsView.connect_to_models(self.manager_model, self.settings_model)
-        self.librarySongsView.connect_to_models_signals()
         self.librarySongsView.update_view()
+        self.albumSongsView.connect_to_models(self.manager_model, self.settings_model)
+        self.albumSongsView.update_view()
+        self.albumFilterView.connect_to_models(self.manager_model, self.settings_model)
+        self.albumFilterView.setCategory(["album", "artist"])
+        self.albumFilterView.update_view()
+        self.albumSongsView.connect_to_filter_view(self.albumFilterView)
 
         # actions
         self.actionAddMusic.triggered.connect(self.handle_add_music_action)

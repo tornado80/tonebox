@@ -281,6 +281,20 @@ class Manager:
         else:        
             self.db_connection.commit()
 
+    def distinct_category_filter(self, category, **keywords) -> set: # this should be changed to alternative sql query for distinct on multi column
+        result = set()
+        for song in self.songs.values():
+            for kw_key, kw_val in keywords.items():
+                if getattr(song, kw_key) != kw_val:
+                    break
+            else:
+                result.add(
+                    tuple([
+                        getattr(song, c) for c in category
+                    ])
+                )
+        return result
+
     def close_connection(self):
         self.db_connection.close()
 

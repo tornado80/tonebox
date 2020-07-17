@@ -126,6 +126,7 @@ class Ui_MediaPlayerWidget(object):
         self.elapsedTimeLineEdit.setObjectName(u"elapsedTimeLineEdit")
         self.elapsedTimeLineEdit.setFrame(False)
         self.elapsedTimeLineEdit.setAlignment(Qt.AlignCenter)
+        self.elapsedTimeLineEdit.setReadOnly(True)
 
         self.horizontalLayout.addWidget(self.elapsedTimeLineEdit)
 

@@ -21,14 +21,14 @@ class Settings(object):
             "Artist" : 1, 
             "Genre" : 1, 
             "Duration" : 1, 
-            "Location" : 1, 
+            "Location" : 0, 
             "Total tracks" : 0, 
             "Year" : 1, 
             "Composer" : 0, 
             "File size" : 0, 
             "Bitrate" : 0, 
             "Sample rate" : 0,
-            "Comment" : 1, 
+            "Comment" : 0, 
             "Image" : 0, 
         }
     }

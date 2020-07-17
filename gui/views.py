@@ -1,4 +1,5 @@
-from PySide2.QtWidgets import QAbstractItemView, QListWidget, QTableWidget, QTableWidgetItem, QMenu, QMessageBox
+from PySide2.QtGui import QIcon, QPixmap
+from PySide2.QtWidgets import QAbstractItemView, QListView, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QMenu, QMessageBox
 from PySide2.QtCore import Signal
 
 class FilterView(QListWidget):
@@ -6,13 +7,78 @@ class FilterView(QListWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.manager_model = None
+        self.settings_model = None
         self.parentFilterViews = []
+        self.category = [] # should be list and could be [Album], [Album, Artist], [Genre], etc. it identifies filters to be shown
+        self.setupUi()
+
+    def setCategory(self, val):
+        if not set(val) <= set(self.settings_model.SONGS_VIEW_HEADERS_TRANSLATIONS.values()):
+            raise NotImplementedError("This category is not supported.")
+        else:
+            self.category = val
+
+    def connect_to_models(self, manager_model, settings_model):
+        self.manager_model = manager_model
+        self.settings_model = settings_model
+        self.connect_to_models_signals()
+    
+    def connect_to_models_signals(self):
+        self.manager_model.songAdded.connect(self.update_view)
+        self.manager_model.songRemoved.connect(self.update_view)
+
+    def disconnect_from_models_signals(self):
+        self.manager_model.songAdded.disconnect(self.update_view)
+        self.manager_model.songRemoved.disconnect(self.update_view)
+
+    def setupUi(self):
+        self.setViewMode(QListWidget.ListMode)
+        self.setMovement(QListView.Static)
+        self.setup_context_menu()
+
+    def contextMenuEvent(self, event):
+        self.contextMenu.exec_(event.globalPos())
+
+    def setup_context_menu(self):
+        self.contextMenu = QMenu(self)
+        self.viewModeAction = self.contextMenu.addAction("Icon Mode")
+        self.viewModeAction.triggered.connect(self.handle_view_mode_action)
+
+    def handle_view_mode_action(self):
+        if self.viewMode() == QListWidget.ListMode:
+            self.viewModeAction.setText("List Mode")
+            self.setViewMode(QListWidget.IconMode)
+        else:
+            self.viewModeAction.setText("Icon Mode")
+            self.setViewMode(QListWidget.ListMode)
+
+    def connect_to_parent_filter_view(self, fview):
+        fview.childToBeUpdated.connect(self.update_view)
+        self.parentFilterViews.append(fview)
 
     def child_filter_keywords(self):
-        pass
+        return {}
+    
+    def update_view(self):
+        self.clear()
+        self.rows_data = self.filter_view()
+        for row_data in self.rows_data:
+            shown_name = "({})" if len(row_data) > 1 else "{}"
+            item = QListWidgetItem(shown_name.format(
+                ", ".join(row_data)
+            ))
+            item.setIcon(QIcon(QPixmap(u":/images/icons/ascii/{}.png".format(row_data[0][0].lower()))))
+            self.addItem(item)
+    
+    def accumulate_parent_keywords(self):
+        search = {}
+        for pfv in self.parentFilterViews:
+            search.update(pfv.child_filter_keywords())
+        return search
 
     def filter_view(self):
-        pass
+        search = self.accumulate_parent_keywords()
+        return list(self.manager_model.distinct_category_filter(self.category, **search))
 
 class SongsView(QTableWidget):
     def __init__(self, parent):
@@ -20,7 +86,6 @@ class SongsView(QTableWidget):
         self.manager_model = None
         self.settings_model = None
         self.filterViews = []
-        self.rows_data = []
         self.setup_ui()
 
     def setup_ui(self):
@@ -38,6 +103,7 @@ class SongsView(QTableWidget):
     def connect_to_models(self, manager_model, settings_model):
         self.manager_model = manager_model
         self.settings_model = settings_model
+        self.connect_to_models_signals()
     
     def connect_to_models_signals(self):
         self.manager_model.songAdded.connect(self.update_rows)
@@ -110,8 +176,7 @@ class SongsView(QTableWidget):
 
     def update_rows(self):
         self.clearContents()
-        self.rows_data.clear()
-        self.filter_view()
+        self.rows_data = self.filter_view()
         self.setRowCount(len(self.rows_data))
         headers = list(self.settings_model.DEFAULT_JSON_FIELDS["SongsViewHeaders"].keys())
         for i in range(len(self.rows_data)):
@@ -127,5 +192,5 @@ class SongsView(QTableWidget):
         search = {}
         for view in self.filterViews:
             search.update(view.child_filter_keywords())
-        self.rows_data = self.manager_model.songs_dict_filter(**search)
+        return self.manager_model.songs_dict_filter(**search)
         
