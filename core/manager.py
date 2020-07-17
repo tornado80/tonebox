@@ -288,6 +288,12 @@ class Manager:
                 return True
         return False
 
+    def edit_playlist_name(self, playlist_id, new_name):
+        try:
+            self.playlists[playlist_id].name = new_name 
+        except Exception as e:
+            self.show_errors_to_user(e)            
+
     def filter(self, query):
         try:
             self.db_cursor.execute(query)
@@ -306,8 +312,4 @@ class Manager:
 
 if __name__ == "__main__":
     m = Manager("tonebox.db")
-    #print(m.songs)
-    #print(m.playlists)
-    print(m.playlists[1].songs)
-    m.remove_song_from_playlist(playlist_name='lofi', song_path="E:\\5_32PM (Now on Spotify and Itunes).mp3")
-    print(m.playlists[1].songs)
+    
