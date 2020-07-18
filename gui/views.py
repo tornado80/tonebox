@@ -1,6 +1,6 @@
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtWidgets import QAbstractItemView, QListView, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QMenu, QMessageBox
-from PySide2.QtCore import Signal
+from PySide2.QtCore import Signal, Qt
 from .info_dialog import InfoDialog
 
 class FilterView(QListWidget):
@@ -33,6 +33,7 @@ class FilterView(QListWidget):
     def setupUi(self):
         self.setViewMode(QListWidget.ListMode)
         self.setMovement(QListView.Static)
+        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.clicked.connect(self.single_click_to_filter_child)
         self.setup_context_menu()
 
@@ -56,16 +57,20 @@ class FilterView(QListWidget):
             self.setViewMode(QListWidget.ListMode)
 
     def connect_to_parent_filter_view(self, fview):
-        fview.childToBeUpdated.connect(self.update_view)
+        fview.childToBeUpdated.connect(self.update_grand_children)
         self.parentFilterViews.append(fview)
+
+    def update_grand_children(self):
+        self.update_view()
+        self.childToBeUpdated.emit()
 
     def child_filter_keywords(self): # maybe todo multi selection
         result = self.accumulate_parent_keywords()
         if len(self.selectionModel().selectedRows()) > 0:
-            selected_row = self.selectionModel().selectedRows()[0].row()
+            selected_rows = [idx.row() for idx in self.selectionModel().selectedRows()]
             for i in range(len(self.category)):
                 result.update({
-                    self.category[i] : self.rows_data[selected_row][i]
+                    self.category[i] : [self.rows_data[selected_row][i] for selected_row in selected_rows]
                     })
         return result
     
@@ -77,6 +82,7 @@ class FilterView(QListWidget):
             item = QListWidgetItem(shown_name.format(
                 ", ".join([str(i) for i in row_data])
             ))
+            item.setData(Qt.UserRole, row_data)
             if ord("a") <= ord(str(row_data[0])[0].lower()) <= ord("z"):
                 item.setIcon(QIcon(
                     QPixmap(u":/images/icons/ascii/{}.png".format(str(row_data[0])[0].lower()))
@@ -217,7 +223,41 @@ class SongsView(QTableWidget):
         return self.manager_model.songs_dict_filter(**search)
 
 class PlaylistFilterView(FilterView):
-    pass
+    def setupUi(self):
+        super().setupUi()
+
+    def setup_context_menu(self):
+        super().setup_context_menu()
+
+    def child_filter_keywords(self): # maybe todo multi selection
+        result = self.accumulate_parent_keywords()
+        if len(self.selectionModel().selectedRows()) > 0:
+            selected_rows = [idx.row() for idx in self.selectionModel().selectedRows()]
+            for i in range(len(self.category)):
+                result.update({
+                    self.category[i] : [self.rows_data[selected_row][i] for selected_row in selected_rows]
+                    })
+        return result
+    
+    def update_view(self):
+        self.clear()
+        self.rows_data = self.filter_view()
+        for row_data in self.rows_data:
+            item = QListWidgetItem(self.manager_model.playlists[row_data].name)
+            item.setData(Qt.UserRole, row_data)
+            if ord("a") <= ord(str(row_data[0])[0].lower()) <= ord("z"):
+                item.setIcon(QIcon(
+                    QPixmap(u":/images/icons/ascii/{}.png".format(str(row_data[0])[0].lower()))
+                    ))
+            else:
+                item.setIcon(QIcon(
+                    QPixmap(u":/images/icons/ascii/question_mark.svg")
+                    ))               
+            self.addItem(item)
+
+    def filter_view(self):
+        search = self.accumulate_parent_keywords()
+        return self.manager_model.playlists_dict_filter(**search)
 
 class PlaylistSongsView(SongsView):
     pass

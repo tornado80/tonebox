@@ -101,6 +101,29 @@
              </item>
             </layout>
            </widget>
+           <widget class="QWidget" name="tab">
+            <attribute name="title">
+             <string>Multi</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_10">
+             <item>
+              <widget class="QSplitter" name="splitter_6">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <widget class="QSplitter" name="splitter_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="FilterView" name="multiGenre"/>
+                <widget class="FilterView" name="multiArtist"/>
+                <widget class="FilterView" name="multiAlbum"/>
+               </widget>
+               <widget class="SongsView" name="multiSongs"/>
+              </widget>
+             </item>
+            </layout>
+           </widget>
            <widget class="QWidget" name="playlistsTab">
             <attribute name="title">
              <string>Playlists</string>

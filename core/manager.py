@@ -207,8 +207,9 @@ class Manager:
         result = []
         for song_id, song in self.songs.items():
             for kw_key, kw_val in keywords.items():
-                if getattr(song, kw_key) != kw_val:
-                    break
+                if hasattr(song, kw_key):
+                    if getattr(song, kw_key) not in kw_val:
+                        break
             else:
                 result.append(song_id)
         return result                    
@@ -217,8 +218,21 @@ class Manager:
         result = []
         for playlist_id, playlist in self.playlists.items():
             for kw_key, kw_val in keywords.items():
-                if getattr(playlist, kw_key) != kw_val:
-                    break
+                if hasattr(playlist, kw_key):
+                    if getattr(playlist, kw_key) not in kw_val:
+                        break
+            else:
+                result.append(playlist_id)
+        return result
+
+    def playlists_songs_dict_filter(self, **keywords):
+        result = []
+        for playlist_id, playlist in self.playlists.items():
+            
+            for kw_key, kw_val in keywords.items():
+                if hasattr(playlist.song, kw_key):
+                    if getattr(playlist, kw_key) not in kw_val:
+                        break
             else:
                 result.append(playlist_id)
         return result
@@ -309,8 +323,9 @@ class Manager:
         result = set()
         for song in self.songs.values():
             for kw_key, kw_val in keywords.items():
-                if getattr(song, kw_key) != kw_val:
-                    break
+                if hasattr(song, kw_key):
+                    if getattr(song, kw_key) not in kw_val:
+                        break
             else:
                 result.add(
                     tuple([

@@ -39,6 +39,24 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
         self.genreFilterView.update_view()
         self.genreSongsView.connect_to_filter_view(self.genreFilterView)
 
+        self.multiSongs.connect_to_models(self.manager_model, self.settings_model)
+        self.multiAlbum.connect_to_models(self.manager_model, self.settings_model)
+        self.multiAlbum.setCategory(["album"])
+        self.multiArtist.connect_to_models(self.manager_model, self.settings_model)
+        self.multiArtist.setCategory(["artist"])
+        self.multiGenre.connect_to_models(self.manager_model, self.settings_model)
+        self.multiGenre.setCategory(["genre"])
+        self.multiSongs.connect_to_filter_view(self.multiAlbum)
+        self.multiAlbum.connect_to_parent_filter_view(self.multiArtist)
+        self.multiArtist.connect_to_parent_filter_view(self.multiGenre)
+        self.multiSongs.update_view()
+        self.multiAlbum.update_view()
+        self.multiArtist.update_view()
+        self.multiGenre.update_view()
+        
+        #self.playlistFilterView.connect_to_models(self.manager_model, self.settings_model)
+        #self.playlistFilterView.update_view()
+
         # actions
         self.actionAddMusic.triggered.connect(self.handle_add_music_action)
         self.actionNewPlaylist.triggered.connect(self.handle_new_playlist_action)

@@ -10,9 +10,10 @@ class InfoDialog(QDialog, Ui_InfoDialogUi):
         self.song = song
         for val in settings_model.SONGS_VIEW_HEADERS_TRANSLATIONS.values():
             if val != "image":
-                getattr(self, f"{val}LineEdit").setText(str(
-                    getattr(song, val)
-                    ))
+                if hasattr(self, f"{val}LineEdit"):
+                    getattr(self, f"{val}LineEdit").setText(str(
+                        getattr(song, val)
+                        ))
             else:
                 qp = QPixmap()
                 qp.loadFromData(QByteArray(song.image))
