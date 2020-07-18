@@ -32,11 +32,13 @@ class Ui_InfoDialogUi(object):
 
         self.bitrateLineEdit = QLineEdit(InfoDialogUi)
         self.bitrateLineEdit.setObjectName(u"bitrateLineEdit")
+        self.bitrateLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.bitrateLineEdit, 10, 1, 1, 1)
 
         self.track_totalLineEdit = QLineEdit(InfoDialogUi)
         self.track_totalLineEdit.setObjectName(u"track_totalLineEdit")
+        self.track_totalLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.track_totalLineEdit, 6, 1, 1, 1)
 
@@ -72,16 +74,19 @@ class Ui_InfoDialogUi(object):
 
         self.filesizeLineEdit = QLineEdit(InfoDialogUi)
         self.filesizeLineEdit.setObjectName(u"filesizeLineEdit")
+        self.filesizeLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.filesizeLineEdit, 9, 1, 1, 1)
 
         self.pathLineEdit = QLineEdit(InfoDialogUi)
         self.pathLineEdit.setObjectName(u"pathLineEdit")
+        self.pathLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.pathLineEdit, 5, 1, 1, 1)
 
         self.yearLineEdit = QLineEdit(InfoDialogUi)
         self.yearLineEdit.setObjectName(u"yearLineEdit")
+        self.yearLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.yearLineEdit, 7, 1, 1, 1)
 
@@ -92,11 +97,13 @@ class Ui_InfoDialogUi(object):
 
         self.composerLineEdit = QLineEdit(InfoDialogUi)
         self.composerLineEdit.setObjectName(u"composerLineEdit")
+        self.composerLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.composerLineEdit, 8, 1, 1, 1)
 
         self.durationLineEdit = QLineEdit(InfoDialogUi)
         self.durationLineEdit.setObjectName(u"durationLineEdit")
+        self.durationLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.durationLineEdit, 4, 1, 1, 1)
 
@@ -107,11 +114,13 @@ class Ui_InfoDialogUi(object):
 
         self.albumLineEdit = QLineEdit(InfoDialogUi)
         self.albumLineEdit.setObjectName(u"albumLineEdit")
+        self.albumLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.albumLineEdit, 1, 1, 1, 1)
 
         self.titleLineEdit = QLineEdit(InfoDialogUi)
         self.titleLineEdit.setObjectName(u"titleLineEdit")
+        self.titleLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.titleLineEdit, 0, 1, 1, 1)
 
@@ -122,6 +131,7 @@ class Ui_InfoDialogUi(object):
 
         self.artistLineEdit = QLineEdit(InfoDialogUi)
         self.artistLineEdit.setObjectName(u"artistLineEdit")
+        self.artistLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.artistLineEdit, 2, 1, 1, 1)
 
@@ -137,6 +147,7 @@ class Ui_InfoDialogUi(object):
 
         self.genreLineEdit = QLineEdit(InfoDialogUi)
         self.genreLineEdit.setObjectName(u"genreLineEdit")
+        self.genreLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.genreLineEdit, 3, 1, 1, 1)
 
@@ -159,11 +170,13 @@ class Ui_InfoDialogUi(object):
 
         self.samplerateLineEdit = QLineEdit(InfoDialogUi)
         self.samplerateLineEdit.setObjectName(u"samplerateLineEdit")
+        self.samplerateLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.samplerateLineEdit, 11, 1, 1, 1)
 
         self.commentLineEdit = QLineEdit(InfoDialogUi)
         self.commentLineEdit.setObjectName(u"commentLineEdit")
+        self.commentLineEdit.setReadOnly(True)
 
         self.gridLayout.addWidget(self.commentLineEdit, 12, 1, 1, 1)
 

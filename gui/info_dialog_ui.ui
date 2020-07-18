@@ -24,10 +24,18 @@
       </widget>
      </item>
      <item row="10" column="1">
-      <widget class="QLineEdit" name="bitrateLineEdit"/>
+      <widget class="QLineEdit" name="bitrateLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="6" column="1">
-      <widget class="QLineEdit" name="track_totalLineEdit"/>
+      <widget class="QLineEdit" name="track_totalLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
@@ -72,13 +80,25 @@
       </widget>
      </item>
      <item row="9" column="1">
-      <widget class="QLineEdit" name="filesizeLineEdit"/>
+      <widget class="QLineEdit" name="filesizeLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="5" column="1">
-      <widget class="QLineEdit" name="pathLineEdit"/>
+      <widget class="QLineEdit" name="pathLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="7" column="1">
-      <widget class="QLineEdit" name="yearLineEdit"/>
+      <widget class="QLineEdit" name="yearLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
@@ -88,10 +108,18 @@
       </widget>
      </item>
      <item row="8" column="1">
-      <widget class="QLineEdit" name="composerLineEdit"/>
+      <widget class="QLineEdit" name="composerLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QLineEdit" name="durationLineEdit"/>
+      <widget class="QLineEdit" name="durationLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="10" column="0">
       <widget class="QLabel" name="label_11">
@@ -101,10 +129,18 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="albumLineEdit"/>
+      <widget class="QLineEdit" name="albumLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="titleLineEdit"/>
+      <widget class="QLineEdit" name="titleLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_5">
@@ -114,7 +150,11 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="artistLineEdit"/>
+      <widget class="QLineEdit" name="artistLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_4">
@@ -131,7 +171,11 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLineEdit" name="genreLineEdit"/>
+      <widget class="QLineEdit" name="genreLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="11" column="0">
       <widget class="QLabel" name="label_12">
@@ -161,10 +205,18 @@
       </widget>
      </item>
      <item row="11" column="1">
-      <widget class="QLineEdit" name="samplerateLineEdit"/>
+      <widget class="QLineEdit" name="samplerateLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="12" column="1">
-      <widget class="QLineEdit" name="commentLineEdit"/>
+      <widget class="QLineEdit" name="commentLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

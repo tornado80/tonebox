@@ -16,21 +16,25 @@ class SettingsDialog(QDialog, Ui_SettingsDialogUi):
         self.databasePathButton.clicked.connect(self.get_database_path)
 
     def get_database_path(self):
-        p = QFileDialog.getOpenFileName(self, "Open Database File",
+        p, _ = QFileDialog.getOpenFileName(self, "Open Database File",
             self.databasePathLineEdit.text(),
             "ToneBox DB Files (*.db)")
-        self.databasePathLineEdit.setText(p)
+        if p != "":
+            self.databasePathLineEdit.setText(p)
 
     def get_default_path(self):
         p = QFileDialog.getExistingDirectory(self, "Open File Path",
                                        self.defaultPathLineEdit.text(),
                                        QFileDialog.ShowDirsOnly)
-        self.defaultPathLineEdit.setText(p)
+        if p != "":
+            self.defaultPathLineEdit.setText(p)
 
     def reload_database(self):
+        self.manager_model.close_connection()
+        self.manager_model.db_path = self.settings_model.get("DatabasePath")
         self.manager_model.songs.clear()
         self.manager_model.playlists.clear()
-        self.manager_model.get_all_data()
+        self.manager_model.setup_connection()
         self.manager_model.modelUpdated.emit()
     
     def reload_settings(self):
@@ -66,6 +70,7 @@ class SettingsDialog(QDialog, Ui_SettingsDialogUi):
         for key, value in self.settings_model.SONGS_VIEW_HEADERS_TRANSLATIONS.items():            
             self.settings_model.json_dict["SongsViewHeaders"][key] = 1 if getattr(self, f"{value}CheckBox").isChecked() else 0        
         self.settings_model.write_settings_file()
+        self.reload_database()
         return super().accept()
 
     def exec_(self):

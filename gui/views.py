@@ -75,11 +75,11 @@ class FilterView(QListWidget):
         for row_data in self.rows_data:
             shown_name = "({})" if len(row_data) > 1 else "{}"
             item = QListWidgetItem(shown_name.format(
-                ", ".join(row_data)
+                ", ".join([str(i) for i in row_data])
             ))
-            if ord("a") <= ord(str(row_data[0][0]).lower()) <= ord("z"):
+            if ord("a") <= ord(str(row_data[0])[0].lower()) <= ord("z"):
                 item.setIcon(QIcon(
-                    QPixmap(u":/images/icons/ascii/{}.png".format(str(row_data[0][0]).lower()))
+                    QPixmap(u":/images/icons/ascii/{}.png".format(str(row_data[0])[0].lower()))
                     ))
             else:
                 item.setIcon(QIcon(

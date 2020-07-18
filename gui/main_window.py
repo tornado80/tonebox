@@ -50,9 +50,10 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
             self.settings_model.get("OpenFilePath"),
             "Audio Files ({})".format(" ".join(self.settings_model.SUPPORTED_AUDIO_FILES))
             )
-        self.manager_model.add_songs(*new_songs)
-        if self.settings_model.get("RememberLastPath"):
-            self.settings_model.update("OpenFilePath", str(Path(new_songs[0]).parent))
+        if len(new_songs) > 0:
+            self.manager_model.add_songs(*new_songs)
+            if self.settings_model.get("RememberLastPath"):
+                self.settings_model.update("OpenFilePath", str(Path(new_songs[0]).parent))
     
     def handle_new_playlist_action(self):
         pass

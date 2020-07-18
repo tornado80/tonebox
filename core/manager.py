@@ -51,6 +51,9 @@ class Manager:
         self.db_path = db_path
         self.songs = {}
         self.playlists = {}
+        self.setup_connection()
+
+    def setup_connection(self):
         if self.open_connection():
             self.setup_database()
             self.get_all_data()
@@ -311,7 +314,7 @@ class Manager:
             else:
                 result.add(
                     tuple([
-                        getattr(song, c) if getattr(song, c) is not None else "?" for c in category
+                        getattr(song, c) for c in category
                     ])
                 )
         return result
