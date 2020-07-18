@@ -307,7 +307,8 @@ class Manager:
 
     def edit_playlist_name(self, playlist_id, new_name):
         try:
-            self.playlists[playlist_id].name = new_name 
+            self.playlists[playlist_id].name = new_name
+            self.db_cursor.execute(f"UPDATE playlists SET name=? WHERE playlist_id=?", (new_name, playlist_id))
         except Exception as e:
             self.show_errors_to_user(e)            
 
