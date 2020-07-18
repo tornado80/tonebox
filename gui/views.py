@@ -2,6 +2,7 @@ from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtWidgets import QAbstractItemView, QListView, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QMenu, QMessageBox, QAction
 from PySide2.QtCore import Signal, Qt
 from .info_dialog import InfoDialog
+from .rename_dialog import RenameDialog
 
 class FilterView(QListWidget):
     childToBeUpdated = Signal()
@@ -33,6 +34,7 @@ class FilterView(QListWidget):
     def setupUi(self):
         self.setViewMode(QListWidget.ListMode)
         self.setMovement(QListView.Static)
+        self.setSortingEnabled(True)
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.clicked.connect(self.single_click_to_filter_child)
         self.setup_context_menu()
@@ -158,7 +160,7 @@ class SongsView(QTableWidget):
         self.contextMenu = QMenu(self)
         self.playSongAction = self.contextMenu.addAction("Play")
         self.addToQueueAction = self.contextMenu.addAction("Add to Queue")
-        self.addToPlaylistAction = self.contextMenu.addAction("Add to Playlist")
+        self.addToPlaylistMenu = self.contextMenu.addMenu("Add to Playlist")
         self.removeSongAction = self.contextMenu.addAction("Remove song(s)")
         self.informationAction = self.contextMenu.addAction("Details")
         self.playSongAction.triggered.connect(self.request_playing_song)
@@ -179,8 +181,11 @@ class SongsView(QTableWidget):
     def handle_add_to_queue(self):
         pass
 
-    def handle_remove_song_action(self): # there is a bug here. we need a function to delete as many songs as we want and them emit signal
-        if QMessageBox.question(self, "User Consent", "Do you really want to remove the file from Library?", QMessageBox.Yes, QMessageBox.No):
+    def handle_remove_song_action(self):
+        if QMessageBox.question(self, 
+            "User Consent", 
+            "Do you really want to remove the song from Library?", 
+            QMessageBox.No, QMessageBox.Yes) == QMessageBox.Yes:        
             songs_to_be_deleted = [self.rows_data[row_idx.row()] for row_idx in self.selectionModel().selectedRows()]
             self.manager_model.remove_songs(*songs_to_be_deleted)
         
@@ -229,6 +234,7 @@ class SongsView(QTableWidget):
 class PlaylistFilterView(FilterView):
     def setupUi(self):
         super().setupUi()
+        self.doubleClicked.connect(self.ready_item_for_edit)
 
     def setup_context_menu(self):
         super().setup_context_menu()
@@ -239,23 +245,28 @@ class PlaylistFilterView(FilterView):
         self.removePlaylistAction = QAction("Remove Playlist(s)")
         self.contextMenu.insertAction(self.viewModeAction, self.removePlaylistAction)
         self.newPlaylistAction.triggered.connect(self.new_playlist)
-        self.renamePlaylistAction.triggered.connect(self.rename_playlist)
         self.removePlaylistAction.triggered.connect(self.remove_playlist)
+        self.renamePlaylistAction.triggered.connect(self.ready_item_for_edit)
+
+    def ready_item_for_edit(self):
+        idx = self.selectionModel().currentIndex()
+        item = self.itemFromIndex(idx)
+        playlist_id = item.data(Qt.UserRole)
+        playlist_name = self.manager_model.playlists[playlist_id].name
+        dlg = RenameDialog(self, playlist_name)
+        if dlg.exec_():
+            self.manager_model.rename_playlist(playlist_id, dlg.lineEdit.text())
 
     def new_playlist(self):
-        pass
-
-    def rename_playlist(self):
-        pass
+        self.manager_model.add_playlists("NewPlaylist")
 
     def remove_playlist(self):
-        pass
-
-    def contextMenuEvent(self, event):
-        if len(self.selectionModel().selectedRows()) > 1:
-            self.renamePlaylistAction.setVisible(False)
-        self.contextMenu.exec_(event.globalPos())
-        self.renamePlaylistAction.setVisible(True)
+        if QMessageBox.question(self, 
+            "User Consent", 
+            "Do you really want to remove the playlist?", 
+            QMessageBox.No, QMessageBox.Yes) == QMessageBox.Yes:
+            selected_rows = [self.itemFromIndex(idx).data(Qt.UserRole) for idx in self.selectionModel().selectedRows()]
+            self.manager_model.remove_playlists(*selected_rows)
 
     def child_filter_keywords(self):
         result = self.accumulate_parent_keywords()

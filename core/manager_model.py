@@ -19,6 +19,12 @@ class Model(QObject, Manager):
         output = Manager.show_errors_to_user(self, err, place)
         QMessageBox.critical(None, "Error", output)
 
+    def rename_playlist(self, playlist_id, new_name):
+        if not Manager.edit_playlist_name(self, playlist_id, new_name):
+            self.show_errors_to_user(f"Failed to rename playlist with name \"{new_name}\" and id \"{playlist_id}\"", "rename_playlist")
+        else:
+            self.modelUpdated.emit()
+
     def add_songs(self, *song_paths):
         added_songs_count = 0
         for song_path in song_paths:

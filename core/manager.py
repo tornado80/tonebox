@@ -35,7 +35,7 @@ class Manager:
     );
     CREATE TABLE IF NOT EXISTS Playlists (
         playlist_id INTEGER PRIMARY KEY,
-        name TEXT UNIQUE NOT NULL
+        name TEXT NOT NULL
     );
     CREATE TABLE IF NOT EXISTS SongsPlaylistsGroups (
         record_id INTEGER PRIMARY KEY,
@@ -120,8 +120,9 @@ class Manager:
         try:
             new_playlist = Playlist(playlist_name)
             self.db_cursor.execute("INSERT INTO Playlists(name) VALUES (?)", (new_playlist.name,))
-            self.db_cursor.execute("SELECT playlist_id FROM Playlists WHERE name=?", (playlist_name,))
-            new_playlist.db_id = self.db_cursor.fetchone()[0]
+            self.db_connection.commit()
+            #self.db_cursor.execute("SELECT playlist_id FROM Playlists WHERE name=?", (playlist_name,))
+            new_playlist.db_id = self.db_cursor.lastrowid #self.db_cursor.fetchone()[0]
             self.playlists[new_playlist.db_id] = new_playlist   
             self.db_connection.commit() 
         except sqlite3.Error as e:
@@ -135,6 +136,7 @@ class Manager:
             try:
                 del self.playlists[playlist_id]
                 self.db_cursor.execute("DELETE FROM Playlists WHERE playlist_id=?", (playlist_id,))
+                self.db_connection.commit() 
                 self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE playlist_id=?", (playlist_id,))
                 self.db_connection.commit()    
             except sqlite3.Error as e:                                                     
@@ -151,6 +153,7 @@ class Manager:
                 self.db_cursor.execute("SELECT playlist_id FROM Playlists WHERE name=?", (playlist_name,))
                 playlist_id = self.db_cursor.fetchone()[0]                                                                      
                 self.db_cursor.execute("DELETE FROM Playlists WHERE name=?", (playlist_name,))
+                self.db_connection.commit() 
                 self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE playlist_id=?", (playlist_id,))
                 self.db_connection.commit()
             except sqlite3.Error as e:                                                     
@@ -164,8 +167,8 @@ class Manager:
             new_song = Song(song_path)
             self.db_cursor.execute("INSERT INTO Songs(path) VALUES (?)", (new_song.path,))
             self.db_connection.commit()
-            self.db_cursor.execute("SELECT song_id FROM Songs WHERE path=?", (song_path,))
-            new_song.db_id = self.db_cursor.fetchone()[0]
+            #self.db_cursor.execute("SELECT song_id FROM Songs WHERE path=?", (song_path,))
+            new_song.db_id = self.db_cursor.lastrowid #self.db_cursor.fetchone()[0]
             self.songs[new_song.db_id] = new_song
             self.db_connection.commit()
         except sqlite3.Error as e:
@@ -179,6 +182,7 @@ class Manager:
             try:
                 del self.songs[song_id]
                 self.db_cursor.execute("DELETE FROM Songs WHERE song_id=?", (song_id,))
+                self.db_connection.commit() 
                 self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song_id,))
                 self.db_connection.commit() 
             except sqlite3.Error as e:
@@ -195,6 +199,7 @@ class Manager:
                 self.db_cursor.execute("SELECT song_id FROM Songs WHERE path=?", (song_path,))
                 song_id = self.db_cursor.fetchone()[0]
                 self.db_cursor.execute("DELETE FROM Songs WHERE path=?", (song_path,))
+                self.db_connection.commit() 
                 self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=?", (song_id,))
                 self.db_connection.commit()
             except sqlite3.Error as e:
@@ -277,7 +282,9 @@ class Manager:
                 self.db_cursor.execute("SELECT playlist_order FROM SongsPlaylistsGroups WHERE song_id=? AND playlist_id=?", (song_id, playlist_id))
                 flag = self.db_cursor.fetchone()[0]
                 self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=? AND playlist_id=? AND playlist_order=?", (song_id, playlist_id, flag))
+                self.db_connection.commit() 
                 self.db_cursor.execute(f"UPDATE SongsPlaylistsGroups SET playlist_order = playlist_order-1 WHERE playlist_order > {flag}")
+                self.db_connection.commit() 
             except sqlite3.Error as e:
                 self.show_errors_to_user(e)
             else:
@@ -297,6 +304,7 @@ class Manager:
                 self.db_cursor.execute("SELECT playlist_order FROM SongsPlaylistsGroups WHERE song_id=? AND playlist_id=?", (song.db_id, playlist.db_id))
                 flag = self.db_cursor.fetchone()[0]
                 self.db_cursor.execute("DELETE FROM SongsPlaylistsGroups WHERE song_id=? AND playlist_id=? AND playlist_order=?", (song.db_id, playlist.db_id, flag)) 
+                self.db_connection.commit() 
                 self.db_cursor.execute(f"UPDATE SongsPlaylistsGroups SET playlist_order = playlist_order-1 WHERE playlist_order > {flag}") 
                 self.db_connection.commit() 
             except sqlite3.Error as e:
@@ -309,8 +317,12 @@ class Manager:
         try:
             self.playlists[playlist_id].name = new_name
             self.db_cursor.execute(f"UPDATE playlists SET name=? WHERE playlist_id=?", (new_name, playlist_id))
+            self.db_connection.commit()
         except Exception as e:
-            self.show_errors_to_user(e)            
+            self.show_errors_to_user(e)
+        else:
+            return True
+        return False            
 
     def filter(self, query):
         try:
