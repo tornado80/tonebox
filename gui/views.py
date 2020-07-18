@@ -1,3 +1,4 @@
+from core.manager import Playlist
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtWidgets import QAbstractItemView, QListView, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QMenu, QMessageBox, QAction
 from PySide2.QtCore import Signal, Qt
@@ -122,9 +123,10 @@ class SongsView(QTableWidget):
         self.doubleClicked.connect(self.double_click_to_play_song)
         self.setup_context_menu()
 
-    def connect_to_models(self, manager_model, settings_model):
+    def connect_to_models(self, manager_model, settings_model, queue_manager):
         self.manager_model = manager_model
         self.settings_model = settings_model
+        self.queue_manager = queue_manager
         self.connect_to_models_signals()
     
     def connect_to_models_signals(self):
@@ -185,7 +187,11 @@ class SongsView(QTableWidget):
         self.manager_model.add_songs_to_playlist(action.data(), *songs_to_be_added)
 
     def handle_add_to_queue(self):
-        pass
+        self.add_to_queue(None)
+
+    def add_to_queue(self, playlist_id):
+        songs_to_be_queued = [(self.rows_data[row_idx.row()], playlist_id) for row_idx in self.selectionModel().selectedRows()]     
+        self.queue_manager.add_songs_to_queue(*songs_to_be_queued)
 
     def handle_remove_song(self):
         if QMessageBox.question(self, 
@@ -312,6 +318,13 @@ class PlaylistSongsView(SongsView):
         self.removeSongFromPlaylistAction = QAction("Remove song(s) from playlist")
         self.contextMenu.insertAction(self.removeSongAction, self.removeSongFromPlaylistAction)
         self.removeSongFromPlaylistAction.triggered.connect(self.handle_remove_song_from_playlist)
+
+    def handle_add_to_queue(self):
+        playlist_ids = self.accumulate_filter_keywords()["playlist_id"]
+        if len(playlist_ids) == 1:
+            super().add_to_queue(playlist_ids[0])
+        else:
+            super().add_to_queue(None)
 
     def contextMenuEvent(self, event):
         row = self.rowAt(event.y())

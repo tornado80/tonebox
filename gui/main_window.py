@@ -1,45 +1,45 @@
+from core import queue_manager
 from PySide2.QtWidgets import QMainWindow, QFileDialog
 from .main_window_ui import Ui_MainWindowUi
 from pathlib import Path
 from .settings_dialog import SettingsDialog
 
 class MainWindow(QMainWindow, Ui_MainWindowUi):
-    def __init__(self, settings_model, manager_model, queue_model, player_object):
+    def __init__(self, settings_model, manager_model, queue_manager):
         super().__init__()
         self.setupUi(self)
         #self.showMaximized()
         self.settings_model = settings_model
         self.manager_model = manager_model
-        self.queue_model = queue_model
-        self.player_object = player_object
+        self.queue_manager = queue_manager
         self.settings_dialog = SettingsDialog(self, self.settings_model, self.manager_model)
-        
+
         # views
-        self.librarySongsView.connect_to_models(self.manager_model, self.settings_model)
+        self.librarySongsView.connect_to_models(self.manager_model, self.settings_model, self.queue_manager)
         self.librarySongsView.update_view()
 
-        self.albumSongsView.connect_to_models(self.manager_model, self.settings_model)
+        self.albumSongsView.connect_to_models(self.manager_model, self.settings_model, self.queue_manager)
         self.albumSongsView.update_view()
         self.albumFilterView.connect_to_models(self.manager_model, self.settings_model)
         self.albumFilterView.setCategory(["album", "artist"])
         self.albumFilterView.update_view()
         self.albumSongsView.connect_to_filter_view(self.albumFilterView)
 
-        self.artistSongsView.connect_to_models(self.manager_model, self.settings_model)
+        self.artistSongsView.connect_to_models(self.manager_model, self.settings_model, self.queue_manager)
         self.artistSongsView.update_view()
         self.artistFilterView.connect_to_models(self.manager_model, self.settings_model)
         self.artistFilterView.setCategory(["artist"])
         self.artistFilterView.update_view()
         self.artistSongsView.connect_to_filter_view(self.artistFilterView)
 
-        self.genreSongsView.connect_to_models(self.manager_model, self.settings_model)
+        self.genreSongsView.connect_to_models(self.manager_model, self.settings_model, self.queue_manager)
         self.genreSongsView.update_view()
         self.genreFilterView.connect_to_models(self.manager_model, self.settings_model)
         self.genreFilterView.setCategory(["genre"])
         self.genreFilterView.update_view()
         self.genreSongsView.connect_to_filter_view(self.genreFilterView)
 
-        self.multiSongs.connect_to_models(self.manager_model, self.settings_model)
+        self.multiSongs.connect_to_models(self.manager_model, self.settings_model, self.queue_manager)
         self.multiAlbum.connect_to_models(self.manager_model, self.settings_model)
         self.multiAlbum.setCategory(["album"])
         self.multiArtist.connect_to_models(self.manager_model, self.settings_model)
@@ -57,7 +57,7 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
         self.playlistFilterView.connect_to_models(self.manager_model, self.settings_model)
         self.playlistFilterView.update_view()
 
-        self.playlistSongsView.connect_to_models(self.manager_model, self.settings_model)
+        self.playlistSongsView.connect_to_models(self.manager_model, self.settings_model, self.queue_manager)
         self.playlistSongsView.connect_to_filter_view(self.playlistFilterView)
         self.playlistSongsView.update_view()
 

@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1,0,0,0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1,0,0,0">
      <item>
       <widget class="QLabel" name="coverImageLabel">
        <property name="maximumSize">
@@ -109,19 +109,21 @@
          <property name="suffix">
           <string>x</string>
          </property>
+         <property name="minimum">
+          <double>-10.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>10.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
         </widget>
        </item>
       </layout>
-     </item>
-     <item>
-      <widget class="QSlider" name="speedSlider">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="tickPosition">
-        <enum>QSlider::TicksBothSides</enum>
-       </property>
-      </widget>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0,0">
@@ -131,7 +133,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="icons.qrc">:/images/icons/icons8-no-audio-30.png</pixmap>
+          <pixmap resource="icons.qrc">:/images/icons/icons8-voice-30.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>false</bool>
@@ -159,6 +161,9 @@
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
          <property name="buttonSymbols">
           <enum>QAbstractSpinBox::NoButtons</enum>
          </property>
@@ -168,6 +173,9 @@
          <property name="maximum">
           <number>100</number>
          </property>
+         <property name="value">
+          <number>70</number>
+         </property>
         </widget>
        </item>
       </layout>
@@ -176,6 +184,9 @@
       <widget class="QSlider" name="volumeSlider">
        <property name="maximum">
         <number>100</number>
+       </property>
+       <property name="value">
+        <number>70</number>
        </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -198,7 +209,7 @@
         <set>Qt::AlignCenter</set>
        </property>
        <property name="readOnly">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -225,7 +236,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0">
      <item>
       <widget class="QToolButton" name="playPauseBtn">
        <property name="text">
@@ -474,14 +485,13 @@
       </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="repeatBtn">
+      <widget class="QToolButton" name="playbackModeBtn">
        <property name="text">
         <string>...</string>
        </property>
        <property name="icon">
         <iconset resource="icons.qrc">
-         <normaloff>:/images/icons/icons8-repeat-30.png</normaloff>
-         <normalon>:/images/icons/icons8-repeat-one-30.png</normalon>:/images/icons/icons8-repeat-30.png</iconset>
+         <normaloff>:/images/icons/no-repeat-all-30.png</normaloff>:/images/icons/no-repeat-all-30.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -490,27 +500,7 @@
         </size>
        </property>
        <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="shuffleBtn">
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="icons.qrc">
-         <normaloff>:/images/icons/icons8-shuffle-30.png</normaloff>:/images/icons/icons8-shuffle-30.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>30</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>

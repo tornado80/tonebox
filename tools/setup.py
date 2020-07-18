@@ -1,4 +1,5 @@
 from PySide2.QtCore import QObject, Signal
+from PySide2.QtWidgets import QMessageBox
 import json
 import os
 
@@ -123,6 +124,10 @@ class SettingsModel(QObject, Settings):
     def __init__(self):
         QObject.__init__(self)
         Settings.__init__(self)
+
+    def show_errors_to_user(self, err):
+        output = Settings.show_errors_to_user(self, err)
+        QMessageBox.critical(None, "Error", output)        
 
     def write_settings_file(self):
         Settings.write_settings_file(self)

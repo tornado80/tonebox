@@ -65,6 +65,10 @@ class Ui_MediaPlayerWidget(object):
         self.speedSpinBox.setFrame(False)
         self.speedSpinBox.setAlignment(Qt.AlignCenter)
         self.speedSpinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.speedSpinBox.setMinimum(-10.000000000000000)
+        self.speedSpinBox.setMaximum(10.000000000000000)
+        self.speedSpinBox.setSingleStep(0.500000000000000)
+        self.speedSpinBox.setValue(1.000000000000000)
 
         self.verticalLayout.addWidget(self.speedSpinBox)
 
@@ -72,18 +76,11 @@ class Ui_MediaPlayerWidget(object):
 
         self.horizontalLayout_2.addLayout(self.verticalLayout)
 
-        self.speedSlider = QSlider(MediaPlayerWidget)
-        self.speedSlider.setObjectName(u"speedSlider")
-        self.speedSlider.setOrientation(Qt.Vertical)
-        self.speedSlider.setTickPosition(QSlider.TicksBothSides)
-
-        self.horizontalLayout_2.addWidget(self.speedSlider)
-
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.volumeIcon = QLabel(MediaPlayerWidget)
         self.volumeIcon.setObjectName(u"volumeIcon")
-        self.volumeIcon.setPixmap(QPixmap(u":/images/icons/icons8-no-audio-30.png"))
+        self.volumeIcon.setPixmap(QPixmap(u":/images/icons/icons8-voice-30.png"))
         self.volumeIcon.setScaledContents(False)
         self.volumeIcon.setAlignment(Qt.AlignCenter)
 
@@ -99,8 +96,10 @@ class Ui_MediaPlayerWidget(object):
         self.volumeSpinBox.setObjectName(u"volumeSpinBox")
         self.volumeSpinBox.setFrame(False)
         self.volumeSpinBox.setAlignment(Qt.AlignCenter)
+        self.volumeSpinBox.setReadOnly(True)
         self.volumeSpinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.volumeSpinBox.setMaximum(100)
+        self.volumeSpinBox.setValue(70)
 
         self.verticalLayout_2.addWidget(self.volumeSpinBox)
 
@@ -111,6 +110,7 @@ class Ui_MediaPlayerWidget(object):
         self.volumeSlider = QSlider(MediaPlayerWidget)
         self.volumeSlider.setObjectName(u"volumeSlider")
         self.volumeSlider.setMaximum(100)
+        self.volumeSlider.setValue(70)
         self.volumeSlider.setOrientation(Qt.Vertical)
         self.volumeSlider.setTickPosition(QSlider.TicksBothSides)
 
@@ -126,7 +126,7 @@ class Ui_MediaPlayerWidget(object):
         self.elapsedTimeLineEdit.setObjectName(u"elapsedTimeLineEdit")
         self.elapsedTimeLineEdit.setFrame(False)
         self.elapsedTimeLineEdit.setAlignment(Qt.AlignCenter)
-        self.elapsedTimeLineEdit.setReadOnly(True)
+        self.elapsedTimeLineEdit.setReadOnly(False)
 
         self.horizontalLayout.addWidget(self.elapsedTimeLineEdit)
 
@@ -272,32 +272,21 @@ class Ui_MediaPlayerWidget(object):
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_4)
 
-        self.repeatBtn = QToolButton(MediaPlayerWidget)
-        self.repeatBtn.setObjectName(u"repeatBtn")
+        self.playbackModeBtn = QToolButton(MediaPlayerWidget)
+        self.playbackModeBtn.setObjectName(u"playbackModeBtn")
         icon12 = QIcon()
-        icon12.addFile(u":/images/icons/icons8-repeat-30.png", QSize(), QIcon.Normal, QIcon.Off)
-        icon12.addFile(u":/images/icons/icons8-repeat-one-30.png", QSize(), QIcon.Normal, QIcon.On)
-        self.repeatBtn.setIcon(icon12)
-        self.repeatBtn.setIconSize(QSize(30, 30))
-        self.repeatBtn.setCheckable(True)
+        icon12.addFile(u":/images/icons/no-repeat-all-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.playbackModeBtn.setIcon(icon12)
+        self.playbackModeBtn.setIconSize(QSize(30, 30))
+        self.playbackModeBtn.setCheckable(False)
 
-        self.horizontalLayout_3.addWidget(self.repeatBtn)
-
-        self.shuffleBtn = QToolButton(MediaPlayerWidget)
-        self.shuffleBtn.setObjectName(u"shuffleBtn")
-        icon13 = QIcon()
-        icon13.addFile(u":/images/icons/icons8-shuffle-30.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.shuffleBtn.setIcon(icon13)
-        self.shuffleBtn.setIconSize(QSize(30, 30))
-        self.shuffleBtn.setCheckable(True)
-
-        self.horizontalLayout_3.addWidget(self.shuffleBtn)
+        self.horizontalLayout_3.addWidget(self.playbackModeBtn)
 
         self.muteBtn = QToolButton(MediaPlayerWidget)
         self.muteBtn.setObjectName(u"muteBtn")
-        icon14 = QIcon()
-        icon14.addFile(u":/images/icons/icons8-mute-30.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.muteBtn.setIcon(icon14)
+        icon13 = QIcon()
+        icon13.addFile(u":/images/icons/icons8-mute-30.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.muteBtn.setIcon(icon13)
         self.muteBtn.setIconSize(QSize(30, 30))
         self.muteBtn.setCheckable(True)
 
@@ -335,8 +324,7 @@ class Ui_MediaPlayerWidget(object):
         self.skip5SecBtn.setText(QCoreApplication.translate("MediaPlayerWidget", u"...", None))
         self.skip10SecBtn.setText(QCoreApplication.translate("MediaPlayerWidget", u"...", None))
         self.skip30SecBtn.setText(QCoreApplication.translate("MediaPlayerWidget", u"...", None))
-        self.repeatBtn.setText(QCoreApplication.translate("MediaPlayerWidget", u"...", None))
-        self.shuffleBtn.setText(QCoreApplication.translate("MediaPlayerWidget", u"...", None))
+        self.playbackModeBtn.setText(QCoreApplication.translate("MediaPlayerWidget", u"...", None))
         self.muteBtn.setText(QCoreApplication.translate("MediaPlayerWidget", u"...", None))
     # retranslateUi
 
