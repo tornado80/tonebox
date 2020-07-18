@@ -57,6 +57,10 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
         self.playlistFilterView.connect_to_models(self.manager_model, self.settings_model)
         self.playlistFilterView.update_view()
 
+        self.playlistSongsView.connect_to_models(self.manager_model, self.settings_model)
+        self.playlistSongsView.connect_to_filter_view(self.playlistFilterView)
+        self.playlistSongsView.update_view()
+
         # actions
         self.actionAddMusic.triggered.connect(self.handle_add_music_action)
         self.actionNewPlaylist.triggered.connect(self.handle_new_playlist_action)
@@ -74,7 +78,8 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
                 self.settings_model.update("OpenFilePath", str(Path(new_songs[0]).parent))
     
     def handle_new_playlist_action(self):
-        pass
+        self.categoryWidget.setCurrentIndex(5) # namely playlists tab
+        self.playlistFilterView.new_playlist()
 
     def handle_settings(self):
         self.settings_dialog.exec_()
