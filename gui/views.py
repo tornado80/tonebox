@@ -34,7 +34,6 @@ class FilterView(QListWidget):
     def setupUi(self):
         self.setViewMode(QListWidget.ListMode)
         self.setMovement(QListView.Static)
-        self.setSortingEnabled(True)
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.clicked.connect(self.single_click_to_filter_child)
         self.setup_context_menu()
@@ -118,8 +117,6 @@ class SongsView(QTableWidget):
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.horizontalHeader().setStretchLastSection(True)
-        self.horizontalHeader().setSortIndicatorShown(True)
-        self.setSortingEnabled(True)
         self.verticalHeader().setVisible(False)
         self.horizontalHeader().setSectionsMovable(True)
         self.doubleClicked.connect(self.double_click_to_play_song)
@@ -149,6 +146,7 @@ class SongsView(QTableWidget):
             self.playSongAction.setVisible(True)
 
     def double_click_to_play_song(self, idx):
+        print("Row:", self.itemFromIndex(idx).row())
         print("Playing song name:", self.manager_model.songs[self.rows_data[idx.row()]].title)
         print("Row double clicked. Row number:", idx.row(), "Column number:", idx.column())
         self.request_playing_song()
@@ -164,24 +162,32 @@ class SongsView(QTableWidget):
         self.removeSongAction = self.contextMenu.addAction("Remove song(s)")
         self.informationAction = self.contextMenu.addAction("Details")
         self.playSongAction.triggered.connect(self.request_playing_song)
-        self.removeSongAction.triggered.connect(self.handle_remove_song_action)
+        self.removeSongAction.triggered.connect(self.handle_remove_song)
         self.addToQueueAction.triggered.connect(self.handle_add_to_queue)
-        self.addToPlaylistAction.triggered.connect(self.handle_add_to_playlist)
         self.informationAction.triggered.connect(self.handle_information)
+        self.addToPlaylistMenu.aboutToShow.connect(self.setup_playlist_menu)
+        self.addToPlaylistMenu.triggered.connect(self.add_to_playlist)
 
     def handle_information(self):
         InfoDialog(self, self.manager_model.songs[
             self.rows_data[
-                self.selectionModel().selectedRows()[0].row()
+                self.selectionModel().currentIndex().row()
             ]], self.settings_model).exec_()
 
-    def handle_add_to_playlist(self):
-        pass
+    def setup_playlist_menu(self):
+        self.addToPlaylistMenu.clear()
+        for playlist_id, playlist in self.manager_model.playlists.items():
+            action = self.addToPlaylistMenu.addAction(playlist.name)
+            action.setData(playlist_id)
+
+    def add_to_playlist(self, action):
+        songs_to_be_added = [self.rows_data[row_idx.row()] for row_idx in self.selectionModel().selectedRows()]
+        self.manager_model.add_songs_to_playlist(action.data(), *songs_to_be_added)
 
     def handle_add_to_queue(self):
         pass
 
-    def handle_remove_song_action(self):
+    def handle_remove_song(self):
         if QMessageBox.question(self, 
             "User Consent", 
             "Do you really want to remove the song from Library?", 
@@ -244,8 +250,8 @@ class PlaylistFilterView(FilterView):
         self.contextMenu.insertAction(self.viewModeAction, self.renamePlaylistAction)
         self.removePlaylistAction = QAction("Remove Playlist(s)")
         self.contextMenu.insertAction(self.viewModeAction, self.removePlaylistAction)
-        self.newPlaylistAction.triggered.connect(self.new_playlist)
-        self.removePlaylistAction.triggered.connect(self.remove_playlist)
+        self.newPlaylistAction.triggered.connect(self.handle_new_playlist)
+        self.removePlaylistAction.triggered.connect(self.handle_remove_playlist)
         self.renamePlaylistAction.triggered.connect(self.ready_item_for_edit)
 
     def ready_item_for_edit(self):
@@ -257,10 +263,10 @@ class PlaylistFilterView(FilterView):
         if dlg.exec_():
             self.manager_model.rename_playlist(playlist_id, dlg.lineEdit.text())
 
-    def new_playlist(self):
+    def handle_new_playlist(self):
         self.manager_model.add_playlists("NewPlaylist")
 
-    def remove_playlist(self):
+    def handle_remove_playlist(self):
         if QMessageBox.question(self, 
             "User Consent", 
             "Do you really want to remove the playlist?", 
@@ -301,6 +307,35 @@ class PlaylistFilterView(FilterView):
         return self.manager_model.playlists_dict_filter(**search)
 
 class PlaylistSongsView(SongsView):
+    def setup_context_menu(self):
+        super().setup_context_menu()
+        self.removeSongFromPlaylistAction = QAction("Remove song(s) from playlist")
+        self.contextMenu.insertAction(self.removeSongAction, self.removeSongFromPlaylistAction)
+        self.removeSongFromPlaylistAction.triggered.connect(self.handle_remove_song_from_playlist)
+
+    def contextMenuEvent(self, event):
+        row = self.rowAt(event.y())
+        if row != -1:
+            if len(self.selectionModel().selectedRows()) > 1:
+                self.informationAction.setVisible(False)
+                self.playSongAction.setVisible(False)
+            if len(self.accumulate_filter_keywords()["playlist_id"]) > 1:
+                self.removeSongFromPlaylistAction.setVisible(False)
+            self.contextMenu.exec_(event.globalPos())
+            self.informationAction.setVisible(True)
+            self.playSongAction.setVisible(True)
+            self.removeSongFromPlaylistAction.setVisible(True)
+
+    def handle_remove_song_from_playlist(self):
+        playlist_id = self.accumulate_filter_keywords()["playlist_id"][0]
+        playlist_name = self.manager_model.playlists[playlist_id].name
+        if QMessageBox.question(self, 
+            "User Consent", 
+            f"Do you really want to remove the song(s) from playlist \"{playlist_name}\"?", 
+            QMessageBox.No, QMessageBox.Yes) == QMessageBox.Yes:   
+            songs_to_be_deleted = [self.rows_data[row_idx.row()] for row_idx in self.selectionModel().selectedRows()]
+            self.manager_model.remove_songs_from_playlist(playlist_id, *songs_to_be_deleted)
+
     def filter_view(self):
         search = self.accumulate_filter_keywords()
         return self.manager_model.playlists_songs_dict_filter(**search)

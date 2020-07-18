@@ -86,9 +86,9 @@ class Model(QObject, Manager):
     
     def remove_songs_from_playlist(self, playlist_id, *song_ids):
         removed_songs_count = 0
-        playlist_name = self.playlists[playlist_id]
+        playlist_name = self.playlists[playlist_id].name
         for song_id in song_ids:
-            song_name = self.songs[song_id]
+            song_name = self.songs[song_id].title
             if not Manager.remove_song_from_playlist(self, playlist_id = playlist_id, song_id = song_id):
                 self.show_errors_to_user(f"Failed to remove song \"{song_name}\" from playlist \"{playlist_name}\"", "remove_songs_from_playlist")
             else:

@@ -232,21 +232,26 @@ class Manager:
 
     def playlists_songs_dict_filter(self, **keywords):
         result = []
-        for playlist_id in keywords["playlist_id"]:
-            for song in self.playlists[playlist_id].songs:
-                for kw_key, kw_val in keywords.items():
-                    if hasattr(song, kw_key):
-                        if getattr(song, kw_key) not in kw_val:
-                            break
-                else:
-                    result.append(song.db_id)
+        if "playlist_id" in keywords:
+            for playlist_id in keywords["playlist_id"]:
+                for song in self.playlists[playlist_id].songs:
+                    for kw_key, kw_val in keywords.items():
+                        if hasattr(song, kw_key):
+                            if getattr(song, kw_key) not in kw_val:
+                                break
+                    else:
+                        result.append(song.db_id)
         return result
 
     def add_song_to_playlist(self, playlist_id=None, song_id=None, playlist_name=None, song_path=None):  #tiny tag wont work so takes in song path instead of name
         if playlist_id and song_id:
             playlist = self.playlists[playlist_id]
             song = self.songs[song_id]
-            playlist.songs.append(song)
+            if not song in playlist.songs:
+                playlist.songs.append(song)
+            else:
+                self.show_errors_to_user("Duplicate adding is not allowed", place = "add_song_to_playlist")
+                return False
             try:
                 self.db_cursor.execute("INSERT INTO SongsPlaylistsGroups(song_id, playlist_id, playlist_order) VALUES (?, ?, ?)", (song_id, playlist_id, len(playlist.songs))) #smh nevermind it actually starts from 1 
                 self.db_connection.commit()
@@ -357,4 +362,3 @@ class Manager:
 
 if __name__ == "__main__":
     m = Manager("tonebox.db")
-    
