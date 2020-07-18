@@ -1,6 +1,7 @@
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtWidgets import QAbstractItemView, QListView, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QMenu, QMessageBox
 from PySide2.QtCore import Signal
+from .info_dialog import InfoDialog
 
 class FilterView(QListWidget):
     childToBeUpdated = Signal()
@@ -25,13 +26,9 @@ class FilterView(QListWidget):
     
     def connect_to_models_signals(self):
         self.manager_model.modelUpdated.connect(self.update_view)
-        #self.manager_model.songAdded.connect(self.update_view)
-        #self.manager_model.songRemoved.connect(self.update_view)
 
     def disconnect_from_models_signals(self):
         self.manager_model.modelUpdated.disconnect(self.update_view)
-        #self.manager_model.songAdded.disconnect(self.update_view)
-        #self.manager_model.songRemoved.disconnect(self.update_view)
 
     def setupUi(self):
         self.setViewMode(QListWidget.ListMode)
@@ -62,7 +59,7 @@ class FilterView(QListWidget):
         fview.childToBeUpdated.connect(self.update_view)
         self.parentFilterViews.append(fview)
 
-    def child_filter_keywords(self):
+    def child_filter_keywords(self): # maybe todo multi selection
         result = self.accumulate_parent_keywords()
         if len(self.selectionModel().selectedRows()) > 0:
             selected_row = self.selectionModel().selectedRows()[0].row()
@@ -128,14 +125,10 @@ class SongsView(QTableWidget):
     def connect_to_models_signals(self):
         self.manager_model.modelUpdated.connect(self.update_view)
         self.settings_model.settingsUpdated.connect(self.update_columns)
-        #self.manager_model.songAdded.connect(self.update_rows)
-        #self.manager_model.songRemoved.connect(self.update_rows)
 
     def disconnect_from_models_signals(self):
         self.manager_model.modelUpdated.disconnect(self.update_view)
         self.settings_model.settingsUpdated.disconnect(self.update_columns)
-        #self.manager_model.songAdded.disconnect(self.update_rows)
-        #self.manager_model.songRemoved.disconnect(self.update_rows)
 
     def contextMenuEvent(self, event):
         row = self.rowAt(event.y())
@@ -161,7 +154,7 @@ class SongsView(QTableWidget):
         self.addToQueueAction = self.contextMenu.addAction("Add to Queue")
         self.addToPlaylistAction = self.contextMenu.addAction("Add to Playlist")
         self.removeSongAction = self.contextMenu.addAction("Remove song(s)")
-        self.informationAction = self.contextMenu.addAction("Information")
+        self.informationAction = self.contextMenu.addAction("Details")
         self.playSongAction.triggered.connect(self.request_playing_song)
         self.removeSongAction.triggered.connect(self.handle_remove_song_action)
         self.addToQueueAction.triggered.connect(self.handle_add_to_queue)
@@ -169,7 +162,10 @@ class SongsView(QTableWidget):
         self.informationAction.triggered.connect(self.handle_information)
 
     def handle_information(self):
-        pass
+        InfoDialog(self, self.manager_model.songs[
+            self.rows_data[
+                self.selectionModel().selectedRows()[0].row()
+            ]], self.settings_model).exec_()
 
     def handle_add_to_playlist(self):
         pass
