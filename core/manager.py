@@ -227,14 +227,14 @@ class Manager:
 
     def playlists_songs_dict_filter(self, **keywords):
         result = []
-        for playlist_id, playlist in self.playlists.items():
-            
-            for kw_key, kw_val in keywords.items():
-                if hasattr(playlist.song, kw_key):
-                    if getattr(playlist, kw_key) not in kw_val:
-                        break
-            else:
-                result.append(playlist_id)
+        for playlist_id in keywords["playlist_id"]:
+            for song in self.playlists[playlist_id].songs:
+                for kw_key, kw_val in keywords.items():
+                    if hasattr(song, kw_key):
+                        if getattr(song, kw_key) not in kw_val:
+                            break
+                else:
+                    result.append(song.db_id)
         return result
 
     def add_song_to_playlist(self, playlist_id=None, song_id=None, playlist_name=None, song_path=None):  #tiny tag wont work so takes in song path instead of name

@@ -1,5 +1,5 @@
 from PySide2.QtGui import QIcon, QPixmap
-from PySide2.QtWidgets import QAbstractItemView, QListView, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QMenu, QMessageBox
+from PySide2.QtWidgets import QAbstractItemView, QListView, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QMenu, QMessageBox, QAction
 from PySide2.QtCore import Signal, Qt
 from .info_dialog import InfoDialog
 
@@ -64,7 +64,7 @@ class FilterView(QListWidget):
         self.update_view()
         self.childToBeUpdated.emit()
 
-    def child_filter_keywords(self): # maybe todo multi selection
+    def child_filter_keywords(self):
         result = self.accumulate_parent_keywords()
         if len(self.selectionModel().selectedRows()) > 0:
             selected_rows = [idx.row() for idx in self.selectionModel().selectedRows()]
@@ -216,10 +216,14 @@ class SongsView(QTableWidget):
                     ))
                 ))
 
-    def filter_view(self):
+    def accumulate_filter_keywords(self):
         search = {}
         for view in self.filterViews:
             search.update(view.child_filter_keywords())
+        return search
+
+    def filter_view(self):
+        search = self.accumulate_filter_keywords()
         return self.manager_model.songs_dict_filter(**search)
 
 class PlaylistFilterView(FilterView):
@@ -228,26 +232,52 @@ class PlaylistFilterView(FilterView):
 
     def setup_context_menu(self):
         super().setup_context_menu()
+        self.newPlaylistAction = QAction("New Playlist")
+        self.contextMenu.insertAction(self.viewModeAction, self.newPlaylistAction)
+        self.renamePlaylistAction = QAction("Rename Playlist")
+        self.contextMenu.insertAction(self.viewModeAction, self.renamePlaylistAction)
+        self.removePlaylistAction = QAction("Remove Playlist(s)")
+        self.contextMenu.insertAction(self.viewModeAction, self.removePlaylistAction)
+        self.newPlaylistAction.triggered.connect(self.new_playlist)
+        self.renamePlaylistAction.triggered.connect(self.rename_playlist)
+        self.removePlaylistAction.triggered.connect(self.remove_playlist)
 
-    def child_filter_keywords(self): # maybe todo multi selection
+    def new_playlist(self):
+        pass
+
+    def rename_playlist(self):
+        pass
+
+    def remove_playlist(self):
+        pass
+
+    def contextMenuEvent(self, event):
+        if len(self.selectionModel().selectedRows()) > 1:
+            self.renamePlaylistAction.setVisible(False)
+        self.contextMenu.exec_(event.globalPos())
+        self.renamePlaylistAction.setVisible(True)
+
+    def child_filter_keywords(self):
         result = self.accumulate_parent_keywords()
         if len(self.selectionModel().selectedRows()) > 0:
             selected_rows = [idx.row() for idx in self.selectionModel().selectedRows()]
-            for i in range(len(self.category)):
-                result.update({
-                    self.category[i] : [self.rows_data[selected_row][i] for selected_row in selected_rows]
-                    })
+            result.update({
+                "playlist_id" : [self.rows_data[selected_row] for selected_row in selected_rows]
+                })
         return result
     
     def update_view(self):
         self.clear()
         self.rows_data = self.filter_view()
         for row_data in self.rows_data:
-            item = QListWidgetItem(self.manager_model.playlists[row_data].name)
+            playlist_name = self.manager_model.playlists[row_data].name
+            item = QListWidgetItem(playlist_name)
             item.setData(Qt.UserRole, row_data)
-            if ord("a") <= ord(str(row_data[0])[0].lower()) <= ord("z"):
+            if ord("a") <= ord(playlist_name[0].lower()) <= ord("z"):
                 item.setIcon(QIcon(
-                    QPixmap(u":/images/icons/ascii/{}.png".format(str(row_data[0])[0].lower()))
+                    QPixmap(u":/images/icons/ascii/{}.png".format(
+                        playlist_name[0].lower()
+                        ))
                     ))
             else:
                 item.setIcon(QIcon(
@@ -260,4 +290,6 @@ class PlaylistFilterView(FilterView):
         return self.manager_model.playlists_dict_filter(**search)
 
 class PlaylistSongsView(SongsView):
-    pass
+    def filter_view(self):
+        search = self.accumulate_filter_keywords()
+        return self.manager_model.playlists_songs_dict_filter(**search)

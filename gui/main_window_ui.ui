@@ -105,7 +105,7 @@
             <attribute name="title">
              <string>Multi</string>
             </attribute>
-            <layout class="QVBoxLayout" name="verticalLayout_10">
+            <layout class="QVBoxLayout" name="verticalLayout_13">
              <item>
               <widget class="QSplitter" name="splitter_6">
                <property name="orientation">
@@ -115,9 +115,48 @@
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <widget class="FilterView" name="multiGenre"/>
-                <widget class="FilterView" name="multiArtist"/>
-                <widget class="FilterView" name="multiAlbum"/>
+                <widget class="QWidget" name="">
+                 <layout class="QVBoxLayout" name="verticalLayout_10">
+                  <item>
+                   <widget class="QLabel" name="label_2">
+                    <property name="text">
+                     <string>Genres:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="FilterView" name="multiGenre"/>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="">
+                 <layout class="QVBoxLayout" name="verticalLayout_11">
+                  <item>
+                   <widget class="QLabel" name="label_3">
+                    <property name="text">
+                     <string>Artists:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="FilterView" name="multiArtist"/>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="">
+                 <layout class="QVBoxLayout" name="verticalLayout_12">
+                  <item>
+                   <widget class="QLabel" name="label_4">
+                    <property name="text">
+                     <string>Albums:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="FilterView" name="multiAlbum"/>
+                  </item>
+                 </layout>
+                </widget>
                </widget>
                <widget class="SongsView" name="multiSongs"/>
               </widget>

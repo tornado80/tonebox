@@ -7,7 +7,7 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
     def __init__(self, settings_model, manager_model, queue_model, player_object):
         super().__init__()
         self.setupUi(self)
-        self.showMaximized()
+        #self.showMaximized()
         self.settings_model = settings_model
         self.manager_model = manager_model
         self.queue_model = queue_model
@@ -54,8 +54,8 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
         self.multiArtist.update_view()
         self.multiGenre.update_view()
         
-        #self.playlistFilterView.connect_to_models(self.manager_model, self.settings_model)
-        #self.playlistFilterView.update_view()
+        self.playlistFilterView.connect_to_models(self.manager_model, self.settings_model)
+        self.playlistFilterView.update_view()
 
         # actions
         self.actionAddMusic.triggered.connect(self.handle_add_music_action)
