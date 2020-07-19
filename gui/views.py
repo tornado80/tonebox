@@ -147,14 +147,14 @@ class SongsView(QTableWidget):
             self.informationAction.setVisible(True)
             self.playSongAction.setVisible(True)
 
-    def double_click_to_play_song(self, idx):
-        print("Row:", self.itemFromIndex(idx).row())
-        print("Playing song name:", self.manager_model.songs[self.rows_data[idx.row()]].title)
-        print("Row double clicked. Row number:", idx.row(), "Column number:", idx.column())
-        self.request_playing_song()
+    def double_click_to_play_song(self):
+        self.queue_manager.clear_queue()
+        self.handle_add_to_queue()
+        self.queue_manager.play_queue()
 
     def request_playing_song(self):
-        pass
+        self.handle_add_to_queue()
+        self.queue_manager.play_queue()
 
     def setup_context_menu(self):
         self.contextMenu = QMenu(self)

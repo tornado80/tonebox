@@ -5,12 +5,13 @@ from .media_player_widget_ui import Ui_MediaPlayerWidget
 from PySide2.QtCore import Signal
 
 class MediaPlayerWidget(QWidget, Ui_MediaPlayerWidget):
-    speedChanged = Signal()
-    volumeChanged = Signal()
-    positionChanged = Signal()
-    muteChanged = Signal()
+    speedChanged = Signal(float)
+    volumeChanged = Signal(int)
+    positionChanged = Signal(int)
+    muteChanged = Signal(bool)
     playbackModeChanged = Signal()
-    playPauseChanged = Signal()
+    trackPlayed = Signal()
+    trackPaused = Signal()
     stopTrackRequested = Signal()
     nextTrackRequested = Signal()
     previousTrackRequested = Signal()
@@ -19,15 +20,45 @@ class MediaPlayerWidget(QWidget, Ui_MediaPlayerWidget):
         self.setupUi(self)
         self.volumeSlider.valueChanged.connect(self.handle_volume_slider)
         self.playbackModeBtn.clicked.connect(self.handle_playback_btn)
-        #self.speedSpinBox.valueChanged.connect()
-        #self.muteBtn.clicked.connect(self.handle_mute_btn)
-        #self.playPauseBtn.clicked.connect()
-        #self.stopBtn.clicked.connect()
-        #self.nextBtn.clicked.connect()
-        #self.previuosBtn.clicked.connect()
-        #self.fasterBtn.clicked.connect()
-        #self.slowerBtn.clicked.connect()
+        self.speedSpinBox.valueChanged.connect(self.handle_speed_spinbox)
+        self.muteBtn.clicked.connect(self.handle_mute_btn)
+        self.playPauseBtn.clicked.connect(self.handle_play_pause_btn)
+        self.stopBtn.clicked.connect(self.handle_stop_btn)
+        self.nextBtn.clicked.connect(self.handle_next_btn)
+        self.previousBtn.clicked.connect(self.handle_previous_btn)
+        self.timeSeekSlider.sliderPressed.connect(self.started_to_change_position)
+        self.timeSeekSlider.sliderReleased.connect(self.finished_changing_position)
         self.play_back_mode = QMediaPlaylist.Sequential
+        self.playbackModeChanged.emit()
+        self.position_changing_state = False
+
+    def handle_speed_spinbox(self):
+        self.speedChanged.emit(self.speedSpinBox.value())
+
+    def handle_mute_btn(self):
+        self.muteChanged.emit(self.muteBtn.isChecked())
+
+    def handle_next_btn(self):
+        self.nextTrackRequested.emit()
+
+    def handle_previous_btn(self):
+        self.previousTrackRequested.emit()
+    
+    def handle_stop_btn(self):
+        self.stopTrackRequested.emit()
+
+    def started_to_change_position(self):
+        self.position_changing_state = True
+    
+    def finished_changing_position(self):
+        self.position_changing_state = False
+        self.positionChanged.emit(self.timeSeekSlider.value())
+
+    def handle_play_pause_btn(self):
+        if self.playPauseBtn.isChecked():
+            self.trackPlayed.emit()
+        else:
+            self.trackPaused.emit()
 
     def handle_volume_slider(self):
         self.volumeSpinBox.setValue(self.volumeSlider.value())
@@ -39,7 +70,7 @@ class MediaPlayerWidget(QWidget, Ui_MediaPlayerWidget):
             self.volumeIcon.setPixmap(QPixmap(u":/images/icons/icons8-voice-30.png"))
         else:
             self.volumeIcon.setPixmap(QPixmap(u":/images/icons/icons8-audio-30.png"))
-        self.volumeChanged.emit()
+        self.volumeChanged.emit(self.volumeSpinBox.value())
 
     def handle_playback_btn(self):
         if self.play_back_mode == QMediaPlaylist.Sequential:

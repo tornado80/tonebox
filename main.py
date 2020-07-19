@@ -18,6 +18,7 @@ class ToneBoxApp(QApplication):
         self.main_window.playerWidget.queue_manager = self.queue_manager
         self.queue_manager.queue_widget = self.main_window.queueWidget
         self.main_window.queueWidget.queue_manager = self.queue_manager
+        self.queue_manager.setup_signals()
         self.main_window.show()
 
 tone_box_app = ToneBoxApp(sys.argv)
