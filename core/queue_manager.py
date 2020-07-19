@@ -1,12 +1,6 @@
 from PySide2.QtCore import QUrl, QByteArray
 from PySide2.QtGui import QPixmap
-from PySide2.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist
-
-class SongContent(QMediaContent):
-    def __init__(self, src, song, playlist_name):
-        super().__init__(src)
-        self.tonebox_song = song
-        self.tonebox_playlist_name = playlist_name
+from PySide2.QtMultimedia import QMediaPlayer, QMediaPlaylist
 
 class QueueManager(QMediaPlaylist):
     def __init__(self, manager_model):
@@ -25,6 +19,7 @@ class QueueManager(QMediaPlaylist):
     def setup_signals(self):
         self.setup_player_signals()
         self.setup_queue_widget_signals()
+        self.queue_widget.clearQueueAction.triggered.connect(self.clear_queue)
 
     def setup_queue_widget_signals(self):
         self.player_widget.speedChanged.connect(self.change_speed)
@@ -75,38 +70,19 @@ class QueueManager(QMediaPlaylist):
         self.player_object.setNotifyInterval(100)
         self.player_object.mediaStatusChanged.connect(self.media_status_changed)
         self.player_object.stateChanged.connect(self.media_state_changed)
-        self.player_object.mediaChanged.connect(self.update_player_widget)
 
     def update_time_seek_slider(self, pos):
         if not self.player_widget.position_changing_state:
             self.player_widget.timeSeekSlider.setValue(pos)
             self.player_widget.elapsedTimeLineEdit.setText(self.showTimeProperly(int(pos/1000)))
-    
-    def update_player_widget(self, media):
-        print(media.tonebox_song.name)
 
     def media_state_changed(self):
         print("Media sate changed", self.player_object.state())
-        if self.player_object.state() == QMediaPlayer.PlayingState:
-            song_id = self.songs_data_by_rows[self.currentIndex()][0]
-            song = self.manager_model.songs[song_id]
-            self.player_widget.timeSeekSlider.setMaximum(int(song.duration) * 1000)
-            self.player_widget.totalTimeLineEdit.setText(self.showTimeProperly(int(song.duration)))
-            qp = QPixmap()
-            qp.loadFromData(QByteArray(song.image))
-            self.player_widget.coverImageLabel.setPixmap(qp)                  
-            self.player_widget.infoLabel.setText(f"""
-                <html><head/><body>
-                <p><span style="font-size:18pt; font-weight:600;">{song.title}</span></p>
-                <p><span style=" font-size:14pt;">{song.album} - {song.artist}</span></p>
-                </body></html>
-            """)
-            self.change_speed(self.player_widget.speedSpinBox.value())
         if self.player_object.state() == QMediaPlayer.StoppedState:
             self.player_widget.totalTimeLineEdit.setText("")
             self.player_widget.elapsedTimeLineEdit.setText("")
             self.player_widget.infoLabel.setText("No Song")
-            self.player_widget.coverImageLabel.setPixmap(QPixmap(u":/images/icons/Blank_CD_icon.png"))  
+            self.player_widget.coverImageLabel.setPixmap(QPixmap(u":/images/icons/Blank_CD_icon.png"))
 
     def showTimeProperly(self, t):
         hours = 0
@@ -122,6 +98,22 @@ class QueueManager(QMediaPlaylist):
 
     def media_status_changed(self):
         print("Media status changed", self.player_object.mediaStatus())
+        if self.player_object.mediaStatus() == QMediaPlayer.BufferedMedia:
+            song_id = self.songs_data_by_rows[self.currentIndex()][0]
+            song = self.manager_model.songs[song_id]
+            #self.queue_widget.set_current_playing(self.currentIndex())
+            self.player_widget.timeSeekSlider.setMaximum(int(song.duration) * 1000)
+            self.player_widget.totalTimeLineEdit.setText(self.showTimeProperly(int(song.duration)))
+            qp = QPixmap()
+            qp.loadFromData(QByteArray(song.image))
+            self.player_widget.coverImageLabel.setPixmap(qp)                  
+            self.player_widget.infoLabel.setText(f"""
+                <html><head/><body>
+                <p><span style="font-size:18pt; font-weight:600;">{song.title}</span></p>
+                <p><span style=" font-size:14pt;">{song.album} - {song.artist}</span></p>
+                </body></html>
+            """)
+            self.change_speed(self.player_widget.speedSpinBox.value())
 
     def play_queue(self):
         self.player_object.play()
@@ -145,7 +137,6 @@ class QueueManager(QMediaPlaylist):
             self.songs_by_visuals.append(idx)
             self.songs_by_rows.append(idx)
             self.songs_data_by_rows.append(song_data)
-            sc = SongContent(QUrl.fromLocalFile(song.path), song, playlist_name)
-            self.addMedia(sc)
+            self.addMedia(QUrl.fromLocalFile(song.path))
             self.queue_widget.add_row(*[song.title, song.album, song.artist, playlist_name])
     

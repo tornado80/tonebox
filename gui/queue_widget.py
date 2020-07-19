@@ -15,7 +15,8 @@ class QueueWidget(QTableWidget):
         self.setColumnCount(5)
         self.setHorizontalHeaderLabels(["Status", "Title", "Album", "Artist", "Playlist"])      
         self.contextMenu = QMenu(self)
-        self.removeFromQueueAction = self.contextMenu.addAction("Remove song(s) from queue")
+        self.clearQueueAction = self.contextMenu.addAction("Clear queue")
+        
         self.doubleClicked.connect(self.handle_double_click)
         self.row_numbers = 0
         self.current_playing_row = None  
@@ -31,10 +32,12 @@ class QueueWidget(QTableWidget):
         self.row_numbers += 1
     
     def set_current_playing(self, row):
+        print("set_current_playing", row)
         item = self.item(row, 0)
         item.setIcon(QIcon(QPixmap(u":/images/icons/icons8-play-30.png")))
-        item = self.item(self.current_playing_row, 0)
-        item.setIcon(QIcon())
+        if self.current_playing_row is not None:
+            item = self.item(self.current_playing_row, 0)
+            item.setIcon(QIcon())
         self.current_playing_row = row
 
     def clear_rows(self):
