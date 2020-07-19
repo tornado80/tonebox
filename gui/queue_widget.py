@@ -33,7 +33,8 @@ class QueueWidget(QTableWidget):
     
     def set_current_playing(self, row):
         print("set_current_playing", row)
-        item = self.item(row, 0)
+        item = self.item(1, 1)
+        print(item)
         item.setIcon(QIcon(QPixmap(u":/images/icons/icons8-play-30.png")))
         if self.current_playing_row is not None:
             item = self.item(self.current_playing_row, 0)

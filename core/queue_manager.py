@@ -77,7 +77,7 @@ class QueueManager(QMediaPlaylist):
             self.player_widget.elapsedTimeLineEdit.setText(self.showTimeProperly(int(pos/1000)))
 
     def media_state_changed(self):
-        print("Media sate changed", self.player_object.state())
+        #print("Media sate changed", self.player_object.state())
         if self.player_object.state() == QMediaPlayer.StoppedState:
             self.player_widget.totalTimeLineEdit.setText("")
             self.player_widget.elapsedTimeLineEdit.setText("")
@@ -97,7 +97,7 @@ class QueueManager(QMediaPlaylist):
         return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
     def media_status_changed(self):
-        print("Media status changed", self.player_object.mediaStatus())
+        #print("Media status changed", self.player_object.mediaStatus())
         if self.player_object.mediaStatus() == QMediaPlayer.BufferedMedia:
             song_id = self.songs_data_by_rows[self.currentIndex()][0]
             song = self.manager_model.songs[song_id]
