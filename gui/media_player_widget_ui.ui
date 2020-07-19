@@ -50,7 +50,7 @@
      <item>
       <widget class="QLabel" name="infoLabel">
        <property name="text">
-        <string>infoLabel</string>
+        <string>No Song</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

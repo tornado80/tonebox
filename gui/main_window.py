@@ -8,12 +8,13 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
     def __init__(self, settings_model, manager_model, queue_manager):
         super().__init__()
         self.setupUi(self)
-        #self.showMaximized()
+        self.showMaximized()
         self.settings_model = settings_model
         self.manager_model = manager_model
         self.queue_manager = queue_manager
         self.settings_dialog = SettingsDialog(self, self.settings_model, self.manager_model)
-
+        self.playerSplitter.setStretchFactor(0, 1)
+        self.queueSplitter.setStretchFactor(0, 1)
         # views
         self.librarySongsView.connect_to_models(self.manager_model, self.settings_model, self.queue_manager)
         self.librarySongsView.update_view()
@@ -79,7 +80,7 @@ class MainWindow(QMainWindow, Ui_MainWindowUi):
     
     def handle_new_playlist_action(self):
         self.categoryWidget.setCurrentIndex(5) # namely playlists tab
-        self.playlistFilterView.new_playlist()
+        self.playlistFilterView.handle_new_playlist()
 
     def handle_settings(self):
         self.settings_dialog.exec_()

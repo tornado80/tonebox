@@ -1,3 +1,4 @@
+from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtWidgets import QAbstractItemView, QTableWidgetItem, QMenu, QTableWidget
 
 class QueueWidget(QTableWidget):
@@ -16,10 +17,11 @@ class QueueWidget(QTableWidget):
         self.contextMenu = QMenu(self)
         self.removeFromQueueAction = self.contextMenu.addAction("Remove song(s) from queue")
         self.doubleClicked.connect(self.handle_double_click)
-        self.row_numbers = 0  
+        self.row_numbers = 0
+        self.current_playing_row = None  
     
-    def handle_double_click(self):
-        pass
+    def handle_double_click(self, idx):
+        self.queue_manager.setCurrentIndex(idx.row())
 
     def add_row(self, *args):
         self.insertRow(self.row_numbers)
@@ -28,9 +30,17 @@ class QueueWidget(QTableWidget):
             self.setItem(self.row_numbers, i, item)
         self.row_numbers += 1
     
+    def set_current_playing(self, row):
+        item = self.item(row, 0)
+        item.setIcon(QIcon(QPixmap(u":/images/icons/icons8-play-30.png")))
+        item = self.item(self.current_playing_row, 0)
+        item.setIcon(QIcon())
+        self.current_playing_row = row
+
     def clear_rows(self):
         self.clearContents()
+        self.setRowCount(0)
         self.row_numbers = 0
 
     def contextMenuEvent(self, event):
-        pass
+        self.contextMenu.exec_(event.globalPos())

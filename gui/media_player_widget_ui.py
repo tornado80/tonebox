@@ -305,7 +305,7 @@ class Ui_MediaPlayerWidget(object):
     def retranslateUi(self, MediaPlayerWidget):
         MediaPlayerWidget.setWindowTitle(QCoreApplication.translate("MediaPlayerWidget", u"Form", None))
         self.coverImageLabel.setText("")
-        self.infoLabel.setText(QCoreApplication.translate("MediaPlayerWidget", u"infoLabel", None))
+        self.infoLabel.setText(QCoreApplication.translate("MediaPlayerWidget", u"No Song", None))
         self.label_3.setText("")
         self.label.setText(QCoreApplication.translate("MediaPlayerWidget", u"Speed:", None))
         self.speedSpinBox.setSuffix(QCoreApplication.translate("MediaPlayerWidget", u"x", None))

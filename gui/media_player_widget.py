@@ -62,11 +62,11 @@ class MediaPlayerWidget(QWidget, Ui_MediaPlayerWidget):
 
     def handle_volume_slider(self):
         self.volumeSpinBox.setValue(self.volumeSlider.value())
-        if self.volumeSlider.value() < 25:
+        if self.volumeSlider.value() == 0:
             self.volumeIcon.setPixmap(QPixmap(u":/images/icons/icons8-no-audio-30.png"))
-        elif self.volumeSlider.value() < 50:
+        elif self.volumeSlider.value() < 40:
             self.volumeIcon.setPixmap(QPixmap(u":/images/icons/icons8-low-volume-30.png"))
-        elif self.volumeSlider.value() < 75:
+        elif self.volumeSlider.value() < 80:
             self.volumeIcon.setPixmap(QPixmap(u":/images/icons/icons8-voice-30.png"))
         else:
             self.volumeIcon.setPixmap(QPixmap(u":/images/icons/icons8-audio-30.png"))
