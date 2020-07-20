@@ -5,6 +5,9 @@ This project was first aimed to meet the needs of final project of Adavanced Pro
 ## Requirements
 Only [tinytag](https://pypi.org/project/tinytag) and [PySide2](https://pypi.org/project/PySide2/) together with Python3 are enough for you to listen to ToneBox.
 
+## How to run the project?
+You need to just type `python3 main.py` in project directory.
+
 ## Features
 * Adding songs to library
 * Grouping songs for you by Albums, Artists and Genres. Also hierarchical grouping is also possible.
