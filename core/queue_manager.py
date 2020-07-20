@@ -58,7 +58,6 @@ class QueueManager(QMediaPlaylist):
 
     def pause_queue(self):
         self.player_object.pause()
-        self.player_widget.playPauseBtn.setChecked(False)
 
     def change_speed(self, spe):
         cur_pos = self.player_object.position()
@@ -77,12 +76,17 @@ class QueueManager(QMediaPlaylist):
             self.player_widget.elapsedTimeLineEdit.setText(self.showTimeProperly(int(pos/1000)))
 
     def media_state_changed(self):
-        #print("Media sate changed", self.player_object.state())
         if self.player_object.state() == QMediaPlayer.StoppedState:
             self.player_widget.totalTimeLineEdit.setText("")
             self.player_widget.elapsedTimeLineEdit.setText("")
             self.player_widget.infoLabel.setText("No Song")
             self.player_widget.coverImageLabel.setPixmap(QPixmap(u":/images/icons/Blank_CD_icon.png"))
+            self.player_widget.playPauseBtn.setChecked(False)
+            self.queue_widget.set_current_playing(None)
+        elif self.player_object.state() == QMediaPlayer.PausedState:
+            self.player_widget.playPauseBtn.setChecked(False)
+        elif self.player_object.state() == QMediaPlayer.PlayingState:
+            self.player_widget.playPauseBtn.setChecked(True)
 
     def showTimeProperly(self, t):
         hours = 0
@@ -97,11 +101,10 @@ class QueueManager(QMediaPlaylist):
         return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
     def media_status_changed(self):
-        #print("Media status changed", self.player_object.mediaStatus())
         if self.player_object.mediaStatus() == QMediaPlayer.BufferedMedia:
             song_id = self.songs_data_by_rows[self.currentIndex()][0]
             song = self.manager_model.songs[song_id]
-            #self.queue_widget.set_current_playing(self.currentIndex())
+            self.queue_widget.set_current_playing(self.currentIndex())
             self.player_widget.timeSeekSlider.setMaximum(int(song.duration) * 1000)
             self.player_widget.totalTimeLineEdit.setText(self.showTimeProperly(int(song.duration)))
             qp = QPixmap()
@@ -117,7 +120,6 @@ class QueueManager(QMediaPlaylist):
 
     def play_queue(self):
         self.player_object.play()
-        self.player_widget.playPauseBtn.setChecked(True)
 
     def clear_queue(self):
         self.songs_by_rows.clear()

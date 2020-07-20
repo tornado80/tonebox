@@ -83,9 +83,6 @@ class MediaPlayerWidget(QWidget, Ui_MediaPlayerWidget):
             self.play_back_mode = QMediaPlaylist.Loop
             self.playbackModeBtn.setIcon(QIcon(QPixmap(u":/images/icons/icons8-repeat-30.png")))
         elif self.play_back_mode == QMediaPlaylist.Loop:
-            self.play_back_mode = QMediaPlaylist.Random
-            self.playbackModeBtn.setIcon(QIcon(QPixmap(u":/images/icons/icons8-shuffle-30.png")))
-        elif self.play_back_mode == QMediaPlaylist.Random:
             self.play_back_mode = QMediaPlaylist.Sequential
             self.playbackModeBtn.setIcon(QIcon(QPixmap(u":/images/icons/no-repeat-all-30.png")))
         self.playbackModeChanged.emit()
