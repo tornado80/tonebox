@@ -202,6 +202,12 @@
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0">
      <item>
       <widget class="QLineEdit" name="elapsedTimeLineEdit">
+       <property name="inputMask">
+        <string>99:99:99</string>
+       </property>
+       <property name="text">
+        <string>00:00:00</string>
+       </property>
        <property name="frame">
         <bool>false</bool>
        </property>
@@ -222,6 +228,12 @@
      </item>
      <item>
       <widget class="QLineEdit" name="totalTimeLineEdit">
+       <property name="inputMask">
+        <string>99:99:99</string>
+       </property>
+       <property name="text">
+        <string>00:00:00</string>
+       </property>
        <property name="frame">
         <bool>false</bool>
        </property>

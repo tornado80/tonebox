@@ -29,10 +29,26 @@ class MediaPlayerWidget(QWidget, Ui_MediaPlayerWidget):
         self.slowerBtn.clicked.connect(self.handle_slower_btn)
         self.previousBtn.clicked.connect(self.handle_previous_btn)
         self.timeSeekSlider.sliderPressed.connect(self.started_to_change_position)
+        self.timeSeekSlider.sliderMoved.connect(self.started_to_move_position)
         self.timeSeekSlider.sliderReleased.connect(self.finished_changing_position)
+        self.elapsedTimeLineEdit.mouseDoubleClickEvent = self.set_elapsed_time_editable
+        self.elapsedTimeLineEdit.returnPressed.connect(self.finished_changing_position_elapsed)
         self.play_back_mode = QMediaPlaylist.Sequential
         self.playbackModeChanged.emit()
         self.position_changing_state = False
+
+    def started_to_move_position(self):
+        if self.position_changing_state:
+            pos = self.timeSeekSlider.sliderPosition()
+            self.elapsedTimeLineEdit.setText(self.queue_manager.showTimeProperly(int(pos/1000)))
+
+    def set_elapsed_time_editable(self, event):
+        if self.elapsedTimeLineEdit.isReadOnly():
+            self.elapsedTimeLineEdit.setReadOnly(False)
+            self.position_changing_state = True
+        else:
+            self.elapsedTimeLineEdit.setReadOnly(True)
+            self.position_changing_state = False
 
     def handle_faster_btn(self):
         self.speedSpinBox.setValue(self.speedSpinBox.value() + 0.5)
@@ -58,6 +74,12 @@ class MediaPlayerWidget(QWidget, Ui_MediaPlayerWidget):
     def started_to_change_position(self):
         self.position_changing_state = True
     
+    def finished_changing_position_elapsed(self):
+        self.position_changing_state = False
+        self.elapsedTimeLineEdit.setReadOnly(False)
+        hours, mins, secs = [int(x) for x in self.elapsedTimeLineEdit.text().split(":")]
+        self.positionChanged.emit((hours * 3600 + mins * 60 + secs) * 1000)
+
     def finished_changing_position(self):
         self.position_changing_state = False
         self.positionChanged.emit(self.timeSeekSlider.value())

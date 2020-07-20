@@ -61,7 +61,7 @@ class QueueManager(QMediaPlaylist):
         self.player_object.setPosition(cur_pos)
 
     def setup_player_signals(self):
-        self.player_object.setVolume(self.player_widget.volumeSlider.value())
+        self.change_volume(self.player_widget.volumeSlider.value())
         self.player_object.positionChanged.connect(self.update_time_seek_slider)
         self.player_object.setNotifyInterval(100)
         self.player_object.mediaStatusChanged.connect(self.media_status_changed)
@@ -75,8 +75,8 @@ class QueueManager(QMediaPlaylist):
 
     def media_state_changed(self):
         if self.player_object.state() == QMediaPlayer.StoppedState:
-            self.player_widget.totalTimeLineEdit.setText("")
-            self.player_widget.elapsedTimeLineEdit.setText("")
+            self.player_widget.totalTimeLineEdit.setText("00:00:00")
+            self.player_widget.elapsedTimeLineEdit.setText("00:00:00")
             self.player_widget.infoLabel.setText("No Song")
             self.player_widget.coverImageLabel.setPixmap(QPixmap(u":/images/icons/Blank_CD_icon.png"))
             self.player_widget.playPauseBtn.setChecked(False)
