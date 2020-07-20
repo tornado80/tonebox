@@ -1,5 +1,5 @@
 from PySide2.QtGui import QIcon, QPixmap
-from PySide2.QtWidgets import QAbstractItemView, QHeaderView, QListView, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QMenu, QMessageBox, QAction
+from PySide2.QtWidgets import QAbstractItemView, QListView, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem, QMenu, QMessageBox, QAction
 from PySide2.QtCore import Signal, Qt
 from .info_dialog import InfoDialog
 from .rename_dialog import RenameDialog
@@ -118,7 +118,6 @@ class SongsView(QTableWidget):
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.horizontalHeader().setStretchLastSection(True)
         self.verticalHeader().setVisible(False)
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.horizontalHeader().setSectionsMovable(True)
         self.doubleClicked.connect(self.double_click_to_play_song)
         self.setup_context_menu()

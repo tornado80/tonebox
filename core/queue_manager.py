@@ -34,11 +34,9 @@ class QueueManager(QMediaPlaylist):
 
     def next_track(self):
         self.next()
-        self.play_queue()
     
     def previous_track(self):
         self.previous()
-        self.play_queue()
 
     def change_volume(self, vol):
         self.player_object.setVolume(vol)
@@ -72,7 +70,8 @@ class QueueManager(QMediaPlaylist):
     def update_time_seek_slider(self, pos):
         if not self.player_widget.position_changing_state:
             self.player_widget.timeSeekSlider.setValue(pos)
-            self.player_widget.elapsedTimeLineEdit.setText(self.showTimeProperly(int(pos/1000)))
+            if self.player_widget.totalTimeLineEdit.text() != "":
+                self.player_widget.elapsedTimeLineEdit.setText(self.showTimeProperly(int(pos/1000)))
 
     def media_state_changed(self):
         if self.player_object.state() == QMediaPlayer.StoppedState:
@@ -83,8 +82,8 @@ class QueueManager(QMediaPlaylist):
             self.player_widget.playPauseBtn.setChecked(False)
             self.queue_widget.set_current_playing(None)
         elif self.player_object.state() == QMediaPlayer.PausedState:
-            self.queue_widget.set_current_paused(self.currentIndex())
             self.player_widget.playPauseBtn.setChecked(False)
+            self.queue_widget.set_current_paused(self.currentIndex())
         elif self.player_object.state() == QMediaPlayer.PlayingState:
             self.player_widget.playPauseBtn.setChecked(True)
             self.queue_widget.set_current_playing(self.currentIndex())
@@ -105,7 +104,10 @@ class QueueManager(QMediaPlaylist):
         if self.player_object.mediaStatus() == QMediaPlayer.BufferedMedia:
             song_id = self.songs_data_by_rows[self.currentIndex()][0]
             song = self.manager_model.songs[song_id]
-            self.queue_widget.set_current_playing(self.currentIndex())
+            if self.player_object.state() == QMediaPlayer.PlayingState:
+                self.queue_widget.set_current_playing(self.currentIndex())
+            elif self.player_object.state() == QMediaPlayer.PausedState:
+                self.queue_widget.set_current_paused(self.currentIndex())
             self.player_widget.timeSeekSlider.setMaximum(int(song.duration) * 1000)
             self.player_widget.totalTimeLineEdit.setText(self.showTimeProperly(int(song.duration)))
             qp = QPixmap()
