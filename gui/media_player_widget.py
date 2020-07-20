@@ -25,12 +25,20 @@ class MediaPlayerWidget(QWidget, Ui_MediaPlayerWidget):
         self.playPauseBtn.clicked.connect(self.handle_play_pause_btn)
         self.stopBtn.clicked.connect(self.handle_stop_btn)
         self.nextBtn.clicked.connect(self.handle_next_btn)
+        self.fasterBtn.clicked.connect(self.handle_faster_btn)
+        self.slowerBtn.clicked.connect(self.handle_slower_btn)
         self.previousBtn.clicked.connect(self.handle_previous_btn)
         self.timeSeekSlider.sliderPressed.connect(self.started_to_change_position)
         self.timeSeekSlider.sliderReleased.connect(self.finished_changing_position)
         self.play_back_mode = QMediaPlaylist.Sequential
         self.playbackModeChanged.emit()
         self.position_changing_state = False
+
+    def handle_faster_btn(self):
+        self.speedSpinBox.setValue(self.speedSpinBox.value() + 0.5)
+
+    def handle_slower_btn(self):
+        self.speedSpinBox.setValue(self.speedSpinBox.value() - 0.5)
 
     def handle_speed_spinbox(self):
         self.speedChanged.emit(self.speedSpinBox.value())

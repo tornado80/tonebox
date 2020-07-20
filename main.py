@@ -1,8 +1,9 @@
 from PySide2.QtWidgets import QApplication
+from PySide2.QtMultimedia import QMediaPlayer
 import sys
 from gui.main_window import MainWindow
 from tools.setup import SettingsModel
-from core import manager_model, queue_manager, media_player
+from core import manager_model, queue_manager
 
 class ToneBoxApp(QApplication):
     def __init__(self, *args, **kwargs):
@@ -10,7 +11,7 @@ class ToneBoxApp(QApplication):
         self.settings_model = SettingsModel()
         self.manager_model = manager_model.Model(self.settings_model.get("DatabasePath"))
         self.queue_manager = queue_manager.QueueManager(self.manager_model)
-        self.player_object = media_player.MediaPlayer()
+        self.player_object = QMediaPlayer()
         self.player_object.setPlaylist(self.queue_manager)
         self.queue_manager.player_object = self.player_object
         self.main_window = MainWindow(self.settings_model, self.manager_model, self.queue_manager)

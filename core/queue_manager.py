@@ -9,11 +9,7 @@ class QueueManager(QMediaPlaylist):
         self.queue_widget = None
         self.player_widget = None
         self.player_object = None
-        self.songs_by_rows = []
-        self.songs_by_visuals = []
         self.songs_data_by_rows = []
-        self.song_contents = []
-        self.last_player_state = QMediaPlayer.StoppedState
         self.setPlaybackMode(QMediaPlaylist.Sequential)
 
     def setup_signals(self):
@@ -38,9 +34,11 @@ class QueueManager(QMediaPlaylist):
 
     def next_track(self):
         self.next()
+        self.play_queue()
     
     def previous_track(self):
         self.previous()
+        self.play_queue()
 
     def change_volume(self, vol):
         self.player_object.setVolume(vol)
@@ -65,6 +63,7 @@ class QueueManager(QMediaPlaylist):
         self.player_object.setPosition(cur_pos)
 
     def setup_player_signals(self):
+        self.player_object.setVolume(self.player_widget.volumeSlider.value())
         self.player_object.positionChanged.connect(self.update_time_seek_slider)
         self.player_object.setNotifyInterval(100)
         self.player_object.mediaStatusChanged.connect(self.media_status_changed)
@@ -84,9 +83,11 @@ class QueueManager(QMediaPlaylist):
             self.player_widget.playPauseBtn.setChecked(False)
             self.queue_widget.set_current_playing(None)
         elif self.player_object.state() == QMediaPlayer.PausedState:
+            self.queue_widget.set_current_paused(self.currentIndex())
             self.player_widget.playPauseBtn.setChecked(False)
         elif self.player_object.state() == QMediaPlayer.PlayingState:
             self.player_widget.playPauseBtn.setChecked(True)
+            self.queue_widget.set_current_playing(self.currentIndex())
 
     def showTimeProperly(self, t):
         hours = 0
@@ -122,22 +123,21 @@ class QueueManager(QMediaPlaylist):
         self.player_object.play()
 
     def clear_queue(self):
-        self.songs_by_rows.clear()
-        self.songs_by_visuals.clear()
         self.songs_data_by_rows.clear()
         self.queue_widget.clear_rows()
         self.clear()
 
+    def remove_song_from_queue(self, row):
+        self.removeMedia(row)
+        del self.songs_data_by_rows[row]
+
     def add_songs_to_queue(self, *songs_data):
-        idx = len(self.songs_by_rows)
         for song_data in songs_data:
             song = self.manager_model.songs[song_data[0]]
             if song_data[1]:
                 playlist_name = self.manager_model.playlists[song_data[1]].name
             else:
                 playlist_name = None
-            self.songs_by_visuals.append(idx)
-            self.songs_by_rows.append(idx)
             self.songs_data_by_rows.append(song_data)
             self.addMedia(QUrl.fromLocalFile(song.path))
             self.queue_widget.add_row(*[song.title, song.album, song.artist, playlist_name])

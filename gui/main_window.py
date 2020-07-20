@@ -1,4 +1,3 @@
-from core import queue_manager
 from PySide2.QtWidgets import QMainWindow, QFileDialog
 from .main_window_ui import Ui_MainWindowUi
 from pathlib import Path

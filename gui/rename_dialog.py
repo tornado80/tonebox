@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QDial, QDialog, QMessageBox
+from PySide2.QtWidgets import QDialog, QMessageBox
 from .rename_dialog_ui import Ui_RenameDialogUi
 
 class RenameDialog(QDialog, Ui_RenameDialogUi):
